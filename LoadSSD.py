@@ -34,7 +34,7 @@ def main():
 			"Added watch for {0}".format(source_path))
 	except:
 		logging.getLogger(logger_name).error(
-			"Failed to add watch for {0}".format(source_path))
+			"Failed to add watch for {0}, exiting".format(source_path))
 		return
 
 	for event in i.event_gen(yield_nones = False):

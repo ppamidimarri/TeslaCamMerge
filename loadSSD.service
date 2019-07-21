@@ -1,0 +1,14 @@
+[Unit]
+Description=Load SSD with dashcam clips received over CIFS share
+After=network.target
+After=systemd-user-session.service
+
+[Service]
+User=pavan
+ExecStart=/home/pavan/TeslaCamMerge/LoadSSD.py
+Restart=on-failure
+RestartSec=60
+
+[Install]
+WantedBy=multi-user.target
+WantedBy=smbd.service

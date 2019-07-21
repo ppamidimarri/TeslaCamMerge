@@ -1,0 +1,17 @@
+[Unit]
+Description=Start filebrowser
+After=network.target
+After=systemd-user-session.service
+After=loadSSD.service
+After=mergeTeslaCam.service
+After=uploadDrive.service
+RequiresMountsFor=/media/pavan/Samsung_T5/Footage
+
+[Service]
+User=pavan
+ExecStart=/usr/local/bin/filebrowser -d /home/pavan/filebrowser.db
+Restart=on-failure
+RestartSec=60
+
+[Install]
+WantedBy=multi-user.target

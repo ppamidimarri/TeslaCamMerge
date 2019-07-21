@@ -1,0 +1,16 @@
+[Unit]
+Description=Upload selected dashcam footage to Google Drive
+After=network.target
+After=systemd-user-session.service
+After=loadSSD.service
+After=mergeTeslaCam.service
+RequiresMountsFor=/media/pavan/Samsung_T5/Footage/Upload
+
+[Service]
+User=pavan
+ExecStart=/home/pavan/TeslaCamMerge/UploadDrive.py
+Restart=on-failure
+RestartSec=60
+
+[Install]
+WantedBy=multi-user.target

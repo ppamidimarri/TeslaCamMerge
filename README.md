@@ -23,7 +23,7 @@ Tesla's in-built dashcam create three separate video files, one each from the fr
 1. Flash a Micro-SD card flashed with the Jetson Nano system image
 2. Insert the card in the Jetson Nano
 3. Connect keyboard, mouse, ethernet and monitor and power up the Nano
-4. Set up a new user and set autologin (in the instructions, you will see this ID as `<userid>`
+4. Set up a new user and password (in these instructions, you will see this ID as `<userid>`)
 
 Once these steps are done, you can do the rest of the work on the Jetson Nano either in a terminal window in the GUI, or by setting up SSH. If you don't like `vim` as the text editor, install `nano` with `sudo apt install nano`.
 
@@ -92,6 +92,8 @@ Once these steps are done, you can do the rest of the work on the Jetson Nano ei
 11. `sudo systemctl enable mergeTeslaCam.service`
 12. `sudo systemctl enable uploadDrive.service`
 13. `sudo systemctl enable startFileBrowser.service`
+14. `sudo reboot`
+15. Verify that your services are running, with `systemctl status mergeTeslaCam.service`, etc. (once for each of the four services)
 
 **H. Configure your Pi Zero W**
 

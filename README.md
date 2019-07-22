@@ -69,6 +69,23 @@ Once these steps are done, you can do the rest of the work on the Jetson Nano ei
 8. On your computer's web browser, go to `http://<LAN-IP>:8080/`. 
 9. Login as `admin` (password is `admin` as you set up in step 6 above), change password, create new (non-admin) user
 
+**Install the scripts**
+1. `cd ~`
+2. `git clone https://github.com/ppamidimarri/TeslaCamMerge`
+3. `cd TeslaCamMerge`
+4. Modify the paths in the python scripts and service files to match yours
+
+**Install the service files**
+1. `sudo cp loadSSD.service /lib/systemd/system`
+2. `sudo cp mergeTeslaCam.service /lib/systemd/system`
+3. `sudo cp uploadDrive.service /lib/systemd/system`
+4. `sudo cp startFileBrowser.service /lib/systemd/system`
+5. `sudo systemctl daemon-reload`
+6. `sudo systemctl enable loadSSD.service`
+7. `sudo systemctl enable mergeTeslaCam.service`
+8. `sudo systemctl enable uploadDrive.service`
+9. `sudo systemctl enable startFileBrowser.service`
+
 **Configure your Pi Zero W**
 
 Follow the [one-step setup instructions](https://github.com/marcone/teslausb/blob/main-dev/doc/OneStepSetup.md) with the pre-built image and the Jetson Nano as the share server, and the username and password for the CIFS share you have set up above. 

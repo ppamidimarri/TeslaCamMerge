@@ -18,21 +18,21 @@ Tesla's in-built dashcam create three separate video files, one each from the fr
 
 ## Instructions
 
-**Setup the Jetson Nano**
+**A. Setup the Jetson Nano**
 
 1. Flash a Micro-SD card flashed with the Jetson Nano system image
 2. Insert the card in the Jetson Nano
 3. Connect keyboard, mouse, ethernet and monitor and power up the Nano
 4. Set up a new user and set autologin (in the instructions, you will see this ID as `<userid>`
 
-Once these steps are done, you can do the rest of the work on the Jetson Nano either in a terminal window in the GUI, or by setting up SSH. I prefer SSH. 
+Once these steps are done, you can do the rest of the work on the Jetson Nano either in a terminal window in the GUI, or by setting up SSH. If you don't like `vim` as the text editor, install `nano` with `sudo apt install nano`.
 
-**Install required software on the Nano**
+**B. Install required software on the Nano**
 1. `sudo apt update`
 2. `sudo apt upgrade`
-3. `sudo apt install nano exfat-fuse ffmpeg samba`
+3. `sudo apt install exfat-fuse ffmpeg samba`
 
-**Configure samba and set up the CIFS share**
+**C. Configure samba and set up the CIFS share**
 1. `sudo cp /etc/samba/smb.conf{,.backup}`
 2. `sudo nano /etc/samba/smb.conf`, uncomment (i.e. remove the `;` character at the beginning of) these lines:
 ```
@@ -48,7 +48,7 @@ Once these steps are done, you can do the rest of the work on the Jetson Nano ei
 9. `sudo smbpasswd -a <share-user-name>` and set your CIFS share password
 10. `sudo smbpasswd -e <share-user-name>`
 
-**Setup the locations for the dashcam footage to be stored**
+**D. Setup the locations for the dashcam footage to be stored**
 
 1. Connect the USB SSD to the Jetson Nano
 2. It should automatically be configured under `/media/<userid>`. `ls -l /media/<userid>` to check its name. Let's call the name `<drivename>`.
@@ -58,7 +58,7 @@ Once these steps are done, you can do the rest of the work on the Jetson Nano ei
 6. `mkdir /media/<userid>/<drivename>/Footage/Fast`
 7. `mkdir /media/<userid>/<drivename>/Footage/Upload`
 
-**Install and set up filebrowser**
+**E. Install and set up filebrowser**
 1. `cd ~`
 2. `curl -fsSL https://filebrowser.xyz/get.sh | bash`
 3. `filebrowser config init`
@@ -69,11 +69,20 @@ Once these steps are done, you can do the rest of the work on the Jetson Nano ei
 8. On your computer's web browser, go to `http://<LAN-IP>:8080/`. 
 9. Login as `admin` (password is `admin` as you set up in step 6 above), change password, create new (non-admin) user
 
-**Install the python scripts and service files**
+**F. Install and configure rclone**
+
+1. `wget https://downloads.rclone.org/rclone-current-linux-arm.zip` 
+2. `unzip rclone-current-linux-arm.zip` 
+3. `sudo cp rclone-v????-linux-arm/rclone /usr/local/bin/`
+4. `rclone config` and create a remote with the name `gdrive` of type `drive`, with access of `drive.file`
+5. `rm rclone*` to remove unneded files
+6. In your Google Drive account, create a folder called `TeslaCam` for the uploaded videos
+
+**G. Install the python scripts and service files**
 1. `cd ~`
 2. `git clone https://github.com/ppamidimarri/TeslaCamMerge`
 3. `cd TeslaCamMerge`
-4. Modify the paths in the python scripts and service files to match yours
+4. Modify the paths in the python scripts (`LoadSSD.py`, `MergeTeslaCam.py`, `UploadDrive.py`) and service files (`loadSSD.service`, `mergeTeslaCam.service`. `startFileBrowser.service`. `uploadDrive.service`) to match yours from steps C and D above
 5. `sudo cp loadSSD.service /lib/systemd/system`
 6. `sudo cp mergeTeslaCam.service /lib/systemd/system`
 7. `sudo cp uploadDrive.service /lib/systemd/system`
@@ -84,6 +93,6 @@ Once these steps are done, you can do the rest of the work on the Jetson Nano ei
 12. `sudo systemctl enable uploadDrive.service`
 13. `sudo systemctl enable startFileBrowser.service`
 
-**Configure your Pi Zero W**
+**H. Configure your Pi Zero W**
 
 Follow the [one-step setup instructions](https://github.com/marcone/teslausb/blob/main-dev/doc/OneStepSetup.md) with the pre-built image and the Jetson Nano as the share server, and the username and password for the CIFS share you have set up above. 

@@ -69,22 +69,20 @@ Once these steps are done, you can do the rest of the work on the Jetson Nano ei
 8. On your computer's web browser, go to `http://<LAN-IP>:8080/`. 
 9. Login as `admin` (password is `admin` as you set up in step 6 above), change password, create new (non-admin) user
 
-**Install the scripts**
+**Install the python scripts and service files**
 1. `cd ~`
 2. `git clone https://github.com/ppamidimarri/TeslaCamMerge`
 3. `cd TeslaCamMerge`
 4. Modify the paths in the python scripts and service files to match yours
-
-**Install the service files**
-1. `sudo cp loadSSD.service /lib/systemd/system`
-2. `sudo cp mergeTeslaCam.service /lib/systemd/system`
-3. `sudo cp uploadDrive.service /lib/systemd/system`
-4. `sudo cp startFileBrowser.service /lib/systemd/system`
-5. `sudo systemctl daemon-reload`
-6. `sudo systemctl enable loadSSD.service`
-7. `sudo systemctl enable mergeTeslaCam.service`
-8. `sudo systemctl enable uploadDrive.service`
-9. `sudo systemctl enable startFileBrowser.service`
+5. `sudo cp loadSSD.service /lib/systemd/system`
+6. `sudo cp mergeTeslaCam.service /lib/systemd/system`
+7. `sudo cp uploadDrive.service /lib/systemd/system`
+8. `sudo cp startFileBrowser.service /lib/systemd/system`
+9. `sudo systemctl daemon-reload`
+10. `sudo systemctl enable loadSSD.service`
+11. `sudo systemctl enable mergeTeslaCam.service`
+12. `sudo systemctl enable uploadDrive.service`
+13. `sudo systemctl enable startFileBrowser.service`
 
 **Configure your Pi Zero W**
 

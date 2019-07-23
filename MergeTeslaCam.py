@@ -15,7 +15,7 @@ import TCMConstants
 
 logger_name = 'MergeTeslaCam'
 logger = logging.getLogger(logger_name)
-logger.setLevel(DEBUG)
+logger.setLevel(logging.DEBUG)
 
 # Characteristics of filenames output by TeslaCam
 front_text = 'front.mp4'
@@ -39,7 +39,7 @@ rights = []
 
 def main():
 	fh = logging.FileHandler(TCMConstants.LOG_PATH + logger_name + TCMConstants.LOG_EXTENSION)
-	fh.setLevel(logging.INFO)
+	fh.setLevel(logging.DEBUG)
 	formatter = logging.Formatter(TCMConstants.LOG_FORMAT)
 	fh.setFormatter(formatter)
 	logger.addHandler(fh)
@@ -64,8 +64,8 @@ def main():
 
 def process_videos(stamp):
 	logger.info("Processing videos for {0}...".format(stamp))
-	run_ffmpeg_command(stamp, 0) # Full video merging three camera feeds
-	run_ffmpeg_command(stamp, 1) # Fast video, i.e. sped-up version of Full
+	run_ffmpeg_command("Merge", stamp, 0) # Full video merging three camera feeds
+	run_ffmpeg_command("Fast preview", stamp, 1) # Fast video, i.e. sped-up version of Full
 	logger_name.info("Created videos for {0}.".format(stamp))
 	remove_from_worklist(stamp)
 

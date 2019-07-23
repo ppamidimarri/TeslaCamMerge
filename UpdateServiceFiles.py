@@ -14,3 +14,5 @@ def process_service_file(name):
            fout.write(line.replace('PROJECT_PATH', PROJECT_PATH).replace('FILEBROWSER_PATH', FILEBROWSER_PATH))
   os.rename(name + ".tmp", name)
   
+if __name__ == '__main__':
+	main()

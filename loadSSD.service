@@ -5,7 +5,7 @@ After=systemd-user-session.service
 
 [Service]
 User=pavan
-ExecStart=PROJECT_PATH/LoadSSD.py
+ExecStart=PROJECT_PATH/TeslaCamMerge/LoadSSD.py
 Restart=on-failure
 RestartSec=60
 

@@ -13,3 +13,4 @@ LOG_LEVEL = logging.DEBUG
 FFMPEG_PATH = '/usr/bin/ffmpeg'
 RCLONE_PATH = '/usr/local/bin/rclone'
 PROJECT_PATH = '/home/pavan/TeslaCamMerge'
+FILEBROWSER_PATH = '/usr/local/bin/filebrowser'

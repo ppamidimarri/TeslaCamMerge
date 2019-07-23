@@ -6,7 +6,7 @@ After=loadSSD.service
 RequiresMountsFor=/media/pavan/Samsung_T5
 
 [Service]
-User=pavan
+User=PROJECT_USER
 ExecStart=PROJECT_PATH/TeslaCamMerge/UploadDrive.py
 Restart=on-failure
 RestartSec=60

@@ -9,7 +9,7 @@ RequiresMountsFor=/media/pavan/Samsung_T5/Footage
 
 [Service]
 User=pavan
-ExecStart=/usr/local/bin/filebrowser -d /home/pavan/filebrowser.db
+ExecStart=FILEBROWSER_PATH -d PROJECT_PATH/filebrowser.db
 Restart=on-failure
 RestartSec=60
 

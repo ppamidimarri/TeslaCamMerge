@@ -3,7 +3,7 @@ Description=Upload selected dashcam footage to Google Drive
 After=network.target
 After=systemd-user-session.service
 After=loadSSD.service
-RequiresMountsFor=/media/pavan/Samsung_T5
+RequiresMountsFor=SSD_MOUNT_POINT
 
 [Service]
 User=PROJECT_USER

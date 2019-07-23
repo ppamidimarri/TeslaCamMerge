@@ -1,7 +1,7 @@
 import logging
 
 # Location where the TeslaCamMerge directory is present. Must NOT include trailing /.
-PROJECT_PATH = '/home/pavan'  # Must contain the directory called TeslaCamMerge where you cloned this repository
+PROJECT_PATH = '/home/pavan'  # Must contain the directory called TeslaCamMerge (where you cloned this repository), as well as filebrowser.db
 PROJECT_USER = 'pavan'        # User ID for the application to run as. This user needs to have read permission on all the paths listed here, plus write permission on the SSD and CIFS share
 
 # Locations of the stored footage on the SSD. MUST include trailing /. PROJECT_USER must have read-write permissions on all these paths.

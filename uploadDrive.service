@@ -7,7 +7,7 @@ RequiresMountsFor=/media/pavan/Samsung_T5
 
 [Service]
 User=pavan
-ExecStart=/home/pavan/TeslaCamMerge/UploadDrive.py
+ExecStart=PROJECT_PATH/TeslaCamMerge/UploadDrive.py
 Restart=on-failure
 RestartSec=60
 

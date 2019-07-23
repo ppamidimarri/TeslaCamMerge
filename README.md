@@ -84,19 +84,20 @@ Once these steps are done, you can do the rest of the work on the Jetson Nano ei
 1. `cd ~`
 2. `git clone https://github.com/ppamidimarri/TeslaCamMerge`
 3. `cd TeslaCamMerge`
-4. Modify the paths in `TCMConstants.py` to match your structure from all the previous steps
-5. Once all paths are correct, run `python3 UpdateServiceFiles.py`, then verify that the service files have been updated with your information (e.g. verify that `mergeTeslaCam.service` has the correct user ID, path to `MergeTeslaCam.py`, and SSD mont point)
-5. `sudo cp loadSSD.service /lib/systemd/system`
-6. `sudo cp mergeTeslaCam.service /lib/systemd/system`
-7. `sudo cp uploadDrive.service /lib/systemd/system`
-8. `sudo cp startFileBrowser.service /lib/systemd/system`
-9. `sudo systemctl daemon-reload`
-10. `sudo systemctl enable loadSSD.service`
-11. `sudo systemctl enable mergeTeslaCam.service`
-12. `sudo systemctl enable uploadDrive.service`
-13. `sudo systemctl enable startFileBrowser.service`
-14. `sudo reboot`
-15. Verify that your services are running, with `systemctl status mergeTeslaCam.service`, etc. (once for each of the four services)
+4. `chmod +x *.py`
+5. Modify the paths and other entries in `TCMConstants.py` to match your structure from all the previous steps
+6. Once all paths are correct, run `python3 UpdateServiceFiles.py`, then verify that the service files have been updated with your information (e.g. verify that `mergeTeslaCam.service` has the correct user ID, path to `MergeTeslaCam.py`, and SSD mont point)
+7. `sudo cp loadSSD.service /lib/systemd/system`
+8. `sudo cp mergeTeslaCam.service /lib/systemd/system`
+9. `sudo cp uploadDrive.service /lib/systemd/system`
+10. `sudo cp startFileBrowser.service /lib/systemd/system`
+11. `sudo systemctl daemon-reload`
+12. `sudo systemctl enable loadSSD.service`
+13. `sudo systemctl enable mergeTeslaCam.service`
+14. `sudo systemctl enable uploadDrive.service`
+15. `sudo systemctl enable startFileBrowser.service`
+16. `sudo reboot`
+17. Verify that your services are running, with `systemctl status mergeTeslaCam.service`, etc. (once for each of the four services)
 
 **H. Configure your Pi Zero W**
 

@@ -9,6 +9,7 @@ FULL_PATH = '/media/pavan/Samsung_T5/Footage/Full/'           # Where the merged
 RAW_PATH = '/media/pavan/Samsung_T5/Footage/Raw/'             # Where the raw footage from TeslaCam is stored
 FAST_PATH = '/media/pavan/Samsung_T5/Footage/Fast/'           # Where the fast preview files are stored
 UPLOAD_LOCAL_PATH = '/media/pavan/Samsung_T5/Footage/Upload/' # Any files placed in this directory will be uploaded to Google Drive
+SSD_MOUNT_POINT = '/media/pavan/Samsung_T5'                   # Mount point for the SSD
 
 # Location of CIFS share. MUST include trailing /. PROJECT_USER must have read-write permissions.
 SHARE_PATH = '/samba/fjnuser/'

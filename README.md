@@ -83,7 +83,7 @@ Once these steps are done, you can do the rest of the work on the Jetson Nano ei
 1. `cd ~`
 2. `git clone https://github.com/ppamidimarri/TeslaCamMerge`
 3. `cd TeslaCamMerge`
-4. Modify the paths in `LoadSSD.py`, `MergeTeslaCam.py`, `TCMConstants.py` and service files (`loadSSD.service`, `mergeTeslaCam.service`. `startFileBrowser.service`. `uploadDrive.service`) to match yours from steps C and D above
+4. Modify the paths in `TCMConstants.py` and in all the service files (`loadSSD.service`, `mergeTeslaCam.service`. `startFileBrowser.service`. `uploadDrive.service`) to match your structure from steps C and D above
 5. `sudo cp loadSSD.service /lib/systemd/system`
 6. `sudo cp mergeTeslaCam.service /lib/systemd/system`
 7. `sudo cp uploadDrive.service /lib/systemd/system`

@@ -3,8 +3,7 @@ Description=Upload selected dashcam footage to Google Drive
 After=network.target
 After=systemd-user-session.service
 After=loadSSD.service
-After=mergeTeslaCam.service
-RequiresMountsFor=/media/pavan/Samsung_T5/Footage/Upload
+RequiresMountsFor=/media/pavan/Samsung_T5
 
 [Service]
 User=pavan
@@ -14,3 +13,4 @@ RestartSec=60
 
 [Install]
 WantedBy=multi-user.target
+WantedBy=mergeTeslaCam.service

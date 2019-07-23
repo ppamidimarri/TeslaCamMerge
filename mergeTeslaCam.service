@@ -3,7 +3,8 @@ Description=Merge Tesla dashcam videos from all three cameras
 After=network.target
 After=systemd-user-session.service
 After=loadSSD.service
-RequiresMountsFor=/media/pavan/Samsung_T5/Footage/Raw
+After=uploadDrive.service
+RequiresMountsFor=/media/pavan/Samsung_T5
 
 [Service]
 User=pavan

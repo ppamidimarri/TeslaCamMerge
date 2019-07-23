@@ -8,7 +8,7 @@ RequiresMountsFor=/media/pavan/Samsung_T5
 
 [Service]
 User=pavan
-ExecStart=/home/pavan/TeslaCamMerge/MergeTeslaCam.py
+ExecStart=PROJECT_PATH/MergeTeslaCam.py
 Restart=on-failure
 RestartSec=60
 

@@ -8,7 +8,7 @@ After=uploadDrive.service
 RequiresMountsFor=/media/pavan/Samsung_T5/Footage
 
 [Service]
-User=pavan
+User=PROJECT_USER
 ExecStart=FILEBROWSER_PATH -d PROJECT_PATH/filebrowser.db
 Restart=on-failure
 RestartSec=60

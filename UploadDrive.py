@@ -40,11 +40,12 @@ def main():
 def upload_file(filename):
 	logger.info("Uploading file {0}".format(filename))
 
-	command = "/usr/local/bin/rclone move {0}{1} {2}".format(
-		TCMConstants.UPLOAD_LOCAL_PATH, filename, TCMConstants.UPLOAD_REMOTE_PATH)
+	command = "{0} move {1}{2} {3}".format(
+		TCMConstants.RCLONE_PATH, TCMConstants.UPLOAD_LOCAL_PATH,
+		filename, TCMConstants.UPLOAD_REMOTE_PATH)
 	logger.debug("Command: {0}".format(command))
 	try:
-		subprocess.run(command, shell=True, stdout=subprocess.PIPE, stderr=subprocess.PIPE)
+		subprocess.run(command, shell=True, stdin=subprocess.DEVNULL)
 		logger.info("Uploaded file {0}".format(filename))
 	except shutil.Error:
 		logger.warn("Failed to upload {0}".format(filename))

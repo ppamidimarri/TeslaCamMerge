@@ -26,7 +26,7 @@ fast_text = 'fast.mp4'
 filename_timestamp_format = '%Y-%m-%d_%H-%M-%S'
 
 # ffmpeg commands and filters
-ffmpeg_base = 'ffmpeg -hide_banner -loglevel quiet'
+ffmpeg_base = "{0} -hide_banner -loglevel quiet".format(TCMConstants.FFMPEG_PATH)
 ffmpeg_mid_full = '-filter_complex "[1:v]scale=w=1.2*iw:h=1.2*ih[top];[0:v]scale=w=0.6*iw:h=0.6*ih[right];[2:v]scale=w=0.6*iw:h=0.6*ih[left];[left][right]hstack=inputs=2[bottom];[top][bottom]vstack=inputs=2[full];[full]drawtext=text=\''
 ffmpeg_end_full = '\':fontcolor=white:fontsize=48:box=1:boxcolor=black@0.5:boxborderw=5:x=(w-text_w)/2" -movflags +faststart -threads 0'
 ffmpeg_end_fast = '-vf "setpts=0.09*PTS" -c:v libx264 -crf 28 -profile:v main -tune fastdecode -movflags +faststart -threads 0'
@@ -82,7 +82,7 @@ def run_ffmpeg_command(log_text, stamp, video_type):
 	logger.info("{0} started: {1}...".format(log_text, stamp))
 	command = get_ffmpeg_command(stamp, video_type)
 	logger.debug("Command: {0}".format(command))
-	subprocess.run(command, shell=True, stdout=subprocess.PIPE, stderr=subprocess.PIPE)
+	subprocess.run(command, shell=True, stdin=subprocess.DEVNULL, timeout=600)
 	logger.info("{0} completed: {1}.".format(log_text, stamp))
 
 def get_ffmpeg_command(stamp, video_type):

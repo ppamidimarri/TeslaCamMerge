@@ -31,6 +31,7 @@ Once these steps are done, you can do the rest of the work on the Jetson Nano ei
 1. `sudo apt update`
 2. `sudo apt upgrade`
 3. `sudo apt install exfat-fuse ffmpeg samba`
+4. `sudo -H pip3 install inotify`
 
 **C. Configure samba and set up the CIFS share**
 1. `sudo cp /etc/samba/smb.conf{,.backup}`

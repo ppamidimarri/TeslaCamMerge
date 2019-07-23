@@ -60,7 +60,7 @@ Once these steps are done, you can do the rest of the work on the Jetson Nano ei
 
 **E. Install and set up filebrowser**
 1. `cd ~`
-2. `mkdir log`
+2. `mkdir log` (or any other location you want your log files in)
 3. `curl -fsSL https://filebrowser.xyz/get.sh | bash`
 4. `filebrowser config init`
 5. `ifconfig` and note the LAN IP address of your Jetson Nano. In your home router, given your Jetson Nano a fixed LAN IP.
@@ -83,7 +83,7 @@ Once these steps are done, you can do the rest of the work on the Jetson Nano ei
 1. `cd ~`
 2. `git clone https://github.com/ppamidimarri/TeslaCamMerge`
 3. `cd TeslaCamMerge`
-4. Modify the paths in the python scripts (`LoadSSD.py`, `MergeTeslaCam.py`, `UploadDrive.py`) and service files (`loadSSD.service`, `mergeTeslaCam.service`. `startFileBrowser.service`. `uploadDrive.service`) to match yours from steps C and D above
+4. Modify the paths in `LoadSSD.py`, `MergeTeslaCam.py`, `TCMConstants.py` and service files (`loadSSD.service`, `mergeTeslaCam.service`. `startFileBrowser.service`. `uploadDrive.service`) to match yours from steps C and D above
 5. `sudo cp loadSSD.service /lib/systemd/system`
 6. `sudo cp mergeTeslaCam.service /lib/systemd/system`
 7. `sudo cp uploadDrive.service /lib/systemd/system`

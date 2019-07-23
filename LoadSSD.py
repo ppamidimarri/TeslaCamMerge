@@ -12,11 +12,11 @@ import TCMConstants
 
 logger_name = 'LoadSSD'
 logger = logging.getLogger(logger_name)
-logger.setLevel(logging.DEBUG)
+logger.setLevel(TCMConstants.LOG_LEVEL)
 
 def main():
 	fh = logging.FileHandler(TCMConstants.LOG_PATH + logger_name + TCMConstants.LOG_EXTENSION)
-	fh.setLevel(logging.INFO)
+	fh.setLevel(TCMConstants.LOG_LEVEL)
 	formatter = logging.Formatter(TCMConstants.LOG_FORMAT)
 	fh.setFormatter(formatter)
 	logger.addHandler(fh)

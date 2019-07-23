@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
 
-# This script uploads files placed in "source_path" directory on the
-# computer to the "destination_path" location using rclone.
+# This script uploads files placed in UPLOAD_LOCAL_PATH on the
+# computer to the UPLOAD_REMOTE_PATH location using rclone.
 
 import inotify.adapters
 import subprocess
@@ -11,13 +11,11 @@ import TCMConstants
 
 logger_name = 'UploadDrive'
 logger = logging.getLogger(logger_name)
-logger.setLevel(logging.DEBUG)
-source_path = '/media/pavan/Samsung_T5/Footage/Upload/'
-destination_path = 'gdrive:/TeslaCam'
+logger.setLevel(TCMConstants.LOG_LEVEL)
 
 def main():
 	fh = logging.FileHandler(TCMConstants.LOG_PATH + logger_name + TCMConstants.LOG_EXTENSION)
-	fh.setLevel(logging.INFO)
+	fh.setLevel(TCMConstants.LOG_LEVEL)
 	formatter = logging.Formatter(TCMConstants.LOG_FORMAT)
 	fh.setFormatter(formatter)
 	logger.addHandler(fh)

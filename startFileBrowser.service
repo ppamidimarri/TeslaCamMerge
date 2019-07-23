@@ -2,10 +2,8 @@
 Description=Start filebrowser
 After=network.target
 After=systemd-user-session.service
-After=loadSSD.service
 After=mergeTeslaCam.service
-After=uploadDrive.service
-RequiresMountsFor=/media/pavan/Samsung_T5/Footage
+RequiresMountsFor=SSD_MOUNT_POINT
 
 [Service]
 User=PROJECT_USER

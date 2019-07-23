@@ -4,7 +4,7 @@ After=network.target
 After=systemd-user-session.service
 After=loadSSD.service
 After=uploadDrive.service
-RequiresMountsFor=/media/pavan/Samsung_T5
+RequiresMountsFor=SSD_MOUNT_POINT
 
 [Service]
 User=PROJECT_USER

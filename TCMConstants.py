@@ -12,5 +12,5 @@ LOG_FORMAT = '%(asctime)s - %(name)s - %(levelname)s - %(message)s'
 LOG_LEVEL = logging.DEBUG
 FFMPEG_PATH = '/usr/bin/ffmpeg'
 RCLONE_PATH = '/usr/local/bin/rclone'
-PROJECT_PATH = '/home/pavan/TeslaCamMerge'
+PROJECT_PATH = '/home/pavan'
 FILEBROWSER_PATH = '/usr/local/bin/filebrowser'

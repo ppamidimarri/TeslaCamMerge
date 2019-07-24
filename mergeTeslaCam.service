@@ -1,9 +1,6 @@
 [Unit]
 Description=Merge Tesla dashcam videos from all three cameras
-After=network.target
-After=systemd-user-session.service
-After=loadSSD.service
-After=uploadDrive.service
+After=network.target systemd-user-session.service loadSSD.service uploadDrive.service
 RequiresMountsFor=SSD_MOUNT_POINT
 
 [Service]

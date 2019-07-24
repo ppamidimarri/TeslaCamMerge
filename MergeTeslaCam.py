@@ -56,7 +56,7 @@ def main():
 		logger.debug("Added watch for {0}".format(TCMConstants.RAW_PATH))
 	except:
 		logger.error("Failed to add watch for {0}, exiting".format(TCMConstants.RAW_PATH))
-		return
+		exit_gracefully(TCMConstants.SPECIAL_EXIT_CODE, None)
 
 	for event in i.event_gen(yield_nones = False):
 		(_, type_names, path, filename) = event
@@ -137,7 +137,10 @@ def watch_for_timestamp(filename):
 
 def exit_gracefully(signum, frame):
 	logger.info("Received signal number {0}, exiting.".format(signum))
-	exit()
+	if signum == TCMConstants.SPECIAL_EXIT_CODE:
+		exit(TCMConstants.SPECIAL_EXIT_CODE)
+	else:
+		exit()
 
 if __name__ == '__main__':
 	main()

@@ -1,8 +1,6 @@
 [Unit]
-Description=Start filebrowser
-After=network.target
-After=systemd-user-session.service
-After=mergeTeslaCam.service
+Description=Start filebrowser with database in project path
+After=network.target systemd-user-session.service mergeTeslaCam.service
 RequiresMountsFor=SSD_MOUNT_POINT
 
 [Service]

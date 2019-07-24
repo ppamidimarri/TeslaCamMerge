@@ -63,13 +63,13 @@ Once these steps are done, you can do the rest of the work on the Jetson Nano ei
 1. `cd ~`
 2. `mkdir log` (or any other location you want your log files in)
 3. `curl -fsSL https://filebrowser.xyz/get.sh | bash`
-4. `filebrowser config init`
-5. `ifconfig` and note the LAN IP address of your Jetson Nano. In your home router, given your Jetson Nano a fixed LAN IP.
-6. `filebrowser config set -a <LAN-IP> -r /media/<userid>/<drivename>/Footage/`
-7. `filebrowser users add admin admin`
-8. `filebrowser -d /home/<userid>/filebrowser.db`
-9. On your computer's web browser, go to `http://<LAN-IP>:8080/`. 
-10. Login as `admin` (password is `admin` as you set up in step 6 above), change password, create new (non-admin) user
+4. `ifconfig` and note the LAN IP address of your Jetson Nano. In your home router, given your Jetson Nano a fixed LAN IP.
+5. `filebrowser config init -a <LAN-IP> -r /media/<userid>/<drivename>/Footage/ -l log/filebrowser.log`
+6. `filebrowser users add admin admin`
+7. `filebrowser -d /home/<userid>/filebrowser.db`
+8. On your computer's web browser, go to `http://<LAN-IP>:8080/` 
+9. Login as `admin` (password is `admin` as you set up in step 6 above), change password
+10. Create a new (non-admin) user account and password for routine use of the application
 
 **F. Install and configure rclone**
 

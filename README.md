@@ -86,7 +86,7 @@ Once these steps are done, you can do the rest of the work on the Jetson Nano ei
 3. `cd TeslaCamMerge`
 4. `chmod +x *.py`
 5. Modify the paths and other entries in `TCMConstants.py` to match your structure from all the previous steps
-6. Once all paths are correct, run `python3 UpdateServiceFiles.py`, then verify that the service files have been updated with your information (e.g. verify that `mergeTeslaCam.service` has the correct user ID, path to `MergeTeslaCam.py`, and SSD mont point)
+6. Once all paths are correct, run `python3 CreateServiceFiles.py`, then verify that the service files have been updated with your information (e.g. verify that `mergeTeslaCam.service` has the correct user ID, path to `MergeTeslaCam.py`, and SSD mont point)
 7. `sudo cp *.service /lib/systemd/system`
 8. `sudo systemctl daemon-reload`
 9. `sudo systemctl enable loadSSD.service`

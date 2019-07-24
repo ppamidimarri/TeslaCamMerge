@@ -137,10 +137,7 @@ def watch_for_timestamp(filename):
 
 def exit_gracefully(signum, frame):
 	logger.info("Received signal number {0}, exiting.".format(signum))
-	if signum == TCMConstants.SPECIAL_EXIT_CODE:
-		exit(TCMConstants.SPECIAL_EXIT_CODE)
-	else:
-		exit()
+	exit(signum)
 
 if __name__ == '__main__':
 	main()

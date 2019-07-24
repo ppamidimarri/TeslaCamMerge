@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
 
-# This script moves files placed in the "source" location to the
-# "destination" location. I use it to pick up files placed in a
+# This script moves files placed in the "SHARE_PATH" location to the
+# "RAW_PATH" location. I use it to pick up files placed in a
 # CIFS share by teslausb and move them to a Samsung T5 SSD.
 
 import inotify.adapters

@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
 
 # This script users ffmpeg to generate combined videos of TeslaCam footage.
-# It looks for files at "raw_path" and waits for all (front, left-repeater,
+# It looks for files at "RAW_PATH" and waits for all (front, left-repeater,
 # right-repeater) are available for a single timestamp. Once all three files
 # are available, it merges them into one "full" file. It then creates a
 # sped-up view of the "full" file as the "fast" file.

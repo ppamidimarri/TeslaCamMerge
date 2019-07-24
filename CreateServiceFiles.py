@@ -1,5 +1,8 @@
 #!/usr/bin/env python3
 
+# This script geenrates prepares the correct service files for use by systemd
+# based on your configuration settings in TCMConstants.py
+
 import os
 import re
 import TCMConstants

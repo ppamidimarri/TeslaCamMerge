@@ -25,7 +25,7 @@ LOG_LEVEL = logging.INFO
 
 # Paths of installed software, including name of the application
 FFMPEG_PATH = '/usr/bin/ffmpeg'
-RCLONE_PATH = '/usr/local/bin/rclone'
+RCLONE_PATH = '/usr/local/bin/rclone --log-file /home/pavan/log/rclone.log'
 FILEBROWSER_PATH = '/usr/local/bin/filebrowser'
 
 # Do not change this, used to communicate to systemd that a service hasn't started up properly

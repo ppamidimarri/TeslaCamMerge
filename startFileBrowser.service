@@ -5,6 +5,7 @@ RequiresMountsFor=SSD_MOUNT_POINT
 
 [Service]
 User=PROJECT_USER
+ExecStartPre=/bin/sleep 30
 ExecStart=FILEBROWSER_PATH -d PROJECT_PATH/filebrowser.db
 Restart=on-failure
 RestartSec=60

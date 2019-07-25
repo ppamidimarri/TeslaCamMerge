@@ -9,4 +9,5 @@ Restart=on-failure
 RestartSec=60
 
 [Install]
-WantedBy=multi-user.target smbd.service
+WantedBy=smbd.service
+Also=mergeTeslaCam.service startFileBrowser.service uploadDrive.service

@@ -90,11 +90,8 @@ Once these steps are done, you can do the rest of the work on the Jetson Nano ei
 7. `sudo cp *.service /lib/systemd/system`
 8. `sudo systemctl daemon-reload`
 9. `sudo systemctl enable loadSSD.service`
-10. `sudo systemctl enable mergeTeslaCam.service`
-11. `sudo systemctl enable uploadDrive.service`
-12. `sudo systemctl enable startFileBrowser.service`
-13. `sudo reboot`
-14. Verify that your services are running, with `systemctl status mergeTeslaCam.service`, etc. (once for each of the four services)
+10. `sudo reboot`
+11. Verify that your services are running, with `systemctl status mergeTeslaCam.service`, etc. (once for each of the four services)
 
 **H. Configure your Pi Zero W**
 

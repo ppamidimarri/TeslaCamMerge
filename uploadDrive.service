@@ -1,6 +1,6 @@
 [Unit]
 Description=Upload selected dashcam footage to Google Drive
-After=network.target systemd-user-session.service loadSSD.service
+After=network.target multi-user.target loadSSD.service
 RequiresMountsFor=SSD_MOUNT_POINT
 
 [Service]
@@ -10,4 +10,4 @@ Restart=on-failure
 RestartSec=60
 
 [Install]
-WantedBy=multi-user.target mergeTeslaCam.service
+WantedBy=smbd.service

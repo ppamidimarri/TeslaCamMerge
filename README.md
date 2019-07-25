@@ -5,7 +5,21 @@ Tesla's in-built dashcam create three separate video files, one each from the fr
 2. Merge the three videos into one 
 3. Create a sped-up preview version of the merged video
 4. Show the videos (raw, merged or previews) over a web browser
-5. Move selected videos to my Google Drive account
+5. Move selected videos to cloud storage (e.g. Google Drive)
+
+## How it works
+
+The Pi W is always connected to the car's USB port. In there, it acts presents itself as a USB storage device to the car. The car saves videos to the Pi W's Micro-SD card when sentry events occur, or when the user presses the camera icon on the display. These clips are a minute long, and three clips are produced for each minute. 
+
+The Jetson Nano stays at home and is always on and connected to the network. It has a CIFS share that maps to the Jetson Nano's Micro-SD card. There is a high-capacity USB SSD connected to the Jetson Nano. The Jetson Nano hosts a web site that displays the contents of the USB SSD. 
+
+The Pi W connects to the home WiFi network when in range, and tries to access the CIFS share on the Jetson Nano. When the share is reachable, the Pi W moves over all recorded files to that share.  
+
+When any new files are loaded on the CIFS share, this application moves them from the Micro-SD card on the Jetson Nano over to the USB SSD. Once all three clips for any particular timestamp (i.e. front, left and right camera videos) are available on the USB SSD, this application then merges them into one mp4 file. It then creates a fast preview of the merged clip. 
+
+You can easily access all the videos (raw clips from TeslaCam, merged full videos, or fast-preview versions) through a web browser. There is an "Upload" folder on the USB SSD. The web site allows you to easily copy / move files into that "Upload" folder. This application takes any files placed in that "Upload" folder and uploads them to cloud storage. 
+
+I have an nginx reverse proxy for my home that I set up for other projects. The Jetson Nano's web site for viewing video files is behind that reverse proxy, so I can access my available dashcam footage over the internet. The instructions on this project do not cover how to set up a reverse proxy. 
 
 ## Hardware
 
@@ -73,12 +87,14 @@ Once these steps are done, you can do the rest of the work on the Jetson Nano ei
 
 **F. Install and configure rclone**
 
+If you do not need the ability to upload your videos to the cloud, you can safely skip this section F. If you skip this section, you can also skip step 12 in section G below. 
+
 1. `wget https://downloads.rclone.org/rclone-current-linux-arm.zip` 
 2. `unzip rclone-current-linux-arm.zip` 
 3. `sudo cp rclone-v????-linux-arm/rclone /usr/local/bin/`
-4. `rclone config` and create a remote with the name `gdrive` of type `drive`, with access of `drive.file`
+4. `rclone config` and create a remote (e.g. with the name `gdrive` of type `drive`, with access of `drive.file`)
 5. `rm rclone*` to remove unneded files
-6. In your Google Drive account, create a folder called `TeslaCam` for the uploaded videos
+6. In your cloud (e.g. Google Drive) account, create a folder called `TeslaCam` for the uploaded videos
 
 **G. Install the python scripts and service files**
 1. `cd ~`
@@ -86,7 +102,7 @@ Once these steps are done, you can do the rest of the work on the Jetson Nano ei
 3. `cd TeslaCamMerge`
 4. `chmod +x *.py`
 5. Modify the paths and other entries in `TCMConstants.py` to match your structure from all the previous steps
-6. Once all paths are correct, run `python3 CreateServiceFiles.py`, then verify that the service files have been updated with your information (e.g. verify that `mergeTeslaCam.service` has the correct user ID, path to `MergeTeslaCam.py`, and SSD mont point)
+6. Once all paths are correct, run `python3 CreateServiceFiles.py`, then verify that the service files have been updated with your information (e.g. verify that `mergeTeslaCam.service` has the correct user ID, path to `MergeTeslaCam.py`, and SSD mount point)
 7. `sudo cp *.service /lib/systemd/system`
 8. `sudo systemctl daemon-reload`
 9. `sudo systemctl enable loadSSD.service`

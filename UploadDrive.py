@@ -28,7 +28,7 @@ def main():
 
 	try:
 		i.add_watch(TCMConstants.UPLOAD_LOCAL_PATH,
-			inotify.constants.IN_CLOSE_WRITE)
+			inotify.constants.IN_CLOSE_WRITE | inotify.constants.IN_MOVED_TO)
 		logger.debug("Added watch for {0}".format(TCMConstants.UPLOAD_LOCAL_PATH))
 	except:
 		logger.error("Failed to add watch for {0}, exiting".format(TCMConstants.UPLOAD_LOCAL_PATH))

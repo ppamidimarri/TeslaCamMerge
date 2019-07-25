@@ -11,11 +11,11 @@ Tesla's in-built dashcam create three separate video files, one each from the fr
 
 The Pi Zero W is always connected to the car's USB port. In there, it acts presents itself as a USB storage device to the car. The car saves videos to the Pi Zero W's Micro-SD card when sentry events occur, or when the user presses the camera icon on the display. These clips are a minute long, and three clips are produced for each minute. 
 
-The Jetson Nano stays at home and is always on and connected to the network. It has a CIFS share that maps to the Jetson Nano's Micro-SD card. There is a high-capacity USB SSD connected to the Jetson Nano. The Jetson Nano hosts a web site that displays the contents of the USB SSD. 
+The Jetson Nano stays at home and is always on and connected to the network. It has an SMB share that maps to the Jetson Nano's Micro-SD card. There is a high-capacity USB SSD connected to the Jetson Nano. The Jetson Nano hosts a web site that displays the contents of the USB SSD. 
 
-The Pi Zero W connects to the home WiFi network when in range, and tries to access the CIFS share on the Jetson Nano. When the share is reachable, the Pi Zero W moves over all recorded files to that share.  
+The Pi Zero W connects to the home WiFi network when in range, and tries to access the SMB share on the Jetson Nano. When the share is reachable, the Pi Zero W moves over all recorded files to that share.  
 
-When any new files are loaded on the CIFS share, this application moves them from the Micro-SD card on the Jetson Nano over to the USB SSD. Once all three clips for any particular timestamp (i.e. front, left and right camera videos) are available on the USB SSD, this application then merges them into one mp4 file. It then creates a fast preview of the merged clip. 
+When any new files are loaded on the SMB share, this application moves them from the Micro-SD card on the Jetson Nano over to the USB SSD. Once all three clips for any particular timestamp (i.e. front, left and right camera videos) are available on the USB SSD, this application then merges them into one mp4 file. It then creates a fast preview of the merged clip. 
 
 You can easily access all the videos (raw clips from TeslaCam, merged full videos, or fast-preview versions) through a web browser. There is an "Upload" folder on the USB SSD. The web site allows you to easily copy / move files into that "Upload" folder. This application takes any files placed in that "Upload" folder and moves them to cloud storage. 
 
@@ -55,7 +55,7 @@ If you don't like `vim` as the text editor, install `nano` with `sudo apt instal
 
 `pip3` comes preinstalled on the Jetson Nano. If you use a Raspberry Pi, you will need to install it first with `sudo apt install python3-pip` prior to step 4 above.
 
-**C. Configure [samba](https://www.samba.org/) and set up the CIFS share**
+**C. Configure [samba](https://www.samba.org/) and set up the SMB share**
 1. `sudo cp /etc/samba/smb.conf{,.backup}`
 2. `sudo nano /etc/samba/smb.conf`, uncomment (i.e. remove the `;` character at the beginning of) these lines:
 ```
@@ -68,7 +68,7 @@ If you don't like `vim` as the text editor, install `nano` with `sudo apt instal
 6. `sudo mkdir /samba/<share-user-name>`
 7. `sudo chown <share-user-name>:sambashare /samba/<share-user-name>`
 8. `sudo chmod 2770 /samba/<share-user-name>`
-9. `sudo smbpasswd -a <share-user-name>` and set your CIFS share password
+9. `sudo smbpasswd -a <share-user-name>` and set your SMB share password
 10. `sudo smbpasswd -e <share-user-name>`
 
 **D. Setup the locations for the dashcam footage to be stored**
@@ -123,4 +123,4 @@ Now you are done with setting up your Jetson Nano!
 
 **H. Configure your Pi Zero W**
 
-Follow the [one-step setup instructions](https://github.com/marcone/teslausb/blob/main-dev/doc/OneStepSetup.md) with the pre-built image and the Jetson Nano as the share server, and the username and password for the CIFS share you have set up above. 
+Follow the [one-step setup instructions](https://github.com/marcone/teslausb/blob/main-dev/doc/OneStepSetup.md) with the pre-built image and the Jetson Nano as the share server, and the username and password for the SMB share you have set up above. 

@@ -43,7 +43,9 @@ If you are new to the Jetson Nano, start with this [Getting Started guide from N
 3. Connect keyboard, mouse, ethernet cable and monitor and power up the Nano
 4. Set up a new user and password (in these instructions, you will see this ID as `<userid>`)
 
-Once these steps are done, you can do the rest of the work on the Jetson Nano either in a terminal window in the GUI, or by setting up SSH. If you don't like `vim` as the text editor, install `nano` with `sudo apt install nano`.
+Once these steps are done, you can do the rest of the work on the Jetson Nano either in a terminal window in the GUI, or by setting up SSH. 
+
+If you don't like `vim` as the text editor, install `nano` with `sudo apt install nano` on the Jetson Nano. `nano` comes preinstalled on Raspberry Pi. If you prefer `vim`, use that instead of `nano` in the instructions below.
 
 **B. Install required software on the Nano**
 1. `sudo apt update`
@@ -51,7 +53,9 @@ Once these steps are done, you can do the rest of the work on the Jetson Nano ei
 3. `sudo apt install exfat-fuse ffmpeg samba`
 4. `sudo -H pip3 install inotify`
 
-**C. Configure samba and set up the CIFS share**
+`pip3` comes preinstalled on the Jetson Nano. If you use a Raspberry Pi, you will need to install it first with `sudo apt install python3-pip` prior to step 4 above.
+
+**C. Configure [samba](https://www.samba.org/) and set up the CIFS share**
 1. `sudo cp /etc/samba/smb.conf{,.backup}`
 2. `sudo nano /etc/samba/smb.conf`, uncomment (i.e. remove the `;` character at the beginning of) these lines:
 ```
@@ -68,8 +72,7 @@ Once these steps are done, you can do the rest of the work on the Jetson Nano ei
 10. `sudo smbpasswd -e <share-user-name>`
 
 **D. Setup the locations for the dashcam footage to be stored**
-
-1. Connect the USB SSD to the Jetson Nano
+1. Connect the USB SSD to the Jetson Nano and wait for it to be mounted
 2. It should automatically be configured under `/media/<userid>`. `ls -l /media/<userid>` to check its name. Let's call the name `<drivename>`.
 3. `mkdir /media/<userid>/<drivename>/Footage`
 4. `mkdir /media/<userid>/<drivename>/Footage/Raw`
@@ -77,7 +80,7 @@ Once these steps are done, you can do the rest of the work on the Jetson Nano ei
 6. `mkdir /media/<userid>/<drivename>/Footage/Fast`
 7. `mkdir /media/<userid>/<drivename>/Footage/Upload`
 
-**E. Install and set up filebrowser**
+**E. Install and set up [filebrowser](https://filebrowser.xyz/)**
 1. `cd ~`
 2. `mkdir log` (or any other location you want your log files in)
 3. `curl -fsSL https://filebrowser.xyz/get.sh | bash`
@@ -89,9 +92,9 @@ Once these steps are done, you can do the rest of the work on the Jetson Nano ei
 9. Login as `admin` (password is `admin` as you set up in step 6 above), change password
 10. Create a new (non-admin) user account and password for routine use of the application
 
-**F. Install and configure rclone**
+**F. Install and configure [rclone](https://rclone.org/)**
 
-If you do not need the ability to upload your videos to the cloud, you can safely skip this section F. If you skip this section, you can also skip step 12 in section G below. 
+If you do not need the ability to upload your videos to the cloud, you can safely skip this section F. If you skip this section, you should also skip step 12 in section G below. You can also remove the "Upload" folder set up in step 7 of section D above with `rmdir /media/<userid>/<drivename>/Footage/Upload`.
 
 1. `wget https://downloads.rclone.org/rclone-current-linux-arm.zip` 
 2. `unzip rclone-current-linux-arm.zip` 

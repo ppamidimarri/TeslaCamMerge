@@ -3,7 +3,8 @@
 # This script uploads files placed in UPLOAD_LOCAL_PATH on the
 # computer to the UPLOAD_REMOTE_PATH location using rclone.
 
-import inotify.adapters
+import os
+import time
 import subprocess
 import signal
 import logging
@@ -24,19 +25,17 @@ def main():
 	signal.signal(signal.SIGINT, exit_gracefully)
 	signal.signal(signal.SIGTERM, exit_gracefully)
 
-	i = inotify.adapters.Inotify()
+	files = []
+	while True:
+		try:
+			files = os.listdir(TCMConstants.UPLOAD_LOCAL_PATH)
+		except:
+			logger.error("Error listing directory {0}".format(TCMConstants.UPLOAD_LOCAL_PATH))
+			exit_gracefully(TCMConstants.SPECIAL_EXIT_CODE)
 
-	try:
-		i.add_watch(TCMConstants.UPLOAD_LOCAL_PATH,
-			inotify.constants.IN_CLOSE_WRITE | inotify.constants.IN_MOVED_TO)
-		logger.debug("Added watch for {0}".format(TCMConstants.UPLOAD_LOCAL_PATH))
-	except:
-		logger.error("Failed to add watch for {0}, exiting".format(TCMConstants.UPLOAD_LOCAL_PATH))
-		exit_gracefully(TCMConstants.SPECIAL_EXIT_CODE, None)
-
-	for event in i.event_gen(yield_nones = False):
-		(_, type_names, path, filename) = event
-		upload_file(filename)
+		for file in files:
+			upload_file(file)
+		time.sleep(60)
 
 def upload_file(filename):
 	logger.info("Uploading file {0}".format(filename))

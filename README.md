@@ -32,11 +32,13 @@ I have an nginx reverse proxy for my home that I set up for other projects. The 
 
 I use a 32GB Micro-SD card on the Jetson Nano, and a 128GB card on the Pi Zero W. The amount of storage you need on the Pi depends on how long you may be away from home. 
 
+I chose the Jetson Nano as it does the video merges with ffmpeg 4-5 times faster than a Raspberry Pi 3B+. I don't yet have a Raspberry Pi 4. The Pi 4 *may* achieve similar performance as the Jetson Nano at half the price. 
+
 ## Instructions
 
 **A. Setup the Jetson Nano**
 
-If you are new to the Jetson Nano, start with this [Getting Started guide from Nvidia](https://developer.nvidia.com/embedded/learn/get-started-jetson-nano-devkit#intro).
+If you are new to the Jetson Nano, start with the [Getting Started guide from Nvidia](https://developer.nvidia.com/embedded/learn/get-started-jetson-nano-devkit#intro).
 
 1. Flash a Micro-SD card with the [Jetson Nano system image](https://developer.nvidia.com/jetson-nano-sd-card-image-r322)
 2. Insert the card in the Jetson Nano

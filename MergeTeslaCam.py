@@ -6,7 +6,8 @@
 # are available, it merges them into one "full" file. It then creates a
 # sped-up view of the "full" file as the "fast" file.
 
-import inotify.adapters
+import os
+import time
 import subprocess
 import datetime
 import signal
@@ -32,11 +33,6 @@ ffmpeg_end_full = '\':fontcolor=white:fontsize=48:box=1:boxcolor=black@0.5:boxbo
 ffmpeg_end_fast = '-vf "setpts=0.09*PTS" -c:v libx264 -crf 28 -profile:v main -tune fastdecode -movflags +faststart -threads 0'
 watermark_timestamp_format = '%b %-d\, %-I\:%M %p'
 
-# Lists to keep track of work to be done
-fronts = []
-lefts = []
-rights = []
-
 def main():
 	fh = logging.FileHandler(TCMConstants.LOG_PATH + logger_name + TCMConstants.LOG_EXTENSION)
 	fh.setLevel(TCMConstants.LOG_LEVEL)
@@ -48,35 +44,63 @@ def main():
 	signal.signal(signal.SIGINT, exit_gracefully)
 	signal.signal(signal.SIGTERM, exit_gracefully)
 
-	i = inotify.adapters.Inotify()
+	while True:
+		stamps = []
+		raw_files = os.listdir(TCMConstants.RAW_PATH)
+		full_files = os.listdir(TCMConstants.FULL_PATH)
+		fast_files = os.listdir(TCMConstants.FAST_PATH)
 
-	try:
-		i.add_watch(TCMConstants.RAW_PATH,
-			inotify.constants.IN_CLOSE_WRITE)
-		logger.debug("Added watch for {0}".format(TCMConstants.RAW_PATH))
-	except:
-		logger.error("Failed to add watch for {0}, exiting".format(TCMConstants.RAW_PATH))
-		exit_gracefully(TCMConstants.SPECIAL_EXIT_CODE, None)
+		for file in raw_files:
+			try:
+				stamp, camera = file.rsplit("-", 1)
+			except ValueError:
+				logger.warn("Unrecognized filename: {0}".format(file))
+				continue
+			process_stamp(stamp, raw_files, full_files, fast_files)
 
-	for event in i.event_gen(yield_nones = False):
-		(_, type_names, path, filename) = event
-		watch_for_timestamp(filename)
+		time.sleep(60)
 
-def process_videos(stamp):
-	logger.info("Processing videos for {0}...".format(stamp))
-	run_ffmpeg_command("Merge", stamp, 0) # Full video merging three camera feeds
-	run_ffmpeg_command("Fast preview", stamp, 1) # Fast video, i.e. sped-up version of Full
-	logger.info("Created videos for {0}.".format(stamp))
-	remove_from_worklist(stamp)
+def process_stamp(stamp, raw_files, full_files, fast_files):
+	logger.debug("Processing stamp {0}".format(stamp))
+	if stamp_is_all_ready(stamp, raw_files):
+		logger.debug("Stamp {0} is ready to go".format(stamp))
+		if stamp_in_full(stamp, full_files):
+			logger.debug("Full file exists for stamp {0}".format(stamp))
+			if stamp_in_fast(stamp, fast_files):
+				logger.debug("Fast file exists for stamp {0}".format(stamp))
+			else:
+				run_ffmpeg_command("Fast preview", stamp, 1)
+		else:
+			run_ffmpeg_command("Merge", stamp, 0)
+			if stamp_in_fast(stamp, fast_files):
+				logger.debug("Fast file exists for stamp {0}".format(stamp))
+			else:
+				run_ffmpeg_command("Fast preview", stamp, 1)
+	else:
+		logger.debug("Stamp {0} not yet ready".format(stamp))
 
-def remove_from_worklist(stamp):
-	logger.debug("Removing {0} from work list".format(stamp))
-	try:
-		fronts.remove(stamp)
-		lefts.remove(stamp)
-		rights.remove(stamp)
-	except ValueError:
-		pass
+def stamp_is_all_ready(stamp, raw_files):
+	front_file = "{0}-{1}".format(stamp, front_text)
+	left_file = "{0}-{1}".format(stamp, left_text)
+	right_file = "{0}-{1}".format(stamp, right_text)
+	if front_file in raw_files and left_file in raw_files and right_file in raw_files:
+		return True
+	else:
+		return False
+
+def stamp_in_full(stamp, full_files):
+	full_file = "{0}-{1}".format(stamp, full_text)
+	if full_file in full_files:
+		return True
+	else:
+		return False
+
+def stamp_in_fast(stamp, fast_files):
+	fast_file = "{0}-{1}".format(stamp, fast_text)
+	if fast_file in fast_files:
+		return True
+	else:
+		return False
 
 def run_ffmpeg_command(log_text, stamp, video_type):
 	logger.info("{0} started: {1}...".format(log_text, stamp))
@@ -103,37 +127,6 @@ def format_timestamp(stamp):
 	timestamp = datetime.datetime.strptime(stamp, filename_timestamp_format)
 	logger.debug("Timestamp: {0}".format(timestamp))
 	return timestamp.strftime(watermark_timestamp_format)
-
-def watch_for_timestamp(filename):
-	try:
-		stamp, camera = filename.rsplit("-", 1)
-	except ValueError:
-		logger.warn("Unrecognized filename: {0}".format(filename))
-		return
-
-	if camera == front_text:
-		logger.debug("Found front for: {0}".format(stamp))
-		if stamp in lefts and stamp in rights:
-			process_videos(stamp)
-		else:
-			logger.debug("Not yet ready to merge: {0}".format(stamp))
-			fronts.append(stamp)
-	elif camera == left_text:
-		logger.debug("Found left for: {0}".format(stamp))
-		if stamp in fronts and stamp in rights:
-			process_videos(stamp)
-		else:
-			logger.debug("Not yet ready to merge: {0}".format(stamp))
-			lefts.append(stamp)
-	elif camera == right_text:
-		logger.debug("Found right for: {0}".format(stamp))
-		if stamp in fronts and stamp in lefts:
-			process_videos(stamp)
-		else:
-			logger.debug("Not yet ready to merge: {0}".format(stamp))
-			rights.append(stamp)
-	else:
-		logger.warn("Unrecognized filename: {0}".format(filename))
 
 def exit_gracefully(signum, frame):
 	logger.info("Received signal number {0}, exiting.".format(signum))

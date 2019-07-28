@@ -21,7 +21,7 @@ UPLOAD_REMOTE_PATH = 'gdrive:/TeslaCam'	# Properly-configured entry in your rclo
 LOG_PATH = '/home/pavan/log/'	# Must include trailing /, PROJECT_USER needs read-write permissions
 LOG_EXTENSION = '.log'
 LOG_FORMAT = '%(asctime)s - %(name)s - %(levelname)s - %(message)s'
-LOG_LEVEL = logging.DEBUG
+LOG_LEVEL = logging.INFO
 
 # Paths of installed software, including name of the application
 FFMPEG_PATH = '/usr/bin/ffmpeg'							# Verify with: which ffmpeg

@@ -61,7 +61,7 @@ def main():
 
 		time.sleep(60)
 
-# Startup functions
+### Startup functions ###
 
 def have_required_permissions():
 	return check_permissions(
@@ -87,10 +87,10 @@ def check_permissions(path, test_write):
 			logger.error("Cannot read at path {0}".format(path))
 			return False
 	else:
-		logger.error("Path {0} does not exit".format(path))
+		logger.error("Path {0} does not exist".format(path))
 		return False
 
-# Loop functions
+### Loop functions ###
 
 def process_stamp(stamp):
 	logger.debug("Processing stamp {0}".format(stamp))
@@ -149,7 +149,7 @@ def check_file_for_write(file):
 	else:
 		return True
 
-# FFMPEG command functions
+### FFMPEG command functions ###
 
 def run_ffmpeg_command(log_text, stamp, video_type):
 	logger.info("{0} started: {1}...".format(log_text, stamp))
@@ -172,7 +172,7 @@ def get_ffmpeg_command(stamp, video_type):
 		logger.error("Unrecognized video type {0} for {1}".format(video_type, stamp))
 	return command
 
-# Utility functions
+### Other utility functions ###
 
 def format_timestamp(stamp):
 	timestamp = datetime.datetime.strptime(stamp, filename_timestamp_format)

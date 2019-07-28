@@ -44,69 +44,118 @@ def main():
 	signal.signal(signal.SIGINT, exit_gracefully)
 	signal.signal(signal.SIGTERM, exit_gracefully)
 
-	while True:
-		stamps = []
-		raw_files = os.listdir(TCMConstants.RAW_PATH)
-		full_files = os.listdir(TCMConstants.FULL_PATH)
-		fast_files = os.listdir(TCMConstants.FAST_PATH)
+	if not have_required_permissions():
+		logger.error("Missing some required permissions, exiting")
+		exit_gracefully(TCMConstants.SPECIAL_EXIT_CODE, None)
 
+	while True:
+		raw_files = os.listdir(TCMConstants.RAW_PATH)
 		for file in raw_files:
+			logger.debug("Starting with file {0}".format(file))
 			try:
 				stamp, camera = file.rsplit("-", 1)
 			except ValueError:
 				logger.warn("Unrecognized filename: {0}".format(file))
 				continue
-			process_stamp(stamp, raw_files, full_files, fast_files)
+			process_stamp(stamp)
 
 		time.sleep(60)
 
-def process_stamp(stamp, raw_files, full_files, fast_files):
-	logger.debug("Processing stamp {0}".format(stamp))
-	if stamp_is_all_ready(stamp, raw_files):
-		logger.debug("Stamp {0} is ready to go".format(stamp))
-		if stamp_in_full(stamp, full_files):
-			logger.debug("Full file exists for stamp {0}".format(stamp))
-			if stamp_in_fast(stamp, fast_files):
-				logger.debug("Fast file exists for stamp {0}".format(stamp))
+# Startup functions
+
+def have_required_permissions():
+	return check_permissions(
+		TCMConstants.RAW_PATH, False) and check_permissions(
+		TCMConstants.FULL_PATH, True) and check_permissions(
+		TCMConstants.FAST_PATH, True)
+
+def check_permissions(path, test_write):
+	if os.access(path, os.F_OK):
+		logger.debug("Path {0} exists".format(path))
+		if os.access(path, os.R_OK):
+			logger.debug("Can read at path {0}".format(path))
+			if test_write:
+				if os.access(path, os.W_OK):
+					logger.debug("Can write to path {0}".format(path))
+					return True
+				else:
+					logger.error("Cannot write to path {0}".format(path))
+					return False
 			else:
-				run_ffmpeg_command("Fast preview", stamp, 1)
+				return True
 		else:
+			logger.error("Cannot read at path {0}".format(path))
+			return False
+	else:
+		logger.error("Path {0} does not exit".format(path))
+		return False
+
+# Loop functions
+
+def process_stamp(stamp):
+	logger.debug("Processing stamp {0}".format(stamp))
+	if stamp_is_all_ready(stamp):
+		logger.debug("Stamp {0} is ready to go".format(stamp))
+		if check_file_for_write("{0}{1}-{2}".format(TCMConstants.FULL_PATH, stamp, full_text)):
 			run_ffmpeg_command("Merge", stamp, 0)
-			if stamp_in_fast(stamp, fast_files):
-				logger.debug("Fast file exists for stamp {0}".format(stamp))
-			else:
+		else:
+			logger.debug("Full file exists for stamp {0}".format(stamp))
+		if check_file_for_read("{0}{1}-{2}".format(TCMConstants.FULL_PATH, stamp, full_text)):
+			if check_file_for_write("{0}{1}-{2}".format(TCMConstants.FAST_PATH, stamp, fast_text)):
 				run_ffmpeg_command("Fast preview", stamp, 1)
+			else:
+				logger.debug("Fast file exists for stamp {0}".format(stamp))
+		else:
+			logger.warn("Full file {0}{1}-{2} not ready for read, postponing fast preview".format(
+				TCMConstants.FULL_PATH, stamp, full_text))
 	else:
 		logger.debug("Stamp {0} not yet ready".format(stamp))
 
-def stamp_is_all_ready(stamp, raw_files):
-	front_file = "{0}-{1}".format(stamp, front_text)
-	left_file = "{0}-{1}".format(stamp, left_text)
-	right_file = "{0}-{1}".format(stamp, right_text)
-	if front_file in raw_files and left_file in raw_files and right_file in raw_files:
+def stamp_is_all_ready(stamp):
+	front_file = "{0}{1}-{2}".format(TCMConstants.RAW_PATH, stamp, front_text)
+	left_file = "{0}{1}-{2}".format(TCMConstants.RAW_PATH, stamp, left_text)
+	right_file = "{0}{1}-{2}".format(TCMConstants.RAW_PATH, stamp, right_text)
+	if check_file_for_read(front_file) and check_file_for_read(left_file) and check_file_for_read(right_file):
 		return True
 	else:
 		return False
 
-def stamp_in_full(stamp, full_files):
-	full_file = "{0}-{1}".format(stamp, full_text)
-	if full_file in full_files:
-		return True
+def check_file_for_read(file):
+	if os.access(file, os.F_OK):
+		return not file_being_written(file)
 	else:
+		logger.warn("File {0} does not exist".format(file))
 		return False
 
-def stamp_in_fast(stamp, fast_files):
-	fast_file = "{0}-{1}".format(stamp, fast_text)
-	if fast_file in fast_files:
-		return True
+def file_being_written(file):
+	completed = subprocess.run("{0} {1}".format(TCMConstants.LSOF_PATH, file), shell=True,
+		stdin=subprocess.DEVNULL, stdout=subprocess.PIPE, stderr=subprocess.PIPE)
+	if completed.stderr:
+		logger.error("Error running lsof on file {0}, stdout: {1}, stderr: {2}".format(
+			file, completed.stdout, completed.stderr))
+		return True # abundance of caution: if lsof won't run properly, postpone the merge!
 	else:
+		if completed.stdout:
+			logger.info("File {0} in use, stdout: {1}, stderr: {2}".format(
+				file, completed.stdout, completed.stderr))
+			return True
+		else:
+			return False
+
+def check_file_for_write(file):
+	if os.access(file, os.F_OK):
+		logger.debug("File {0} exists".format(file))
 		return False
+	else:
+		return True
+
+# FFMPEG command functions
 
 def run_ffmpeg_command(log_text, stamp, video_type):
 	logger.info("{0} started: {1}...".format(log_text, stamp))
 	command = get_ffmpeg_command(stamp, video_type)
 	logger.debug("Command: {0}".format(command))
-	subprocess.run(command, shell=True, stdin=subprocess.DEVNULL, timeout=600)
+	subprocess.run(command, shell=True, stdin=subprocess.DEVNULL)
 	logger.info("{0} completed: {1}.".format(log_text, stamp))
 
 def get_ffmpeg_command(stamp, video_type):
@@ -122,6 +171,8 @@ def get_ffmpeg_command(stamp, video_type):
 	else:
 		logger.error("Unrecognized video type {0} for {1}".format(video_type, stamp))
 	return command
+
+# Utility functions
 
 def format_timestamp(stamp):
 	timestamp = datetime.datetime.strptime(stamp, filename_timestamp_format)

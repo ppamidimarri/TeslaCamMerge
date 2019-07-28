@@ -21,12 +21,13 @@ UPLOAD_REMOTE_PATH = 'gdrive:/TeslaCam'	# Properly-configured entry in your rclo
 LOG_PATH = '/home/pavan/log/'	# Must include trailing /, PROJECT_USER needs read-write permissions
 LOG_EXTENSION = '.log'
 LOG_FORMAT = '%(asctime)s - %(name)s - %(levelname)s - %(message)s'
-LOG_LEVEL = logging.INFO
+LOG_LEVEL = logging.DEBUG
 
 # Paths of installed software, including name of the application
-FFMPEG_PATH = '/usr/bin/ffmpeg'
-RCLONE_PATH = '/usr/local/bin/rclone --log-file /home/pavan/log/rclone.log'
-FILEBROWSER_PATH = '/usr/local/bin/filebrowser'
+FFMPEG_PATH = '/usr/bin/ffmpeg'							# Verify with: which ffmpeg
+RCLONE_PATH = '/usr/local/bin/rclone --log-file /home/pavan/log/rclone.log'	# Verify with: which rclone
+FILEBROWSER_PATH = '/usr/local/bin/filebrowser'					# Verify with: which filebrowser
+LSOF_PATH = '/usr/bin/lsof -t'							# Verify with: which lsof
 
 # Do not change this, used to communicate to systemd that a service hasn't started up properly
 SPECIAL_EXIT_CODE = 115

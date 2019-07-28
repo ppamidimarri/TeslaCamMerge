@@ -52,7 +52,7 @@ If you don't like `vim` as the text editor, install `nano` with `sudo apt instal
 **B. Install required software on the Nano**
 1. `sudo apt update`
 2. `sudo apt upgrade`
-3. `sudo apt install exfat-fuse ffmpeg samba`
+3. `sudo apt install exfat-fuse ffmpeg samba lsof`
 4. `sudo -H pip3 install inotify`
 
 `pip3` comes preinstalled on the Jetson Nano. If you use a Raspberry Pi, you will need to install it first with `sudo apt install python3-pip` prior to step 4 above.

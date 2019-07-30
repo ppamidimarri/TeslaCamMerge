@@ -126,3 +126,30 @@ Now you are done with setting up your Jetson Nano!
 **H. Configure your Pi Zero W**
 
 Follow the [one-step setup instructions](https://github.com/marcone/teslausb/blob/main-dev/doc/OneStepSetup.md) with the pre-built image and the Jetson Nano as the share server, and the username and password for the SMB share you have set up above. 
+
+**I. Make your footage accessible over the internet**
+
+This is an optional step. You can access your videos using a browser on your phone or computer at home. If you want to access them over the internet, you need to set up a reverse proxy. You can set up the reverse proxy on the same Jetson Nano or Raspberry Pi you run this project on (but not the Pi Zero W). I use nginx for the reverse proxy, and here is an outline of how to get it going. Please research how to set up a secure reverse proxy before doing this.
+
+1. `sudo apt install nginx`
+2. On your main router, assign a fixed LAN IP address to the device running the website. 
+2. On your main router, forward ports 80 and 443 to that fixed LAN IP address. 
+4. Identify your WAN IP address. You can do this by googling "what's my IP" in a browser. Let's say it is 123.234.213.120. Try the URL http://123.234.213.120/ from your phone with the phone not on your home WiFi (turn the phone's WiFi off for this test). That way you are trying to reach your reverse proxy server from the internet, not your home network. You should see a "Welcome to nginx" page. 
+5. Then edit `sudo nano /etc/nginx/sites-available/default` to add a new `location` block with a `proxy_pass` line. Details [here](https://docs.nginx.com/nginx/admin-guide/web-server/reverse-proxy/). Example: 
+``` 
+location / {
+	proxy_pass http://192.168.1.16:8080/;
+}
+``` 
+7. Restart nginx.
+8. Try accessing http://123.234.213.120/ on your phone with WiFi off.  
+9. If the above test worked, then try it in the car browser. Bookmark the page in the car browser.
+
+Your WAN IP address _may_ be dynamic -- that is at your ISP's discretion. If it is, saving a bookmark with the number will stop working when the ISP gives you a new WAN IP. To get around this, you need to jump through a few more hoops. 
+
+1. Select a dynamic DNS service. I picked NoIP.com. 
+2. Create a domain there. Many services let you set up a free subdomain (e.g. `myteslacam.ddns.net`).
+3. On the device running this project (not the Pi Zero W in the car), install the dynamic update client provided by the dynamic DNS service you picked. This service will ping the service provider once every so often and tell them, "hey, my IP address is x.x.x.x." When the service provider sees a change in the IP address, they change their DNS records so that when you try to reach `myteslacam.ddns.net` over the internet, it will be routed to your new WAN IP. 
+4. Now try your new URL in the car (e.g. http://myteslacam.ddns.net/). Bookmark it! 
+
+If you decide to do all this, I highly recommend securing your reverse proxy server by forcing SSL on all requests and getting your own SSL certificate. There is a lot of documentation out there on how to secure an nginx server. 

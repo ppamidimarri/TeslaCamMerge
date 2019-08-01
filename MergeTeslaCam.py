@@ -64,31 +64,14 @@ def main():
 ### Startup functions ###
 
 def have_required_permissions():
-	return check_permissions(
-		TCMConstants.RAW_PATH, False) and check_permissions(
-		TCMConstants.FULL_PATH, True) and check_permissions(
-		TCMConstants.FAST_PATH, True)
+	return TCMConstants.check_permissions(
+		TCMConstants.RAW_PATH, False, logger) and TCMConstants.check_permissions(
+		TCMConstants.FULL_PATH, True, logger) and TCMConstants.check_permissions(
+		TCMConstants.FAST_PATH, True, logger)
 
-def check_permissions(path, test_write):
-	if os.access(path, os.F_OK):
-		logger.debug("Path {0} exists".format(path))
-		if os.access(path, os.R_OK):
-			logger.debug("Can read at path {0}".format(path))
-			if test_write:
-				if os.access(path, os.W_OK):
-					logger.debug("Can write to path {0}".format(path))
-					return True
-				else:
-					logger.error("Cannot write to path {0}".format(path))
-					return False
-			else:
-				return True
-		else:
-			logger.error("Cannot read at path {0}".format(path))
-			return False
-	else:
-		logger.error("Path {0} does not exist".format(path))
-		return False
+def exit_gracefully(signum, frame):
+	logger.info("Received signal number {0}, exiting.".format(signum))
+	exit(signum)
 
 ### Loop functions ###
 
@@ -96,12 +79,12 @@ def process_stamp(stamp):
 	logger.debug("Processing stamp {0}".format(stamp))
 	if stamp_is_all_ready(stamp):
 		logger.debug("Stamp {0} is ready to go".format(stamp))
-		if check_file_for_write("{0}{1}-{2}".format(TCMConstants.FULL_PATH, stamp, full_text)):
+		if TCMConstants.check_file_for_write("{0}{1}-{2}".format(TCMConstants.FULL_PATH, stamp, full_text), logger):
 			run_ffmpeg_command("Merge", stamp, 0)
 		else:
 			logger.debug("Full file exists for stamp {0}".format(stamp))
-		if check_file_for_read("{0}{1}-{2}".format(TCMConstants.FULL_PATH, stamp, full_text)):
-			if check_file_for_write("{0}{1}-{2}".format(TCMConstants.FAST_PATH, stamp, fast_text)):
+		if TCMConstants.check_file_for_read("{0}{1}-{2}".format(TCMConstants.FULL_PATH, stamp, full_text), logger):
+			if TCMConstants.check_file_for_write("{0}{1}-{2}".format(TCMConstants.FAST_PATH, stamp, fast_text), logger):
 				run_ffmpeg_command("Fast preview", stamp, 1)
 			else:
 				logger.debug("Fast file exists for stamp {0}".format(stamp))
@@ -115,39 +98,10 @@ def stamp_is_all_ready(stamp):
 	front_file = "{0}{1}-{2}".format(TCMConstants.RAW_PATH, stamp, front_text)
 	left_file = "{0}{1}-{2}".format(TCMConstants.RAW_PATH, stamp, left_text)
 	right_file = "{0}{1}-{2}".format(TCMConstants.RAW_PATH, stamp, right_text)
-	if check_file_for_read(front_file) and check_file_for_read(left_file) and check_file_for_read(right_file):
+	if TCMConstants.check_file_for_read(front_file, logger) and TCMConstants.check_file_for_read(left_file, logger) and TCMConstants.check_file_for_read(right_file, logger):
 		return True
 	else:
 		return False
-
-def check_file_for_read(file):
-	if os.access(file, os.F_OK):
-		return not file_being_written(file)
-	else:
-		logger.warn("File {0} does not exist".format(file))
-		return False
-
-def file_being_written(file):
-	completed = subprocess.run("{0} {1}".format(TCMConstants.LSOF_PATH, file), shell=True,
-		stdin=subprocess.DEVNULL, stdout=subprocess.PIPE, stderr=subprocess.PIPE)
-	if completed.stderr:
-		logger.error("Error running lsof on file {0}, stdout: {1}, stderr: {2}".format(
-			file, completed.stdout, completed.stderr))
-		return True # abundance of caution: if lsof won't run properly, postpone the merge!
-	else:
-		if completed.stdout:
-			logger.info("File {0} in use, stdout: {1}, stderr: {2}".format(
-				file, completed.stdout, completed.stderr))
-			return True
-		else:
-			return False
-
-def check_file_for_write(file):
-	if os.access(file, os.F_OK):
-		logger.debug("File {0} exists".format(file))
-		return False
-	else:
-		return True
 
 ### FFMPEG command functions ###
 
@@ -178,10 +132,6 @@ def format_timestamp(stamp):
 	timestamp = datetime.datetime.strptime(stamp, filename_timestamp_format)
 	logger.debug("Timestamp: {0}".format(timestamp))
 	return timestamp.strftime(watermark_timestamp_format)
-
-def exit_gracefully(signum, frame):
-	logger.info("Received signal number {0}, exiting.".format(signum))
-	exit(signum)
 
 if __name__ == '__main__':
 	main()

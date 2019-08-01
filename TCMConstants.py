@@ -1,4 +1,6 @@
 import logging
+import os
+import subprocess
 
 # Location where the TeslaCamMerge directory is present. Must NOT include trailing /.
 PROJECT_PATH = '/home/pavan'	# Must contain the directory called TeslaCamMerge (where you cloned this repository), as well as filebrowser.db
@@ -29,5 +31,56 @@ RCLONE_PATH = '/usr/local/bin/rclone --log-file /home/pavan/log/rclone.log'	# Ve
 FILEBROWSER_PATH = '/usr/local/bin/filebrowser'					# Verify with: which filebrowser
 LSOF_PATH = '/usr/bin/lsof -t'							# Verify with: which lsof
 
-# Do not change this, used to communicate to systemd that a service hasn't started up properly
+### Do not modify anything below this line ###
+
 SPECIAL_EXIT_CODE = 115
+
+def check_permissions(path, test_write, logger):
+	if os.access(path, os.F_OK):
+		logger.debug("Path {0} exists".format(path))
+		if os.access(path, os.R_OK):
+			logger.debug("Can read at path {0}".format(path))
+			if test_write:
+				if os.access(path, os.W_OK):
+					logger.debug("Can write to path {0}".format(path))
+					return True
+				else:
+					logger.error("Cannot write to path {0}".format(path))
+					return False
+			else:
+				return True
+		else:
+			logger.error("Cannot read at path {0}".format(path))
+			return False
+	else:
+		logger.error("Path {0} does not exist".format(path))
+		return False
+
+def check_file_for_read(file, logger):
+	if os.access(file, os.F_OK):
+		return not file_being_written(file)
+	else:
+		logger.warn("File {0} does not exist".format(file))
+		return False
+
+def file_being_written(file, logger):
+	completed = subprocess.run("{0} {1}".format(LSOF_PATH, file), shell=True,
+		stdin=subprocess.DEVNULL, stdout=subprocess.PIPE, stderr=subprocess.PIPE)
+	if completed.stderr:
+		logger.error("Error running lsof on file {0}, stdout: {1}, stderr: {2}".format(
+			file, completed.stdout, completed.stderr))
+		return True # abundance of caution: if lsof won't run properly, postpone the merge!
+	else:
+		if completed.stdout:
+			logger.info("File {0} in use, stdout: {1}, stderr: {2}".format(
+				file, completed.stdout, completed.stderr))
+			return True
+		else:
+			return False
+
+def check_file_for_write(file, logger):
+	if os.access(file, os.F_OK):
+		logger.debug("File {0} exists".format(file))
+		return False
+	else:
+		return True

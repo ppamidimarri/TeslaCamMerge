@@ -4,7 +4,8 @@
 # "RAW_PATH" location. I use it to pick up files placed in a
 # CIFS share by teslausb and move them to a Samsung T5 SSD.
 
-import inotify.adapters
+import os
+import time
 import shutil
 import signal
 import logging
@@ -25,31 +26,41 @@ def main():
 	signal.signal(signal.SIGINT, exit_gracefully)
 	signal.signal(signal.SIGTERM, exit_gracefully)
 
-	i = inotify.adapters.Inotify()
-
-	try:
-		i.add_watch(TCMConstants.SHARE_PATH,
-			inotify.constants.IN_CLOSE_WRITE)
-		logger.debug("Added watch for {0}".format(TCMConstants.SHARE_PATH))
-	except:
-		logger.error("Failed to add watch for {0}, exiting".format(TCMConstants.SHARE_PATH))
+	if not have_required_permissions():
+		logger.error("Missing some required permissions, exiting")
 		exit_gracefully(TCMConstants.SPECIAL_EXIT_CODE, None)
 
-	for event in i.event_gen(yield_nones = False):
-		(_, type_names, path, filename) = event
-		move_file(filename)
+	while True:
+		for root, dirs, files in os.walk(TCMConstants.SHARE_PATH, topdown=False):
+			for name in files:
+				move_file(os.path.join(root, name))
+			for name in dirs:
+				os.rmdir(os.path.join(root, name))
+		time.sleep(60)
 
-def move_file(filename):
-	logger.info("Moving file {0}".format(filename))
-	try:
-		shutil.move(TCMConstants.SHARE_PATH + filename, TCMConstants.RAW_PATH)
-		logger.debug("Moved file {0}".format(filename))
-	except:
-		logger.warn("Failed to move {0}".format(filename))
+### Startup functions ###
 
+def have_required_permissions():
+	return TCMConstants.check_permissions(
+		TCMConstants.SHARE_PATH, True, logger) and TCMConstants.check_permissions(
+		TCMConstants.RAW_PATH, True, logger)
+		
 def exit_gracefully(signum, frame):
 	logger.info("Received signal number {0}, exiting.".format(signum))
 	exit(signum)
+
+### Loop functions ###
+
+def move_file(file):
+	logger.info("Moving file {0}".format(file))
+	if TCMConstants.check_file_for_read(file, logger):
+		try:
+			shutil.move(file, TCMConstants.RAW_PATH)
+			logger.debug("Moved file {0}".format(file))
+		except:
+			logger.error("Failed to move {0}".format(file))
+	else:
+		logger.debug("File {0} still being written, skipping for now".format(file))
 
 if __name__ == '__main__':
 	main()

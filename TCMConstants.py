@@ -33,6 +33,7 @@ LSOF_PATH = '/usr/bin/lsof -t'							# Verify with: which lsof
 
 ### Do not modify anything below this line ###
 
+SLEEP_DURATION = 60
 SPECIAL_EXIT_CODE = 115
 
 def check_permissions(path, test_write, logger):

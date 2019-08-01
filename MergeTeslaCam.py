@@ -59,7 +59,7 @@ def main():
 				continue
 			process_stamp(stamp)
 
-		time.sleep(60)
+		time.sleep(TCMConstants.SLEEP_DURATION)
 
 ### Startup functions ###
 

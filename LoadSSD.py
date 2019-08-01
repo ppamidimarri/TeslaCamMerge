@@ -36,7 +36,7 @@ def main():
 				move_file(os.path.join(root, name))
 			for name in dirs:
 				os.rmdir(os.path.join(root, name))
-		time.sleep(60)
+		time.sleep(TCMConstants.SLEEP_DURATION)
 
 ### Startup functions ###
 

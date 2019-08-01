@@ -35,7 +35,7 @@ def main():
 
 		for file in files:
 			upload_file(file)
-		time.sleep(60)
+		time.sleep(TCMConstants.SLEEP_DURATION)
 
 def upload_file(filename):
 	logger.info("Uploading file {0}".format(filename))

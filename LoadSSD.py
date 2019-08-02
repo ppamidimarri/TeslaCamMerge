@@ -35,6 +35,7 @@ def main():
 			for name in files:
 				move_file(os.path.join(root, name))
 			for name in dirs:
+				logger.debug("Removing empty directory {0}".format(os.path.join(root, name)))
 				os.rmdir(os.path.join(root, name))
 		time.sleep(TCMConstants.SLEEP_DURATION)
 
@@ -44,7 +45,7 @@ def have_required_permissions():
 	return TCMConstants.check_permissions(
 		TCMConstants.SHARE_PATH, True, logger) and TCMConstants.check_permissions(
 		TCMConstants.RAW_PATH, True, logger)
-		
+
 def exit_gracefully(signum, frame):
 	logger.info("Received signal number {0}, exiting.".format(signum))
 	exit(signum)

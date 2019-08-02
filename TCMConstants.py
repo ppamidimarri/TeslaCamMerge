@@ -59,7 +59,7 @@ def check_permissions(path, test_write, logger):
 
 def check_file_for_read(file, logger):
 	if os.access(file, os.F_OK):
-		return not file_being_written(file)
+		return not file_being_written(file, logger)
 	else:
 		logger.warn("File {0} does not exist".format(file))
 		return False

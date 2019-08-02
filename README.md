@@ -69,6 +69,17 @@ If you don't like `vim` as the text editor, install `nano` with `sudo apt instal
 8. `sudo chmod 2770 /samba/<share-user-name>`
 9. `sudo smbpasswd -a <share-user-name>` and set your SMB share password
 10. `sudo smbpasswd -e <share-user-name>`
+11. `sudo nano /etc/samba/smb.conf`, scroll to the bottom of the file and add:
+```
+# Settings for TM3 dashcam footage
+[fdrive]
+   path = /samba/<share-user-name>
+   browseable = no
+   read only = no
+   force create mode = 0660
+   force directory mode = 2770
+   valid users = <share-user-name> @sadmin
+```
 
 **D. Setup the locations for the dashcam footage to be stored**
 1. Connect the USB SSD to the Jetson Nano and wait for it to be mounted

@@ -96,7 +96,7 @@ If you don't like `vim` as the text editor, install `nano` with `sudo apt instal
 3. `curl -fsSL https://filebrowser.xyz/get.sh | bash`
 4. `ifconfig` and note the LAN IP address of your Jetson Nano. In your home router, given your Jetson Nano a fixed LAN IP.
 5. `filebrowser config init -a <LAN-IP> -r /media/<userid>/<drivename>/Footage/ -l /home/<userid>/log/filebrowser.log --branding.files /home/<userid>/TeslaCamMerge --branding.disableExternal --branding.name "TM3 Footage"`
-6. `filebrowser users add admin admin`
+6. `filebrowser users add admin admin --perm.admin`
 7. `filebrowser -d /home/<userid>/filebrowser.db`
 8. On your computer's web browser, go to `http://<LAN-IP>:8080/` 
 9. Login as `admin` (password is `admin` as you set up in step 6 above), change password

@@ -5,7 +5,7 @@ RequiresMountsFor=SSD_MOUNT_POINT
 
 [Service]
 User=PROJECT_USER
-ExecStartPre=/bin/sleep 30
+ExecStartPre=/bin/sleep 60
 ExecStart=PROJECT_PATH/TeslaCamMerge/UploadDrive.py
 Restart=on-failure
 RestartSec=60

@@ -1,9 +1,11 @@
 [Unit]
 Description=Load SSD with dashcam clips received over CIFS share
 After=network.target systemd-user-session.service
+RequiresMountsFor=SSD_MOUNT_POINT
 
 [Service]
 User=PROJECT_USER
+ExecPre=/bin/sleep 60
 ExecStart=PROJECT_PATH/TeslaCamMerge/LoadSSD.py
 Restart=on-failure
 RestartSec=60

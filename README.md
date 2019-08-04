@@ -23,7 +23,7 @@ I have an nginx reverse proxy for my home that I set up for other projects. The 
 
 ## [Screenshots](https://imgur.com/a/2Jl6kED)
 
-![Login screen](https://imgur.com/cOnudbd)
+![Login screen](https://i.imgur.com/cOnudbd.png)
 
 ## Hardware needed
 

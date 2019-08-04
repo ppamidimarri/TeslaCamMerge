@@ -29,7 +29,7 @@ I have an nginx reverse proxy for my home that I set up for other projects. The 
 
 ## [Screenshots](https://imgur.com/a/2Jl6kED)
 
-** Desktop browser view of the website**
+**Desktop browser view of the website**
 
 ![Login screen](https://i.imgur.com/cOnudbd.png)
 
@@ -41,7 +41,7 @@ I have an nginx reverse proxy for my home that I set up for other projects. The 
 
 ![Video display](https://i.imgur.com/JBeHL8F.png)
 
-** Mobile browser view of the website**
+**Mobile browser view of the website**
 
 ![Front page](https://i.imgur.com/A7SeLs8.png)
 

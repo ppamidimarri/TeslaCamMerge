@@ -7,7 +7,7 @@ Tesla's in-built dashcam creates three separate video files, one each from the f
 4. Show the videos (raw, merged or fast previews) over a web browser
 5. Move selected videos to cloud storage (e.g. Google Drive)
 
-I extended this project to support another use-case: two different home locations, a main home and a weekend home. A Jetson Nano runs at the main home and a Pi 4B runs at the weekend home. The code for that setup needs one additional python script and one additional service file. The instructions below are for one home location. If you want the more complicated setup with two locations, please open an issue and I will share that. 
+I extended this project to support another use-case: two different home locations, a main home and a weekend home. A Jetson Nano runs at the main home and a Pi 4B runs at the weekend home. When I park at the weekend home, the Pi Zero W in the car archives the clips, and then Jetson Nano at the main home pulls those files from the weekend home's Pi 4B and merges them. The code for that setup needs one additional python script and one additional service file. The instructions below are for one home location. If you want the more complicated setup with two locations, please open an issue and I will share that. 
 
 ## How it works
 

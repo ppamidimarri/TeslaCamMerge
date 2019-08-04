@@ -21,7 +21,13 @@ You can easily access all the videos (raw clips from TeslaCam, merged full video
 
 I have an nginx reverse proxy for my home that I set up for other projects. The Jetson Nano's web site for viewing video files is behind that reverse proxy, so I can access my available dashcam footage over the internet. The instructions on this project do not cover how to set up a reverse proxy. 
 
-## [Screenshots](https://imgur.com/a/2Jl6kED)
+## Example Videos
+
+![Fast preview video](https://i.imgur.com/nqiPhZz.gifv)
+
+![Full merged video](https://i.imgur.com/Q2Y1ODc.gifv)
+
+## [Website Screenshots](https://imgur.com/a/2Jl6kED)
 
 ![Login screen](https://i.imgur.com/cOnudbd.png)
 

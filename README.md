@@ -27,7 +27,9 @@ I have an nginx reverse proxy for my home that I set up for other projects. The 
 
 [Full merged video](https://i.imgur.com/Q2Y1ODc.gifv)
 
-## [Website Screenshots](https://imgur.com/a/2Jl6kED)
+## [Screenshots](https://imgur.com/a/2Jl6kED)
+
+** Desktop browser view of the website**
 
 ![Login screen](https://i.imgur.com/cOnudbd.png)
 
@@ -38,6 +40,24 @@ I have an nginx reverse proxy for my home that I set up for other projects. The 
 ![List view of videos](https://i.imgur.com/uaKslTA.png)
 
 ![Video display](https://i.imgur.com/JBeHL8F.png)
+
+** Mobile browser view of the website**
+
+![Front page](https://i.imgur.com/A7SeLs8.png)
+
+![File list in tile view](https://i.imgur.com/DOD5ULz.png)
+
+![Menu for mobile view](https://i.imgur.com/B4eOCQM.png)
+
+![Highlighting folder](https://i.imgur.com/w71zvUF.png)
+
+![Highlighting a video](https://i.imgur.com/fyEbYQt.png)
+
+![Share feature](https://i.imgur.com/SNr8WQA.png)
+
+![File information](https://i.imgur.com/i0NZiQH.png) 
+
+![Video display on mobile](https://i.imgur.com/0H02pf1.png)
 
 ## Hardware needed
 

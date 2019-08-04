@@ -1,11 +1,13 @@
 # TeslaCamMerge
 
-Tesla's in-built dashcam create three separate video files, one each from the front, left and right cameras. I built this project to do the following:
+Tesla's in-built dashcam creates three separate video files, one each from the front, left and right cameras. I built this project to do the following:
 1. Use the [teslausb](https://github.com/marcone/teslausb) project to have the car store videos on a Raspberry Pi Zero W and transfer the recorded videos to a network share when connected to WiFi at home
 2. Merge the three videos into one 
-3. Create a sped-up preview version of the merged video
-4. Show the videos (raw, merged or previews) over a web browser
+3. Create a sped-up "fast preview" version of the merged video
+4. Show the videos (raw, merged or fast previews) over a web browser
 5. Move selected videos to cloud storage (e.g. Google Drive)
+
+I extended this project to support another use-case: two different home locations, a main home and a weekend home. A Jetson Nano runs at the main home and a Pi 4B runs at the weekend home. The code for that setup needs one additional python script and one additional service file. The instructions below are for one home location. If you want the more complicated setup with two locations, please open an issue and I will share that. 
 
 ## How it works
 

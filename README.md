@@ -120,6 +120,7 @@ If you don't like `vim` as the text editor, install `nano` with `sudo apt instal
    force directory mode = 2770
    valid users = <share-user-name> @sadmin
 ```
+12. Add UNIX user ID for this project to the group `sambashare` with: `sudo usermod -a -G sambashare <userid>`
 
 **D. Setup the locations for the dashcam footage to be stored**
 1. Connect the USB SSD to the Jetson Nano and wait for it to be mounted

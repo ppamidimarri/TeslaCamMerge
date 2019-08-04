@@ -25,6 +25,14 @@ I have an nginx reverse proxy for my home that I set up for other projects. The 
 
 ![Login screen](https://i.imgur.com/cOnudbd.png)
 
+![Main page of web site](https://i.imgur.com/knQz9Ws.png)
+
+![Tile view of videos](https://i.imgur.com/KMkVhIy.png)
+
+![List view of videos](https://i.imgur.com/uaKslTA.png)
+
+![Video display](https://i.imgur.com/JBeHL8F.png)
+
 ## Hardware needed
 
 1. [Nvidia Jetson Nano](https://developer.nvidia.com/buy-jetson?product=jetson_nano&location=US) (may work on Raspberry Pi with slight changes, but not tested)

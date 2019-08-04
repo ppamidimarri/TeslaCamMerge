@@ -43,21 +43,21 @@ I have an nginx reverse proxy for my home that I set up for other projects. The 
 
 **Mobile browser view of the website**
 
-![Front page](https://i.imgur.com/A7SeLs8.png)
+![Front page](https://i.imgur.com/YQqVGG0.pngg)
 
-![File list in tile view](https://i.imgur.com/DOD5ULz.png)
+![Menu for mobile view](https://i.imgur.com/YjvbABV.png)
 
-![Menu for mobile view](https://i.imgur.com/B4eOCQM.png)
+![Folder selection](https://i.imgur.com/niKq7oc.png)
 
-![Highlighting folder](https://i.imgur.com/w71zvUF.png)
+![File list in tile view](https://i.imgur.com/D6v4nNV.png)
 
-![Highlighting a video](https://i.imgur.com/fyEbYQt.png)
+![Video selection](https://i.imgur.com/pha7eZq.png)
 
-![Share feature](https://i.imgur.com/SNr8WQA.png)
+![Share feature](https://i.imgur.com/rgnxuxs.png)
 
-![File information](https://i.imgur.com/i0NZiQH.png) 
+![File information](https://i.imgur.com/Z0UybCy.png) 
 
-![Video display on mobile](https://i.imgur.com/0H02pf1.png)
+![Video display on mobile](https://i.imgur.com/dNOVmah.jpg)
 
 ## Hardware needed
 

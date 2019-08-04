@@ -23,9 +23,9 @@ I have an nginx reverse proxy for my home that I set up for other projects. The 
 
 ## Example Videos
 
-![Fast preview video](https://i.imgur.com/nqiPhZz.gifv)
+[Fast preview video](https://i.imgur.com/nqiPhZz.gifv)
 
-![Full merged video](https://i.imgur.com/Q2Y1ODc.gifv)
+[Full merged video](https://i.imgur.com/Q2Y1ODc.gifv)
 
 ## [Website Screenshots](https://imgur.com/a/2Jl6kED)
 

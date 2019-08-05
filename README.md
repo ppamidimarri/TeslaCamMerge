@@ -33,32 +33,45 @@ I have an nginx reverse proxy for my home that I set up for other projects. The 
 
 **Desktop browser view of the website**
 
+Login screen:
 ![Login screen](https://i.imgur.com/cOnudbd.png)
 
+Main page:
 ![Main page of web site](https://i.imgur.com/knQz9Ws.png)
 
+Folder view:
 ![Tile view of videos](https://i.imgur.com/KMkVhIy.png)
 
+List view:
 ![List view of videos](https://i.imgur.com/uaKslTA.png)
 
+Video view:
 ![Video display](https://i.imgur.com/JBeHL8F.png)
 
 **Mobile browser view of the website**
 
+Main page:
 ![Front page](https://i.imgur.com/YQqVGG0.pngg)
 
+Menu:
 ![Menu for mobile view](https://i.imgur.com/YjvbABV.png)
 
+Folder selection:
 ![Folder selection](https://i.imgur.com/niKq7oc.png)
 
+Folder view:
 ![File list in tile view](https://i.imgur.com/D6v4nNV.png)
 
+Video selection:
 ![Video selection](https://i.imgur.com/pha7eZq.png)
 
+Share feature:
 ![Share feature](https://i.imgur.com/rgnxuxs.png)
 
+File information:
 ![File information](https://i.imgur.com/Z0UybCy.png) 
 
+Video view:
 ![Video display on mobile](https://i.imgur.com/dNOVmah.jpg)
 
 ## Hardware needed

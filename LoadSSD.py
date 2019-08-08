@@ -9,6 +9,7 @@ import time
 import shutil
 import signal
 import logging
+import re
 import TCMConstants
 
 logger_name = 'LoadSSD'
@@ -33,7 +34,10 @@ def main():
 	while True:
 		for root, dirs, files in os.walk(TCMConstants.SHARE_PATH, topdown=False):
 			for name in files:
-				move_file(os.path.join(root, name))
+				if file_has_proper_name(name):
+					move_file(os.path.join(root, name))
+				else:
+					logger.warn("File '{0}' has invalid name, skipping".format(name))
 			for name in dirs:
 				logger.debug("Removing empty directory {0}".format(os.path.join(root, name)))
 				os.rmdir(os.path.join(root, name))
@@ -62,6 +66,12 @@ def move_file(file):
 			logger.error("Failed to move {0}".format(file))
 	else:
 		logger.debug("File {0} still being written, skipping for now".format(file))
+
+def file_has_proper_name(file):
+	if TCMConstants.FILENAME_PATTERN.match(file):
+		return True
+	else:
+		return False
 
 if __name__ == '__main__':
 	main()

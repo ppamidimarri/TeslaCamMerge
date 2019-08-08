@@ -18,20 +18,11 @@ logger_name = 'MergeTeslaCam'
 logger = logging.getLogger(logger_name)
 logger.setLevel(TCMConstants.LOG_LEVEL)
 
-# Characteristics of filenames output by TeslaCam
-front_text = 'front.mp4'
-left_text = 'left_repeater.mp4'
-right_text = 'right_repeater.mp4'
-full_text = 'full.mp4'
-fast_text = 'fast.mp4'
-filename_timestamp_format = '%Y-%m-%d_%H-%M-%S'
-
 # ffmpeg commands and filters
 ffmpeg_base = "{0} -hide_banner -loglevel quiet".format(TCMConstants.FFMPEG_PATH)
 ffmpeg_mid_full = '-filter_complex "[1:v]scale=w=1.2*iw:h=1.2*ih[top];[0:v]scale=w=0.6*iw:h=0.6*ih[right];[2:v]scale=w=0.6*iw:h=0.6*ih[left];[left][right]hstack=inputs=2[bottom];[top][bottom]vstack=inputs=2[full];[full]drawtext=text=\''
 ffmpeg_end_full = '\':fontcolor=white:fontsize=48:box=1:boxcolor=black@0.5:boxborderw=5:x=(w-text_w)/2" -movflags +faststart -threads 0'
 ffmpeg_end_fast = '-vf "setpts=0.09*PTS" -c:v libx264 -crf 28 -profile:v main -tune fastdecode -movflags +faststart -threads 0'
-watermark_timestamp_format = '%b %-d\, %-I\:%M %p'
 
 def main():
 	fh = logging.FileHandler(TCMConstants.LOG_PATH + logger_name + TCMConstants.LOG_EXTENSION)
@@ -79,25 +70,25 @@ def process_stamp(stamp):
 	logger.debug("Processing stamp {0}".format(stamp))
 	if stamp_is_all_ready(stamp):
 		logger.debug("Stamp {0} is ready to go".format(stamp))
-		if TCMConstants.check_file_for_write("{0}{1}-{2}".format(TCMConstants.FULL_PATH, stamp, full_text), logger):
+		if TCMConstants.check_file_for_write("{0}{1}-{2}".format(TCMConstants.FULL_PATH, stamp, TCMConstants.FULL_TEXT), logger):
 			run_ffmpeg_command("Merge", stamp, 0)
 		else:
 			logger.debug("Full file exists for stamp {0}".format(stamp))
-		if TCMConstants.check_file_for_read("{0}{1}-{2}".format(TCMConstants.FULL_PATH, stamp, full_text), logger):
-			if TCMConstants.check_file_for_write("{0}{1}-{2}".format(TCMConstants.FAST_PATH, stamp, fast_text), logger):
+		if TCMConstants.check_file_for_read("{0}{1}-{2}".format(TCMConstants.FULL_PATH, stamp, TCMConstants.FULL_TEXT), logger):
+			if TCMConstants.check_file_for_write("{0}{1}-{2}".format(TCMConstants.FAST_PATH, stamp, TCMConstants.FAST_TEXT), logger):
 				run_ffmpeg_command("Fast preview", stamp, 1)
 			else:
 				logger.debug("Fast file exists for stamp {0}".format(stamp))
 		else:
 			logger.warn("Full file {0}{1}-{2} not ready for read, postponing fast preview".format(
-				TCMConstants.FULL_PATH, stamp, full_text))
+				TCMConstants.FULL_PATH, stamp, TCMConstants.FULL_TEXT))
 	else:
 		logger.debug("Stamp {0} not yet ready".format(stamp))
 
 def stamp_is_all_ready(stamp):
-	front_file = "{0}{1}-{2}".format(TCMConstants.RAW_PATH, stamp, front_text)
-	left_file = "{0}{1}-{2}".format(TCMConstants.RAW_PATH, stamp, left_text)
-	right_file = "{0}{1}-{2}".format(TCMConstants.RAW_PATH, stamp, right_text)
+	front_file = "{0}{1}-{2}".format(TCMConstants.RAW_PATH, stamp, TCMConstants.FRONT_TEXT)
+	left_file = "{0}{1}-{2}".format(TCMConstants.RAW_PATH, stamp, TCMConstants.LEFT_TEXT)
+	right_file = "{0}{1}-{2}".format(TCMConstants.RAW_PATH, stamp, TCMConstants.RIGHT_TEXT)
 	if TCMConstants.check_file_for_read(front_file, logger) and TCMConstants.check_file_for_read(left_file, logger) and TCMConstants.check_file_for_read(right_file, logger):
 		return True
 	else:
@@ -115,13 +106,13 @@ def run_ffmpeg_command(log_text, stamp, video_type):
 def get_ffmpeg_command(stamp, video_type):
 	if video_type == 0:
 		command = "{0} -i {1}{2}-{3} -i {1}{2}-{4} -i {1}{2}-{5} {6}{7}{8} {9}{2}-{10}".format(
-			ffmpeg_base, TCMConstants.RAW_PATH, stamp, right_text, front_text, left_text,
-			ffmpeg_mid_full, format_timestamp(stamp), ffmpeg_end_full,
-			TCMConstants.FULL_PATH, full_text)
+			ffmpeg_base, TCMConstants.RAW_PATH, stamp, TCMConstants.RIGHT_TEXT,
+			TCMConstants.FRONT_TEXT, TCMConstants.LEFT_TEXT, ffmpeg_mid_full,
+			format_timestamp(stamp), ffmpeg_end_full, TCMConstants.FULL_PATH, TCMConstants.FULL_TEXT)
 	elif video_type == 1:
 		command = "{0} -i {1}{2}-{3} {4} {5}{2}-{6}".format(
-			ffmpeg_base, TCMConstants.FULL_PATH, stamp, full_text, ffmpeg_end_fast,
-			TCMConstants.FAST_PATH, fast_text)
+			ffmpeg_base, TCMConstants.FULL_PATH, stamp, TCMConstants.FULL_TEXT, ffmpeg_end_fast,
+			TCMConstants.FAST_PATH, TCMConstants.FAST_TEXT)
 	else:
 		logger.error("Unrecognized video type {0} for {1}".format(video_type, stamp))
 	return command
@@ -129,9 +120,9 @@ def get_ffmpeg_command(stamp, video_type):
 ### Other utility functions ###
 
 def format_timestamp(stamp):
-	timestamp = datetime.datetime.strptime(stamp, filename_timestamp_format)
+	timestamp = datetime.datetime.strptime(stamp, TCMConstants.FILENAME_TIMESTAMP_FORMAT)
 	logger.debug("Timestamp: {0}".format(timestamp))
-	return timestamp.strftime(watermark_timestamp_format)
+	return timestamp.strftime(TCMConstants.WATERMARK_TIMESTAMP_FORMAT)
 
 if __name__ == '__main__':
 	main()

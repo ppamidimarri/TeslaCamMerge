@@ -1,6 +1,7 @@
 import logging
 import os
 import subprocess
+import re
 
 # Location where the TeslaCamMerge directory is present. Must NOT include trailing /.
 PROJECT_PATH = '/home/pavan'	# Must contain the directory called TeslaCamMerge (where you cloned this repository), as well as filebrowser.db
@@ -31,10 +32,26 @@ RCLONE_PATH = '/usr/local/bin/rclone --log-file /home/pavan/log/rclone.log'	# Ve
 FILEBROWSER_PATH = '/usr/local/bin/filebrowser'					# Verify with: which filebrowser
 LSOF_PATH = '/usr/bin/lsof -t'							# Verify with: which lsof
 
+# Video watermark timestamp format (see Python strftime reference)
+WATERMARK_TIMESTAMP_FORMAT = '%b %-d\, %-I\:%M %p'
+
 ### Do not modify anything below this line ###
 
+# Characteristics of filenames output by TeslaCam
+FRONT_TEXT = 'front.mp4'
+LEFT_TEXT = 'left_repeater.mp4'
+RIGHT_TEXT = 'right_repeater.mp4'
+FULL_TEXT = 'full.mp4'
+FAST_TEXT = 'fast.mp4'
+FILENAME_TIMESTAMP_FORMAT = '%Y-%m-%d_%H-%M-%S'
+FILENAME_REGEX  = '\d{4}(-\d\d){2}_(\d\d-){3}(right_repeater|front|left_repeater).mp4'
+FILENAME_PATTERN = re.compile(FILENAME_REGEX)
+
+# Application management constants
 SLEEP_DURATION = 60
 SPECIAL_EXIT_CODE = 115
+
+# Common functions
 
 def check_permissions(path, test_write, logger):
 	if os.access(path, os.F_OK):

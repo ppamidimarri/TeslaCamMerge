@@ -13,16 +13,19 @@ import datetime
 import signal
 import logging
 import TCMConstants
+import re
 
 logger_name = 'MergeTeslaCam'
 logger = logging.getLogger(logger_name)
 logger.setLevel(TCMConstants.LOG_LEVEL)
 
 # ffmpeg commands and filters
-ffmpeg_base = "{0} -hide_banner -loglevel quiet".format(TCMConstants.FFMPEG_PATH)
+ffmpeg_base = "{0} -hide_banner -loglevel error".format(TCMConstants.FFMPEG_PATH)
 ffmpeg_mid_full = '-filter_complex "[1:v]scale=w=1.2*iw:h=1.2*ih[top];[0:v]scale=w=0.6*iw:h=0.6*ih[right];[2:v]scale=w=0.6*iw:h=0.6*ih[left];[left][right]hstack=inputs=2[bottom];[top][bottom]vstack=inputs=2[full];[full]drawtext=text=\''
 ffmpeg_end_full = '\':fontcolor=white:fontsize=48:box=1:boxcolor=black@0.5:boxborderw=5:x=(w-text_w)/2" -movflags +faststart -threads 0'
 ffmpeg_end_fast = '-vf "setpts=0.09*PTS" -c:v libx264 -crf 28 -profile:v main -tune fastdecode -movflags +faststart -threads 0'
+ffmpeg_error_regex = '(.*): Invalid data found when processing input'
+ffmpeg_error_pattern = re.compile(ffmpeg_error_regex)
 
 def main():
 	fh = logging.FileHandler(TCMConstants.LOG_PATH + logger_name + TCMConstants.LOG_EXTENSION)
@@ -100,7 +103,27 @@ def run_ffmpeg_command(log_text, stamp, video_type):
 	logger.info("{0} started: {1}...".format(log_text, stamp))
 	command = get_ffmpeg_command(stamp, video_type)
 	logger.debug("Command: {0}".format(command))
-	subprocess.run(command, shell=True, stdin=subprocess.DEVNULL)
+	completed = subprocess.run(command, shell=True,
+		stdin=subprocess.DEVNULL, stdout=subprocess.PIPE,
+		stderr=subprocess.PIPE)
+	if completed.stderr or completed.returncode != 0:
+		logger.error("Error running ffmpeg command: {0}, returncode: {3}, stdout: {1}, stderr: {2}".format(
+			command, completed.stdout, completed.stderr, completed.returncode))
+		for line in completed.stderr.encode("UTF-8").splitlines():
+			match = ffmpeg_error_pattern.match(line):
+			if match:
+				file = match.group(1)
+				if video_type == 1:
+					logger.debug("Will try to remove bad merged file: {0}".format(file))
+					try:
+						os.remove(file)
+					except:
+						logger.warn("Failed to remove bad file: {0}".format(file))
+				else:
+					logger.debug("Skipping over bad source file: {0}".format(file))
+	else:
+		logger.debug("FFMPEG stdout: {0}, stderr: {1}".format(
+			completed.stdout, completed.stderr))
 	logger.info("{0} completed: {1}.".format(log_text, stamp))
 
 def get_ffmpeg_command(stamp, video_type):

@@ -78,7 +78,7 @@ def check_file_for_read(file, logger):
 	if os.access(file, os.F_OK):
 		return not file_being_written(file, logger)
 	else:
-		logger.warn("File {0} does not exist".format(file))
+		logger.debug("File {0} does not exist".format(file))
 		return False
 
 def file_being_written(file, logger):
@@ -90,7 +90,7 @@ def file_being_written(file, logger):
 		return True # abundance of caution: if lsof won't run properly, postpone the merge!
 	else:
 		if completed.stdout:
-			logger.info("File {0} in use, stdout: {1}, stderr: {2}".format(
+			logger.debug("File {0} in use, stdout: {1}, stderr: {2}".format(
 				file, completed.stdout, completed.stderr))
 			return True
 		else:

@@ -45,10 +45,15 @@ def upload_file(filename):
 		filename, TCMConstants.UPLOAD_REMOTE_PATH)
 	logger.debug("Command: {0}".format(command))
 	try:
-		subprocess.run(command, shell=True, stdin=subprocess.DEVNULL)
-		logger.info("Uploaded file {0}".format(filename))
+		completed = subprocess.run(command, shell=True, stdin=subprocess.DEVNULL,
+			stdout=subprocess.PIPE, stderr=subprocess.PIPE)
+		if completed.stderr or completed.returncode != 0:
+	                logger.error("Error running rclone command: {0}, returncode: {3}, stdout: {1}, stderr: {2}".format(
+        	                command, completed.stdout, completed.stderr, completed.returncode))
+	        else:
+			logger.info("Uploaded file {0}".format(filename))
 	except shutil.Error:
-		logger.warn("Failed to upload {0}".format(filename))
+		logger.error("Failed to upload {0}".format(filename))
 
 def exit_gracefully(signum, frame):
 	logger.info("Received signal number {0}, exiting.".format(signum))

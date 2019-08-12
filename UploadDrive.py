@@ -48,9 +48,9 @@ def upload_file(filename):
 		completed = subprocess.run(command, shell=True, stdin=subprocess.DEVNULL,
 			stdout=subprocess.PIPE, stderr=subprocess.PIPE)
 		if completed.stderr or completed.returncode != 0:
-	                logger.error("Error running rclone command: {0}, returncode: {3}, stdout: {1}, stderr: {2}".format(
-        	                command, completed.stdout, completed.stderr, completed.returncode))
-	        else:
+			logger.error("Error running rclone command: {0}, returncode: {3}, stdout: {1}, stderr: {2}".format(
+				command, completed.stdout, completed.stderr, completed.returncode))
+		else:
 			logger.info("Uploaded file {0}".format(filename))
 	except shutil.Error:
 		logger.error("Failed to upload {0}".format(filename))

@@ -1,0 +1,12 @@
+[Unit]
+Description=Remove old empty directories from CIFS share path
+After=network.target systemd-user-session.service
+
+[Service]
+User=PROJECT_USER
+ExecStart=PROJECT_PATH/TeslaCamMerge/RemoveOld.py
+Restart=on-failure
+RestartSec=60
+
+[Install]
+WantedBy=smbd.service

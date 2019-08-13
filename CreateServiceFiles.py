@@ -19,6 +19,7 @@ def main():
 	process_service_file('mergeTeslaCam.service')
 	process_service_file('uploadDrive.service')
 	process_service_file('startFileBrowser.service')
+	process_service_files('removeOld.service')
 
 def process_service_file(name):
 	with open(name, "rt") as fin:

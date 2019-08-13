@@ -38,9 +38,7 @@ def main():
 					move_file(os.path.join(root, name))
 				else:
 					logger.warn("File '{0}' has invalid name, skipping".format(name))
-			for name in dirs:
-				logger.debug("Removing empty directory {0}".format(os.path.join(root, name)))
-				os.rmdir(os.path.join(root, name))
+
 		time.sleep(TCMConstants.SLEEP_DURATION)
 
 ### Startup functions ###

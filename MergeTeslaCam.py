@@ -28,7 +28,7 @@ ffmpeg_error_regex = '(.*): Invalid data found when processing input'
 ffmpeg_error_pattern = re.compile(ffmpeg_error_regex)
 
 # Text file containing the names of bad videos (moov atom not found by ffmpeg)
-bad_videos_filename = TCMConstants.RAW_PATH + 'badvideos.txt'
+bad_videos_filename = 'badvideos.txt'
 
 def main():
 	fh = logging.FileHandler(TCMConstants.LOG_PATH + logger_name + TCMConstants.LOG_EXTENSION)
@@ -52,7 +52,8 @@ def main():
 			try:
 				stamp, camera = file.rsplit("-", 1)
 			except ValueError:
-				logger.warn("Unrecognized filename: {0}".format(file))
+				if file != bad_videos_filename:
+					logger.warn("Unrecognized filename: {0}".format(file))
 				continue
 			process_stamp(stamp)
 
@@ -145,7 +146,7 @@ def get_ffmpeg_command(stamp, video_type):
 
 def add_to_bad_videos(name):
 	logger.debug("Skipping over bad source file: {0}".format(name))
-	with open(bad_videos_filename, "a+") as file:
+	with open(TCMConstants.RAW_PATH + bad_videos_filename, "a+") as file:
 		file.write("{0}\n".format(name.replace(TCMConstants.RAW_PATH, '')))
 
 ### Other utility functions ###

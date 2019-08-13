@@ -1,5 +1,16 @@
 # TeslaCamMerge
 
+## Contents
+
+[Introduction](https://github.com/ppamidimarri/TeslaCamMerge#introduction)
+[How it Works](https://github.com/ppamidimarri/TeslaCamMerge#how-it-works)
+[Hardware Needed](https://github.com/ppamidimarri/TeslaCamMerge#hardware-needed)
+[Instructions](https://github.com/ppamidimarri/TeslaCamMerge#instructions)
+[Example Videos](https://github.com/ppamidimarri/TeslaCamMerge#example-videos)
+[Screenshots](https://github.com/ppamidimarri/TeslaCamMerge#screenshots)
+
+## Introduction
+
 Tesla's in-built dashcam creates three separate video files, one each from the front, left and right cameras. I built this project to do the following:
 1. Use the [teslausb](https://github.com/marcone/teslausb) project to have the car store videos on a Raspberry Pi Zero W and transfer the recorded videos to a network share when connected to WiFi at home
 2. Merge the three videos into one 

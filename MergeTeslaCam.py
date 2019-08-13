@@ -112,7 +112,7 @@ def run_ffmpeg_command(log_text, stamp, video_type):
 	if completed.stderr or completed.returncode != 0:
 		logger.error("Error running ffmpeg command: {0}, returncode: {3}, stdout: {1}, stderr: {2}".format(
 			command, completed.stdout, completed.stderr, completed.returncode))
-		for line in completed.stderr.encode("UTF-8").splitlines():
+		for line in completed.stderr.decode("UTF-8").splitlines():
 			match = ffmpeg_error_pattern.match(line)
 			if match:
 				file = match.group(1)

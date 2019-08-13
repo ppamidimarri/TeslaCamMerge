@@ -146,7 +146,7 @@ def get_ffmpeg_command(stamp, video_type):
 def add_to_bad_videos(name):
 	logger.debug("Skipping over bad source file: {0}".format(name))
 	with open(bad_videos_filename, "a+") as file:
-		file.write("{0}\n".format(name.replace(TCMConstants.RAW_PATH, ''))
+		file.write("{0}\n".format(name.replace(TCMConstants.RAW_PATH, '')))
 
 ### Other utility functions ###
 

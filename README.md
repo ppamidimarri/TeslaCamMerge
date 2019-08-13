@@ -2,12 +2,12 @@
 
 ## Contents
 
-[Introduction](https://github.com/ppamidimarri/TeslaCamMerge#introduction)
-[How it Works](https://github.com/ppamidimarri/TeslaCamMerge#how-it-works)
-[Hardware Needed](https://github.com/ppamidimarri/TeslaCamMerge#hardware-needed)
-[Instructions](https://github.com/ppamidimarri/TeslaCamMerge#instructions)
-[Example Videos](https://github.com/ppamidimarri/TeslaCamMerge#example-videos)
-[Screenshots](https://github.com/ppamidimarri/TeslaCamMerge#screenshots)
+* [Introduction](https://github.com/ppamidimarri/TeslaCamMerge#introduction)
+* [How it Works](https://github.com/ppamidimarri/TeslaCamMerge#how-it-works)
+* [Hardware Needed](https://github.com/ppamidimarri/TeslaCamMerge#hardware-needed)
+* [Instructions](https://github.com/ppamidimarri/TeslaCamMerge#instructions)
+* [Example Videos](https://github.com/ppamidimarri/TeslaCamMerge#example-videos)
+* [Screenshots](https://github.com/ppamidimarri/TeslaCamMerge#screenshots)
 
 ## Introduction
 

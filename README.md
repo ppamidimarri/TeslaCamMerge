@@ -93,12 +93,13 @@ I chose the Jetson Nano as it does the video merges with ffmpeg 4-5 times faster
 
 **A. Setup the Jetson Nano**
 
-If you are new to the Jetson Nano, start with the [Getting Started guide from Nvidia](https://developer.nvidia.com/embedded/learn/get-started-jetson-nano-devkit#intro).
+If you are new to the Jetson Nano, start with the [Getting Started guide from Nvidia](https://developer.nvidia.com/embedded/learn/get-started-jetson-nano-devkit#intro). It is simpler to set up your root filesystem on the USB SSD. To accomplish this, follow [the instructions in this Reddit thread](https://www.reddit.com/r/JetsonNano/comments/c79l36/nvidia_jetson_nano_how_to_install_rootfs_on/).
 
-1. Flash a Micro-SD card with the [Jetson Nano system image](https://developer.nvidia.com/jetson-nano-sd-card-image-r322)
+1. Flash a Micro-SD card with the [Jetson Nano bootloader image](https://1drv.ms/u/s!Akd48wbblep6hBcSdTPMoWcDPQP5)
 2. Insert the card in the Jetson Nano
-3. Connect keyboard, mouse, ethernet cable and monitor and power up the Nano
-4. Set up a new user and password (in these instructions, you will see this ID as `<userid>`)
+3. Flash the USB SSD with the [Jetson Nano rootfs image](https://1drv.ms/u/s!Akd48wbblep6hBhwZTz1ajXo2OTY)
+4. Connect USB SSD, keyboard, mouse, ethernet cable and monitor and power up the Nano
+5. Set up a new user and password (in these instructions, you will see this ID as `<userid>`)
 
 Once these steps are done, you can do the rest of the work on the Jetson Nano either in a terminal window in the GUI, or by setting up SSH. 
 
@@ -138,20 +139,21 @@ If you don't like `vim` as the text editor, install `nano` with `sudo apt instal
 12. Add UNIX user ID for this project to the group `sambashare` with: `sudo usermod -a -G sambashare <userid>`
 
 **D. Setup the locations for the dashcam footage to be stored**
-1. Connect the USB SSD to the Jetson Nano and wait for it to be mounted
-2. It should automatically be configured under `/media/<userid>`. `ls -l /media/<userid>` to check its name. Let's call the name `<drivename>`.
-3. `mkdir /media/<userid>/<drivename>/Footage`
-4. `mkdir /media/<userid>/<drivename>/Footage/Raw`
-5. `mkdir /media/<userid>/<drivename>/Footage/Full`
-6. `mkdir /media/<userid>/<drivename>/Footage/Fast`
-7. `mkdir /media/<userid>/<drivename>/Footage/Upload`
+This location is different from the SMB share for two reasons: flatten the directory structure for the clips, and prevent making your clips deletable over the SMB share.
+
+1. Create a directory where all your clips will be stored, (e.g. `/home/<userid>/Footage` with the command `mkdir /home/<userid>/Footage`
+2. Change to that directory using `cd /home/userid>/Footage`
+3. `mkdir Raw`
+4. `mkdir Full`
+5. `mkdir Fast`
+6. `mkdir Upload`
 
 **E. Install and set up [filebrowser](https://filebrowser.xyz/)**
 1. `cd ~`
 2. `mkdir log` (or any other location you want your log files in)
 3. `curl -fsSL https://filebrowser.xyz/get.sh | bash`
 4. `ifconfig` and note the LAN IP address of your Jetson Nano. In your home router, given your Jetson Nano a fixed LAN IP.
-5. `filebrowser config init -a <LAN-IP> -r /media/<userid>/<drivename>/Footage/ -l /home/<userid>/log/filebrowser.log --branding.files /home/<userid>/TeslaCamMerge --branding.disableExternal --branding.name "TM3 Footage"`
+5. `filebrowser config init -a <LAN-IP> -r /home/<userid>/Footage/ -l /home/<userid>/log/filebrowser.log --branding.files /home/<userid>/TeslaCamMerge --branding.disableExternal --branding.name "TM3 Footage"`
 6. `filebrowser users add admin admin --perm.admin`
 7. `filebrowser -d /home/<userid>/filebrowser.db`
 8. On your computer's web browser, go to `http://<LAN-IP>:8080/` 
@@ -182,8 +184,9 @@ If you do not need the ability to upload your videos to the cloud, you can safel
 10. `sudo systemctl enable mergeTeslaCam.service`
 11. `sudo systemctl enable startFileBrowser.service`
 12. `sudo systemctl enable uploadDrive.service`
-13. `sudo reboot`
-14. Verify that your services are running, with `systemctl status mergeTeslaCam.service`, etc. (once for each of the four services)
+13. `sudo systemctl enable removeOld.service`
+14. `sudo reboot`
+15. Verify that your services are running, with `systemctl status mergeTeslaCam.service`, etc. (once for each of the four services)
 
 Now you are done with setting up your Jetson Nano! 
 
@@ -208,6 +211,8 @@ location / {
 7. Restart nginx.
 8. Try accessing http://123.234.213.120/ on your phone with WiFi off.  
 9. If the above test worked, then try it in the car browser. Bookmark the page in the car browser.
+
+If your URL for external access has a location after the `/` (e.g. `http://123.234.213.120/footage`), you need to stop the  startFileBrowser service and then update filebrowser configuration with `filebrowser config set -b /footage`.
 
 Your WAN IP address _may_ be dynamic -- that is at your ISP's discretion. If it is, saving a bookmark with the number will stop working when the ISP gives you a new WAN IP. To get around this, you need to jump through a few more hoops. 
 

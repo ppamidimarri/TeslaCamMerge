@@ -89,6 +89,8 @@ I chose the Jetson Nano as it does the video merges with ffmpeg 4-5 times faster
 
 ## Instructions
 
+**This section is being revamped. Please come back in a couple of days.**
+
 **A. Setup the Jetson Nano**
 
 If you are new to the Jetson Nano, start with the [Getting Started guide from Nvidia](https://developer.nvidia.com/embedded/learn/get-started-jetson-nano-devkit#intro).

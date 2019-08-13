@@ -89,8 +89,6 @@ I chose the Jetson Nano as it does the video merges with ffmpeg 4-5 times faster
 
 ## Instructions
 
-**This section is being revamped. Please come back in a couple of days.**
-
 **A. Setup the Jetson Nano**
 
 If you are new to the Jetson Nano, start with the [Getting Started guide from Nvidia](https://developer.nvidia.com/embedded/learn/get-started-jetson-nano-devkit#intro). It is simpler to set up your root filesystem on the USB SSD. To accomplish this, follow [the instructions in this Reddit thread](https://www.reddit.com/r/JetsonNano/comments/c79l36/nvidia_jetson_nano_how_to_install_rootfs_on/).
@@ -139,7 +137,8 @@ If you don't like `vim` as the text editor, install `nano` with `sudo apt instal
 12. Add UNIX user ID for this project to the group `sambashare` with: `sudo usermod -a -G sambashare <userid>`
 
 **D. Setup the locations for the dashcam footage to be stored**
-This location is different from the SMB share for two reasons: flatten the directory structure for the clips, and prevent making your clips deletable over the SMB share.
+
+This location is different from the SMB share for two reasons: (a) flatten the directory structure for the clips, and (b) prevent making your clips deletable over the SMB share.
 
 1. Create a directory where all your clips will be stored, (e.g. `/home/<userid>/Footage` with the command `mkdir /home/<userid>/Footage`
 2. Change to that directory using `cd /home/userid>/Footage`

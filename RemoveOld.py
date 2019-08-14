@@ -41,11 +41,11 @@ def main():
 
 	while True:
 		for directory in next(os.walk(SOURCE_PATH))[1]:
-			if os.listdir("{0}/{1}".format(SOURCE_PATH, directory)):
+			if os.listdir("{0}{1}".format(SOURCE_PATH, directory)):
 				logger.debug("Directory {0}{1} not empty, skipping".format(
 					SOURCE_PATH, directory))
 			else:
-				remove_empty_old_directory(directory)
+				remove_empty_old_directory(SOURCE_PATH, directory)
 
 		for path in VIDEO_PATHS:
 			for file in os.listdir(path):
@@ -69,15 +69,15 @@ def exit_gracefully(signum, frame):
 
 ### Loop functions ###
 
-def remove_empty_old_directory(name):
+def remove_empty_old_directory(path, name):
 	if is_old_enough(name):
-		logger.info("Removing empty directory: {0}".format(name))
+		logger.info("Removing empty directory: {0}{1}".format(path, name))
 		try:
-			os.rmdir("{0}/{1}".format(SOURCE_PATH, name))
+			os.rmdir("{0}{1}".format(path, name))
 		except:
-			logger.error("Error removing directory: {0}".format(name))
+			logger.error("Error removing directory: {0}{1}".format(path, name))
 	else:
-		logger.debug("Directory {0}{1} is not ready for deletion, skipping".format(SOURCE_PATH, name))
+		logger.debug("Directory {0}{1} is not ready for deletion, skipping".format(path, name))
 
 def remove_old_file(path, file):
 	if is_old_enough(extract_stamp(file)):

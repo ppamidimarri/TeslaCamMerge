@@ -20,6 +20,13 @@ SHARE_PATH = '/samba/fjnuser/'
 # rclone configuration entry for Google Drive.
 UPLOAD_REMOTE_PATH = 'gdrive:/TeslaCam'	# Properly-configured entry in your rclone.conf file. Any subdirectory must already exist on Google Drive.
 
+# Number of days to keep videos: applies to raw, full and fast videos.
+# Videos that are older than these and in the FULL_PATH, FAST_PATH and
+# RAW_PATH locations are automatically deleted by removeOld.service
+# To keep videos longer, move them to any other directory, or move to
+# the UPLOAD_PATH so they are automatically backed up to cloud storage.
+DAYS_TO_KEEP = 30
+
 # Settings for application logs
 LOG_PATH = '/home/pavan/log/'	# Must include trailing /, PROJECT_USER needs read-write permissions
 LOG_EXTENSION = '.log'
@@ -44,7 +51,7 @@ RIGHT_TEXT = 'right_repeater.mp4'
 FULL_TEXT = 'full.mp4'
 FAST_TEXT = 'fast.mp4'
 FILENAME_TIMESTAMP_FORMAT = '%Y-%m-%d_%H-%M-%S'
-FILENAME_REGEX  = '\d{4}(-\d\d){2}_(\d\d-){3}(right_repeater|front|left_repeater).mp4'
+FILENAME_REGEX  = '(\d{4}(-\d\d){2}_(\d\d-){3})(right_repeater|front|left_repeater).mp4'
 FILENAME_PATTERN = re.compile(FILENAME_REGEX)
 
 # Application management constants

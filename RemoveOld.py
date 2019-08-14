@@ -1,7 +1,10 @@
 #!/usr/bin/env python3
 
-# This script removes empty directories under "SOURCE_PATH"
-# whose names have a timestamp older than by "DAYS_TO_KEEP".
+# This script removes:
+# 	- empty directories within "SOURCE_PATH"
+#	- video files under "VIDEO_PATHS"
+# that have a name with a timestamp more than "DAYS_TO_KEEP" days old
+# Files and directories who names don't match this format are left alone
 
 import os
 import time
@@ -10,10 +13,12 @@ import signal
 import logging
 import TCMConstants
 import datetime
+import re
 
 SOURCE_PATH = TCMConstants.SHARE_PATH
-
-DAYS_TO_KEEP = 30
+VIDEO_PATHS = [TCMConstants.RAW_PATH, TCMConstants.FULL_PATH, TCMConstants.FAST_PATH]
+ALL_VIDEO_REGEX = "{0}|fast|full).mp4".format(TCMConstants.FILENAME_REGEX[:-5])
+ALL_VIDEO_PATTERN = re.compile(ALL_VIDEO_REGEX)
 
 logger_name = 'RemoveOld'
 logger = logging.getLogger(logger_name)
@@ -37,17 +42,25 @@ def main():
 	while True:
 		for directory in next(os.walk(SOURCE_PATH))[1]:
 			if os.listdir("{0}/{1}".format(SOURCE_PATH, directory)):
-				logger.debug("Directory {0}/{1} not empty, skipping".format(
+				logger.debug("Directory {0}{1} not empty, skipping".format(
 					SOURCE_PATH, directory))
 			else:
-				remove_empty_directory(directory)
+				remove_empty_old_directory(directory)
+
+		for path in VIDEO_PATHS:
+			for file in os.listdir(path):
+				remove_old_file(path, file)
 
 		time.sleep(TCMConstants.SLEEP_DURATION)
 
 ### Startup functions ###
 
 def have_required_permissions():
-	return TCMConstants.check_permissions(
+	have_perms = True
+	for path in VIDEO_PATHS:
+		have_perms = have_perms and TCMConstants.check_permissions(
+			path, True, logger)
+	return have_perms and TCMConstants.check_permissions(
 		SOURCE_PATH, True, logger)
 
 def exit_gracefully(signum, frame):
@@ -56,7 +69,7 @@ def exit_gracefully(signum, frame):
 
 ### Loop functions ###
 
-def remove_empty_directory(name):
+def remove_empty_old_directory(name):
 	if is_old_enough(name):
 		logger.info("Removing empty directory: {0}".format(name))
 		try:
@@ -64,18 +77,38 @@ def remove_empty_directory(name):
 		except:
 			logger.error("Error removing directory: {0}".format(name))
 	else:
-		logger.debug("Directory {0}/{1} is not ready for deletion, skipping".format(SOURCE_PATH, name))
+		logger.debug("Directory {0}{1} is not ready for deletion, skipping".format(SOURCE_PATH, name))
 
-def is_old_enough(name):
+def remove_old_file(path, file):
+	if is_old_enough(extract_stamp(file)):
+		logger.info("Removing old file: {0}{1}".format(path, file))
+		try:
+		#	os.remove("{0}{1}".format(path, file))
+			pass
+		except:
+			logger.error("Error removing file: {0}{1}".format(path, file))
+	else:
+		logger.debug("File {0}{1} is not ready for deletion, skipping".format(path, file))
+
+def extract_stamp(file):
+	match = ALL_VIDEO_PATTERN.match(file)
+	if match:
+		logger.debug("Returning stamp {0} for file {1}".format(match.group(1)[:-1], file))
+		return match.group(1)[:-1]
+	else:
+		logger.debug("No valid stamp found for file: {0}".format(file))
+		return None
+
+def is_old_enough(stamp_in_name):
 	try:
-		stamp = datetime.datetime.strptime(name, TCMConstants.FILENAME_TIMESTAMP_FORMAT)
+		stamp = datetime.datetime.strptime(stamp_in_name, TCMConstants.FILENAME_TIMESTAMP_FORMAT)
 		age = datetime.datetime.now() - stamp
-		if age.days > DAYS_TO_KEEP:
+		if age.days > TCMConstants.DAYS_TO_KEEP:
 			return True
 		else:
 			return False
 	except:
-		logger.debug("Unrecognized directory name format: {0}/{1}, skipping".format(SOURCE_PATH, name))
+		logger.debug("Unrecognized name: {0}, skipping".format(stamp_in_name))
 		return False
 
 if __name__ == '__main__':

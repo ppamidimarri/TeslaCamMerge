@@ -83,7 +83,7 @@ def remove_old_file(path, file):
 	if is_old_enough(extract_stamp(file)):
 		logger.info("Removing old file: {0}{1}".format(path, file))
 		try:
-		#	os.remove("{0}{1}".format(path, file))
+			os.remove("{0}{1}".format(path, file))
 			pass
 		except:
 			logger.error("Error removing file: {0}{1}".format(path, file))

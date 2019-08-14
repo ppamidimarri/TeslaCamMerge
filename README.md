@@ -17,6 +17,7 @@ Tesla's in-built dashcam creates three separate video files, one each from the f
 3. Create a sped-up "fast preview" version of the merged video
 4. Show the videos (raw, merged or fast previews) over a web browser
 5. Move selected videos to cloud storage (e.g. Google Drive)
+6. Auto-delete files older than 30 days (configurable), unless they are moved to another folder for safe-keeping
 
 ## How it works
 

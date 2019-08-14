@@ -1,5 +1,16 @@
 # TeslaCamMerge
 
+## Contents
+
+* [Introduction](https://github.com/ppamidimarri/TeslaCamMerge#introduction)
+* [How it Works](https://github.com/ppamidimarri/TeslaCamMerge#how-it-works)
+* [Hardware Needed](https://github.com/ppamidimarri/TeslaCamMerge#hardware-needed)
+* [Instructions](https://github.com/ppamidimarri/TeslaCamMerge#instructions)
+* [Example Videos](https://github.com/ppamidimarri/TeslaCamMerge#example-videos)
+* [Screenshots](https://github.com/ppamidimarri/TeslaCamMerge#screenshots)
+
+## Introduction
+
 Tesla's in-built dashcam creates three separate video files, one each from the front, left and right cameras. I built this project to do the following:
 1. Use the [teslausb](https://github.com/marcone/teslausb) project to have the car store videos on a Raspberry Pi Zero W and transfer the recorded videos to a network share when connected to WiFi at home
 2. Merge the three videos into one 
@@ -22,57 +33,6 @@ When any new files are loaded on the SMB share, this application moves them from
 You can easily access all the videos (raw clips from TeslaCam, merged full videos, or fast-preview versions) through a web browser. There is an "Upload" folder on the USB SSD. The web site allows you to easily copy / move files into that "Upload" folder. This application takes any files placed in that "Upload" folder and moves them to cloud storage. 
 
 I have an nginx reverse proxy for my home that I set up for other projects. The Jetson Nano's web site for viewing video files is behind that reverse proxy, so I can access my available dashcam footage over the internet. The instructions on this project do not cover how to set up a reverse proxy. 
-
-## Example Videos
-
-[Fast preview video](https://i.imgur.com/nqiPhZz.gifv)
-
-[Full merged video](https://i.imgur.com/Q2Y1ODc.gifv)
-
-## [Screenshots](https://imgur.com/a/2Jl6kED)
-
-**Desktop browser view of the website**
-
-Login screen:
-![Login screen](https://i.imgur.com/cOnudbd.png)
-
-Main page:
-![Main page of web site](https://i.imgur.com/knQz9Ws.png)
-
-Folder view:
-![Tile view of videos](https://i.imgur.com/KMkVhIy.png)
-
-List view:
-![List view of videos](https://i.imgur.com/uaKslTA.png)
-
-Video view:
-![Video display](https://i.imgur.com/JBeHL8F.png)
-
-**Mobile browser view of the website**
-
-Main page:
-![Front page](https://i.imgur.com/YQqVGG0.pngg)
-
-Menu:
-![Menu for mobile view](https://i.imgur.com/YjvbABV.png)
-
-Folder selection:
-![Folder selection](https://i.imgur.com/niKq7oc.png)
-
-Folder view:
-![File list in tile view](https://i.imgur.com/D6v4nNV.png)
-
-Video selection:
-![Video selection](https://i.imgur.com/pha7eZq.png)
-
-Share feature:
-![Share feature](https://i.imgur.com/rgnxuxs.png)
-
-File information:
-![File information](https://i.imgur.com/Z0UybCy.png) 
-
-Video view:
-![Video display on mobile](https://i.imgur.com/dNOVmah.jpg)
 
 ## Hardware needed
 
@@ -221,3 +181,54 @@ Your WAN IP address _may_ be dynamic -- that is at your ISP's discretion. If it 
 4. Now try your new URL in the car (e.g. http://myteslacam.ddns.net/). Bookmark it! 
 
 If you decide to do all this, I highly recommend securing your reverse proxy server by forcing SSL on all requests and getting your own SSL certificate. There is a lot of documentation out there on how to secure an nginx server. 
+
+## Example Videos
+
+[Fast preview video](https://i.imgur.com/nqiPhZz.gifv)
+
+[Full merged video](https://i.imgur.com/Q2Y1ODc.gifv)
+
+## [Screenshots](https://imgur.com/a/2Jl6kED)
+
+**Desktop browser view of the website**
+
+Login screen:
+![Login screen](https://i.imgur.com/cOnudbd.png)
+
+Main page:
+![Main page of web site](https://i.imgur.com/knQz9Ws.png)
+
+Folder view:
+![Tile view of videos](https://i.imgur.com/KMkVhIy.png)
+
+List view:
+![List view of videos](https://i.imgur.com/uaKslTA.png)
+
+Video view:
+![Video display](https://i.imgur.com/JBeHL8F.png)
+
+**Mobile browser view of the website**
+
+Main page:
+![Front page](https://i.imgur.com/YQqVGG0.pngg)
+
+Menu:
+![Menu for mobile view](https://i.imgur.com/YjvbABV.png)
+
+Folder selection:
+![Folder selection](https://i.imgur.com/niKq7oc.png)
+
+Folder view:
+![File list in tile view](https://i.imgur.com/D6v4nNV.png)
+
+Video selection:
+![Video selection](https://i.imgur.com/pha7eZq.png)
+
+Share feature:
+![Share feature](https://i.imgur.com/rgnxuxs.png)
+
+File information:
+![File information](https://i.imgur.com/Z0UybCy.png) 
+
+Video view:
+![Video display on mobile](https://i.imgur.com/dNOVmah.jpg)

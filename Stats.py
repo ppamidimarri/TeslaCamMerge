@@ -27,14 +27,17 @@ def generate_stats():
 		folders_table = get_folders_table(footage_path)
 		disk_usage = get_disk_usage(footage_path)
 		content = "Footage Details\n{0}\n\nDisk Space Details\n{1}\n\nGenerated at {2}\n".format(
-			folders_table, disk_usage, datetime.datetime.now().strftime(TCMConstants.STATS_TIMESTAMP_FORMAT))
+			folders_table, disk_usage,
+			datetime.datetime.now().strftime(TCMConstants.STATS_TIMESTAMP_FORMAT))
 		with open("{0}/{1}".format(footage_path, TCMConstants.STATS_FILENAME), "w+") as file:
 			logger.debug("Writing content to file:\n{0}".format(content))
 			file.write(content)
 			logger.info("Updated stats")
 
 def get_folders_table(footage_path):
-	result = "------------------------------------\n Folder    | # of Files |    Size  \n------------------------------------\n"
+	result =  "------------------------------------\n"
+	result += " Folder    | # of Files |    Size   \n"
+	result += "------------------------------------\n"
 	for item in os.listdir(footage_path):
 		if item == TCMConstants.STATS_FILENAME:
 			continue
@@ -82,7 +85,8 @@ def get_disk_usage(footage_path):
 		logger.debug("Disk space raw result:\n{0}".format(completed.stdout.decode("UTF-8")))
 		for line in completed.stdout.decode("UTF-8").splitlines():
 			result += "------------------------------------------------------------------\n"
-			result += " {0} | {1} | {2} | {3} | {4} | {5} \n".format(line[0:15], line[15:21], line[21:26], line[26:32], line[32:37], line[37:])
+			result += " {0} | {1} | {2} | {3} | {4} | {5} \n".format(
+				line[0:15], line[15:21], line[21:26], line[26:32], line[32:37], line[37:])
 		result += "------------------------------------------------------------------\n"
 		logger.debug("Disk space formatted result:\n{0}".format(result))
 	return result

@@ -36,7 +36,7 @@ def generate_stats():
 
 def get_folders_table(footage_path):
 	result =  "----------------------------------\n"
-	result += " Folder    | # of Files |    Size   \n"
+	result += " Folder    | # of Files |    Size \n"
 	result += "----------------------------------\n"
 	for item in os.listdir(footage_path):
 		if item == TCMConstants.STATS_FILENAME:

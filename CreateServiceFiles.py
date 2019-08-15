@@ -20,13 +20,15 @@ def main():
 	process_service_file('uploadDrive.service')
 	process_service_file('startFileBrowser.service')
 	process_service_files('removeOld.service')
+	process_service_files('downloadTC.service')
 
 def process_service_file(name):
-	with open(name, "rt") as fin:
-		with open(name + ".tmp", "wt") as fout:
-			for line in fin:
-				fout.write(do_replacements(line))
-	os.rename(name + ".tmp", name)
+	if os.path.isfile(name):
+		with open(name, "rt") as fin:
+			with open(name + ".tmp", "wt") as fout:
+				for line in fin:
+					fout.write(do_replacements(line))
+		os.rename(name + ".tmp", name)
 
 def do_replacements(line):
 	substrs = sorted(replacements, key=len, reverse=True)

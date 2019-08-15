@@ -28,11 +28,15 @@ UPLOAD_REMOTE_PATH = 'gdrive:/TeslaCam'	# Properly-configured entry in your rclo
 DAYS_TO_KEEP = 30
 
 # Filename for a text file with statistics about TeslaCamMerge. If
-# the filename is not empty, the application will generate a text
+# STATS_FILENAME is not empty, the application will generate a text
 # file in the footage directory (i.e. one level up from RAW_PATH)
 # that shows how many videos are in which folder, and the overall
-# disk usage
+# disk usage. Stats are generated when current timestamp's minute
+# matches one of the values in STATS_FREQUENCY, so if you want
+# stats updated more frequently, add more numbers between 0 and 59
+# to the list.
 STATS_FILENAME = 'stats.txt'
+STATS_FREQUENCY = [0, 30]
 STATS_TIMESTAMP_FORMAT = '%-I:%M %p on %a %b %-d, %Y'
 
 # Settings for application logs

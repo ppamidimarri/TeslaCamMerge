@@ -20,7 +20,7 @@ logger.addHandler(fh)
 logger.info("Starting up")
 
 def generate_stats():
-	if TCMConstants.STATS_FILENAME:
+	if TCMConstants.STATS_FILENAME and datetime.datetime.now().minute in TCMConstants.STATS_FREQUENCY:
 		logger.debug("Generating stats in {0}".format(TCMConstants.STATS_FILENAME))
 		footage_path, raw, fragment = TCMConstants.RAW_PATH.rsplit("/", 2)
 		logger.debug("Footage root location: {0}".format(footage_path))
@@ -31,6 +31,7 @@ def generate_stats():
 		with open("{0}/{1}".format(footage_path, TCMConstants.STATS_FILENAME), "w+") as file:
 			logger.debug("Writing content to file:\n{0}".format(content))
 			file.write(content)
+			logger.info("Updated stats")
 
 def get_folders_table(footage_path):
 	result = "------------------------------------\n Folder    | # of Files |    Size  \n------------------------------------\n"

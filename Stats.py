@@ -35,16 +35,16 @@ def generate_stats():
 			logger.info("Updated stats")
 
 def get_folders_table(footage_path):
-	result =  "------------------------------------\n"
+	result =  "----------------------------------\n"
 	result += " Folder    | # of Files |    Size   \n"
-	result += "------------------------------------\n"
+	result += "----------------------------------\n"
 	for item in os.listdir(footage_path):
 		if item == TCMConstants.STATS_FILENAME:
 			continue
 		num_files, total_size = get_folder_details(footage_path, item)
 		result += " {0:9} | {1} | {2} \n".format(
 			item, num_files, total_size)
-	result += "------------------------------------\n"
+	result += "----------------------------------\n"
 	logger.debug("Folders result:\n{0}".format(result))
 	return result
 
@@ -62,15 +62,15 @@ def get_folder_details(path, file):
 
 def convert_file_size(size):
 	if size <= 1024:
-		return "{0:-6d} B".format(size)
+		return "{0:-6d}B".format(size)
 	elif size <= 1024*1024:
-		return "{0:-6.1f} K".format(size/1024)
+		return "{0:-6.1f}K".format(size/1024)
 	elif size <= 1024*1024*1024:
-		return "{0:-6.1f} M".format(size/(1024*1024))
+		return "{0:-6.1f}M".format(size/(1024*1024))
 	elif size <= 1024*1024*1024*1024:
-		return "{0:-6.1f} G".format(size/(1024*1024*1024))
+		return "{0:-6.1f}G".format(size/(1024*1024*1024))
 	else:
-		return "{0:-6.1f} G".format(size/(1024*1024*1024))
+		return "{0:-6.1f}G".format(size/(1024*1024*1024))
 
 def get_disk_usage(footage_path):
 	command = "{0} -h {1}".format(TCMConstants.DF_PATH, footage_path)

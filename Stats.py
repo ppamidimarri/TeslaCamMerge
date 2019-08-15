@@ -80,6 +80,7 @@ def get_disk_usage(footage_path):
 	if completed.stderr or completed.returncode != 0:
 		logger.error("Error running df command, returncode: {0}, stdout: {1}, stderr: {2}".format(
 			completed.returncode, completed.stdout, completed.stderr))
+		result += "------------------------------------------------------------------\n"
 		result += "Disk space usage numbers are unavailable at the moment"
 	else:
 		logger.debug("Disk space raw result:\n{0}".format(completed.stdout.decode("UTF-8")))

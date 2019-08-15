@@ -62,15 +62,15 @@ def get_folder_details(path, file):
 
 def convert_file_size(size):
 	if size <= 1024:
-		return "{0:-5d} B".format(size)
+		return "{0:-6d} B".format(size)
 	elif size <= 1024*1024:
-		return "{0:-5.1f} K".format(size/1024)
+		return "{0:-6.1f} K".format(size/1024)
 	elif size <= 1024*1024*1024:
-		return "{0:-5.1f} M".format(size/(1024*1024))
+		return "{0:-6.1f} M".format(size/(1024*1024))
 	elif size <= 1024*1024*1024*1024:
-		return "{0:-5.1f} G".format(size/(1024*1024*1024))
+		return "{0:-6.1f} G".format(size/(1024*1024*1024))
 	else:
-		return "{0:-5.1f} G".format(size/(1024*1024*1024))
+		return "{0:-6.1f} G".format(size/(1024*1024*1024))
 
 def get_disk_usage(footage_path):
 	command = "{0} -h {1}".format(TCMConstants.DF_PATH, footage_path)

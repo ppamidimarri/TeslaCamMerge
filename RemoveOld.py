@@ -12,6 +12,7 @@ import shutil
 import signal
 import logging
 import TCMConstants
+import Stats
 import datetime
 import re
 
@@ -50,6 +51,8 @@ def main():
 		for path in VIDEO_PATHS:
 			for file in os.listdir(path):
 				remove_old_file(path, file)
+
+		Stats.generate_stats()
 
 		time.sleep(TCMConstants.SLEEP_DURATION)
 

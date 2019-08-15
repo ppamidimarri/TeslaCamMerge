@@ -27,6 +27,14 @@ UPLOAD_REMOTE_PATH = 'gdrive:/TeslaCam'	# Properly-configured entry in your rclo
 # the UPLOAD_PATH so they are automatically backed up to cloud storage.
 DAYS_TO_KEEP = 30
 
+# Filename for a text file with statistics about TeslaCamMerge. If
+# the filename is not empty, the application will generate a text
+# file in the footage directory (i.e. one level up from RAW_PATH)
+# that shows how many videos are in which folder, and the overall
+# disk usage
+STATS_FILENAME = 'stats.txt'
+STATS_TIMESTAMP_FORMAT = '%-I:%M %p on %a %b %-d, %Y'
+
 # Settings for application logs
 LOG_PATH = '/home/pavan/log/'	# Must include trailing /, PROJECT_USER needs read-write permissions
 LOG_EXTENSION = '.log'
@@ -38,6 +46,7 @@ FFMPEG_PATH = '/usr/bin/ffmpeg'							# Verify with: which ffmpeg
 RCLONE_PATH = '/usr/local/bin/rclone --log-file /home/pavan/log/rclone.log'	# Verify with: which rclone
 FILEBROWSER_PATH = '/usr/local/bin/filebrowser'					# Verify with: which filebrowser
 LSOF_PATH = '/usr/bin/lsof -t'							# Verify with: which lsof
+DF_PATH = '/bin/df'								# Verify with: which df
 
 # Video watermark timestamp format (see Python strftime reference)
 WATERMARK_TIMESTAMP_FORMAT = '%b %-d\, %-I\:%M %p'

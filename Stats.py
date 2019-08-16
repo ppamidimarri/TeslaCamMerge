@@ -80,14 +80,14 @@ def get_disk_usage(footage_path):
 	if completed.stderr or completed.returncode != 0:
 		logger.error("Error running df command, returncode: {0}, stdout: {1}, stderr: {2}".format(
 			completed.returncode, completed.stdout, completed.stderr))
-		result += "-----------------------------------------------------------------\n"
+		result += "----------------------------------------------------------\n"
 		result += "Disk space usage numbers are unavailable at the moment"
 	else:
 		logger.debug("Disk space raw result:\n{0}".format(completed.stdout.decode("UTF-8")))
 		for line in completed.stdout.decode("UTF-8").splitlines():
-			result += "-----------------------------------------------------------------\n"
-			result += " {0} | {1} | {2} | {3} | {4} | {5} \n".format(
-				line[0:15], line[15:21], line[21:26], line[26:32], line[32:37], line[37:])
-		result += "-----------------------------------------------------------------\n"
+			result += "----------------------------------------------------------\n"
+			result += " {0}|{1}|{2}|{3}|{4}|{5} \n".format(
+				line[0:15], line[15:21], line[21:27], line[26:33], line[32:38], line[37:])
+		result += "----------------------------------------------------------\n"
 		logger.debug("Disk space formatted result:\n{0}".format(result))
 	return result

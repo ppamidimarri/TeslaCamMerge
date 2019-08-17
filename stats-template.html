@@ -1,0 +1,84 @@
+<html>
+<head>
+<title>Footage Details</title>
+<style>
+body {
+	font-family: Arial, Helvetica, sans-serif;
+}
+
+h1 {
+	font-size: 32px;
+	font-weight: bold;
+}
+
+h2 {
+	font-size: 24px;
+}
+
+th, td {
+	padding: 12px;
+}
+
+th {
+	font-size: 16px;
+	font-weight: bold;
+}
+
+td {
+	font-size: 16px;
+	font-weight: normal;
+}
+
+td.number {
+	text-align: right;
+}
+
+table {
+	border-collapse: collapse;
+}
+
+table, th, td {
+	border: 1px solid black;
+}
+
+.spacer {
+	font-size: 10px;
+}
+
+.footer {
+	font-size: 12px;
+}
+</style>
+</head>
+<body><h1>Footage Details</h1>
+<h2>Video Files</h2>
+<table><thead><tr>
+	<th>Folder</th>
+	<th># of Files</th>
+	<th>Size</th>
+</tr></thead>
+<tbody>
+DIRECTORY_TABLE_ROWS
+</tbody></table>
+<div class="spacer">&nbsp;</p>
+<h2>Disk Space Details</h2>
+<table><thead><tr>
+	<th>Filesystem</th>
+	<th>Size</th>
+	<th>Used</th>
+	<th>Avail</th>
+	<th>Use%</th>
+	<th>Mounted on</th>
+</tr></thead>
+<tbody><tr>
+	<td>DEVICE</td>
+	<td class="number">SIZE</td>
+	<td class="number">USED</td>
+	<td class="number">AVAILABLE</td>
+	<td class="number">USED_PERCENTAGE</td>
+	<td>MOUNT_POINT</td>
+</tr></tbody></table>
+<div class="spacer">&nbsp;</p>
+<div class="footer">Generated at TIMESTAMP</div>
+</body>
+</html>

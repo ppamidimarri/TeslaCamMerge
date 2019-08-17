@@ -35,7 +35,8 @@ DAYS_TO_KEEP = 30
 # matches one of the values in STATS_FREQUENCY, so if you want
 # stats updated more frequently, add more numbers between 0 and 59
 # to the list.
-STATS_FILENAME = 'stats.txt'
+STATS_FILENAME = 'stats.html'
+STATS_IMAGE = 'stats.png'
 STATS_FREQUENCY = [0, 30]
 STATS_TIMESTAMP_FORMAT = '%-I:%M %p on %a %b %-d, %Y'
 
@@ -51,6 +52,7 @@ RCLONE_PATH = '/usr/local/bin/rclone --log-file /home/pavan/log/rclone.log'	# Ve
 FILEBROWSER_PATH = '/usr/local/bin/filebrowser'					# Verify with: which filebrowser
 LSOF_PATH = '/usr/bin/lsof -t'							# Verify with: which lsof
 DF_PATH = '/bin/df'								# Verify with: which df
+CUTYCAPT_PATH = '/usr/bin/cutycapt'						# Verify with: which cutycapt
 
 # Video watermark timestamp format (see Python strftime reference)
 WATERMARK_TIMESTAMP_FORMAT = '%b %-d\, %-I\:%M %p'

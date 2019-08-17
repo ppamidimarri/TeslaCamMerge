@@ -52,7 +52,7 @@ def main():
 			for file in os.listdir(path):
 				remove_old_file(path, file)
 
-		Stats.generate_stats()
+		Stats.generate_stats_image()
 
 		time.sleep(TCMConstants.SLEEP_DURATION)
 

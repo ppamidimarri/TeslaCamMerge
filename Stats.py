@@ -8,6 +8,7 @@ import logging
 import TCMConstants
 import subprocess
 import datetime
+import re
 
 logger_name = 'Stats'
 logger = logging.getLogger(logger_name)
@@ -19,34 +20,56 @@ fh.setFormatter(formatter)
 logger.addHandler(fh)
 logger.info("Starting up")
 
-def generate_stats():
+def generate_stats_image():
 	if TCMConstants.STATS_FILENAME and datetime.datetime.now().minute in TCMConstants.STATS_FREQUENCY:
 		logger.debug("Generating stats in {0}".format(TCMConstants.STATS_FILENAME))
 		footage_path, raw, fragment = TCMConstants.RAW_PATH.rsplit("/", 2)
 		logger.debug("Footage root location: {0}".format(footage_path))
-		folders_table = get_folders_table(footage_path)
-		disk_usage = get_disk_usage(footage_path)
-		content = "Footage Details\n{0}\n\nDisk Space Details\n{1}\n\nGenerated at {2}\n".format(
-			folders_table, disk_usage,
-			datetime.datetime.now().strftime(TCMConstants.STATS_TIMESTAMP_FORMAT))
-		with open("{0}/{1}".format(footage_path, TCMConstants.STATS_FILENAME), "w+") as file:
-			logger.debug("Writing content to file:\n{0}".format(content))
-			file.write(content)
-			logger.info("Updated stats")
+		with open("{0}/TeslaCamMerge/stats-template.html".format(TCMConstants.PROJECT_PATH), "r") as template:
+			html = template.read()
+			logger.debug("Read template:\n{0}".format(html))
+			device, size, used, available, used_percentage, mount_point = get_disk_usage_details(footage_path)
+			directory_table_rows = get_directory_table_rows(footage_path)
+			timestamp = datetime.datetime.now().strftime(TCMConstants.STATS_TIMESTAMP_FORMAT)
+			replacements = {
+				"DEVICE" : device,
+				"SIZE" : size,
+				"USED" : used,
+				"AVAILABLE" : available,
+				"USED_PERCENTAGE" : used_percentage,
+				"MOUNT_POINT" : mount_point,
+				"DIRECTORY_TABLE_ROWS" : directory_table_rows,
+				"TIMESTAMP" : timestamp
+			}
+			output = ""
+			for line in html.splitlines():
+				output += do_replacements(line, replacements)
+			logger.debug("HTML output:\n{0}".format(output))
+			with open("{0}/{1}".format(footage_path, TCMConstants.STATS_FILENAME), "w+") as file:
+				file.write(output)
+		command = "export DISPLAY=:0 && {0} --url=file://{1}/{2} --out={1}/{3}".format(
+			TCMConstants.CUTYCAPT_PATH, footage_path, TCMConstants.STATS_FILENAME, TCMConstants.STATS_IMAGE)
+		logger.debug("Command: {0}".format(command))
+		completed = subprocess.run(command, shell=True, stdin=subprocess.DEVNULL,
+			stdout=subprocess.PIPE, stderr=subprocess.PIPE)
+		if completed.returncode != 0:
+			logger.error("Error running cutycapt command {0}, returncode: {3}, stdout: {1}, stderr: {2}".format(
+				command, completed.stdout, completed.stderr, completed.returncode))
 
-def get_folders_table(footage_path):
-	result =  "----------------------------------\n"
-	result += " Folder    | # of Files |    Size \n"
-	result += "----------------------------------\n"
-	for item in os.listdir(footage_path):
-		if item == TCMConstants.STATS_FILENAME:
+def do_replacements(line, replacements):
+        substrs = sorted(replacements, key=len, reverse=True)
+        regexp = re.compile('|'.join(map(re.escape, substrs)))
+        return regexp.sub(lambda match: replacements[match.group(0)], line)
+
+def get_directory_table_rows(path):
+	output = ""
+	for item in os.listdir(path):
+		if item == TCMConstants.STATS_FILENAME or item == TCMConstants.STATS_IMAGE:
 			continue
-		num_files, total_size = get_folder_details(footage_path, item)
-		result += " {0:9} | {1} | {2} \n".format(
+		num_files, total_size = get_folder_details(path, item)
+		output += "<tr><td>{0}</td><td class='number'>{1}</td><td class='number'>{2}</td></tr>".format(
 			item, num_files, total_size)
-	result += "----------------------------------\n"
-	logger.debug("Folders result:\n{0}".format(result))
-	return result
+	return output
 
 def get_folder_details(path, file):
 	total_size = 0
@@ -72,22 +95,15 @@ def convert_file_size(size):
 	else:
 		return "{0:-6.1f}G".format(size/(1024*1024*1024))
 
-def get_disk_usage(footage_path):
+def get_disk_usage_details(footage_path):
 	command = "{0} -h {1}".format(TCMConstants.DF_PATH, footage_path)
-	result = ""
 	completed = subprocess.run(command, shell=True, stdin=subprocess.DEVNULL,
 		stdout=subprocess.PIPE, stderr=subprocess.PIPE)
 	if completed.stderr or completed.returncode != 0:
 		logger.error("Error running df command, returncode: {0}, stdout: {1}, stderr: {2}".format(
 			completed.returncode, completed.stdout, completed.stderr))
-		result += "----------------------------------------------------------\n"
-		result += "Disk space usage numbers are unavailable at the moment"
+		return None, None, None, None, None, None
 	else:
 		logger.debug("Disk space raw result:\n{0}".format(completed.stdout.decode("UTF-8")))
-		for line in completed.stdout.decode("UTF-8").splitlines():
-			result += "----------------------------------------------------------\n"
-			result += " {0}|{1}|{2}|{3}|{4}|{5} \n".format(
-				line[0:15], line[15:21], line[21:27], line[26:33], line[32:38], line[37:])
-		result += "----------------------------------------------------------\n"
-		logger.debug("Disk space formatted result:\n{0}".format(result))
-	return result
+		line = completed.stdout.decode("UTF-8").splitlines()[1]
+		return line[0:15].strip(), line[15:21].strip(), line[21:27].strip(), line[26:33].strip(), line[32:38].strip(), line[37:].strip()

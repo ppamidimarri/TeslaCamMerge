@@ -54,7 +54,7 @@ def generate_stats_image():
 		completed = subprocess.run(command, shell=True, stdin=subprocess.DEVNULL,
 			stdout=subprocess.PIPE, stderr=subprocess.PIPE)
 		if completed.returncode == 0:
-			os.remove("{0}/{1}".format(footage_path, TCMConstants.STATS_FILENAME)
+			os.remove("{0}/{1}".format(footage_path, TCMConstants.STATS_FILENAME))
 		else:
 			logger.error("Error running cutycapt command {0}, returncode: {3}, stdout: {1}, stderr: {2}".format(
 				command, completed.stdout, completed.stderr, completed.returncode))

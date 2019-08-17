@@ -21,8 +21,7 @@ logger.addHandler(fh)
 logger.info("Starting up")
 
 def generate_stats_image():
-#	if TCMConstants.STATS_FILENAME and datetime.datetime.now().minute in TCMConstants.STATS_FREQUENCY:
-	if TCMConstants.STATS_FILENAME:
+	if TCMConstants.STATS_FILENAME and datetime.datetime.now().minute in TCMConstants.STATS_FREQUENCY:
 		logger.debug("Generating stats in {0}".format(TCMConstants.STATS_FILENAME))
 		footage_path, raw, fragment = TCMConstants.RAW_PATH.rsplit("/", 2)
 		logger.debug("Footage root location: {0}".format(footage_path))
@@ -54,7 +53,9 @@ def generate_stats_image():
 		logger.debug("Command: {0}".format(command))
 		completed = subprocess.run(command, shell=True, stdin=subprocess.DEVNULL,
 			stdout=subprocess.PIPE, stderr=subprocess.PIPE)
-		if completed.returncode != 0:
+		if completed.returncode == 0:
+			os.remove("{0}/{1}".format(footage_path, TCMConstants.STATS_FILENAME)
+		else:
 			logger.error("Error running cutycapt command {0}, returncode: {3}, stdout: {1}, stderr: {2}".format(
 				command, completed.stdout, completed.stderr, completed.returncode))
 

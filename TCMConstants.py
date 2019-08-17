@@ -32,7 +32,8 @@ DAYS_TO_KEEP = 30
 # file in the footage directory (i.e. one level up from RAW_PATH)
 # that shows how many videos are in which folder, and the overall
 # disk usage. It then converts the HTML into an image using
-# cutycapt. Stats are generated when current timestamp's minute
+# cutycapt. If the image is successfully created, it then deletes
+# the HTML file. Stats are generated when current timestamp's minute
 # matches one of the values in STATS_FREQUENCY, so if you want
 # stats updated more frequently, add more numbers between 0 and
 # 59 to the list.

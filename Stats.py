@@ -21,7 +21,8 @@ logger.addHandler(fh)
 logger.info("Starting up")
 
 def generate_stats_image():
-	if TCMConstants.STATS_FILENAME and datetime.datetime.now().minute in TCMConstants.STATS_FREQUENCY:
+#	if TCMConstants.STATS_FILENAME and datetime.datetime.now().minute in TCMConstants.STATS_FREQUENCY:
+	if TCMConstants.STATS_FILENAME:
 		logger.debug("Generating stats in {0}".format(TCMConstants.STATS_FILENAME))
 		footage_path, raw, fragment = TCMConstants.RAW_PATH.rsplit("/", 2)
 		logger.debug("Footage root location: {0}".format(footage_path))
@@ -39,7 +40,8 @@ def generate_stats_image():
 				"USED_PERCENTAGE" : used_percentage,
 				"MOUNT_POINT" : mount_point,
 				"DIRECTORY_TABLE_ROWS" : directory_table_rows,
-				"TIMESTAMP" : timestamp
+				"TIMESTAMP" : timestamp,
+				"DISK_COLOR" : get_disk_color(used_percentage)
 			}
 			output = ""
 			for line in html.splitlines():
@@ -55,6 +57,15 @@ def generate_stats_image():
 		if completed.returncode != 0:
 			logger.error("Error running cutycapt command {0}, returncode: {3}, stdout: {1}, stderr: {2}".format(
 				command, completed.stdout, completed.stderr, completed.returncode))
+
+def get_disk_color(used_percentage):
+	used = int(used_percentage[:-1])
+	if used < 80:
+		return "rgb(0, 255, 0);"
+	elif used < 90:
+		return "rgb(255, 255, 0);"
+	else:
+		return "rgb(255, 0, 0);"
 
 def do_replacements(line, replacements):
         substrs = sorted(replacements, key=len, reverse=True)

@@ -54,6 +54,7 @@ def generate_stats_image():
 		completed = subprocess.run(command, shell=True, stdin=subprocess.DEVNULL,
 			stdout=subprocess.PIPE, stderr=subprocess.PIPE)
 		if completed.returncode == 0:
+			logger.info("Updated stats image")
 			try:
 				os.remove("{0}/{1}".format(footage_path, TCMConstants.STATS_FILENAME))
 			except:

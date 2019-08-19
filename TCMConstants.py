@@ -71,6 +71,11 @@ FILENAME_TIMESTAMP_FORMAT = '%Y-%m-%d_%H-%M-%S'
 FILENAME_REGEX  = '(\d{4}(-\d\d){2}_(\d\d-){3})(right_repeater|front|left_repeater).mp4'
 FILENAME_PATTERN = re.compile(FILENAME_REGEX)
 
+# Logging settings for time-rotating file handler
+WHEN = 'd'
+INTERVAL = 1
+BACKUP_COUNT = 10
+
 # Application management constants
 SLEEP_DURATION = 60
 SPECIAL_EXIT_CODE = 115

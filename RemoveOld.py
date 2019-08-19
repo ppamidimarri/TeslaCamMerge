@@ -27,6 +27,9 @@ logger.setLevel(TCMConstants.LOG_LEVEL)
 
 def main():
 	fh = logging.FileHandler(TCMConstants.LOG_PATH + logger_name + TCMConstants.LOG_EXTENSION)
+        fh = logging.TimedRotatingFileHandler(
+		TCMConstants.LOG_PATH + logger_name + TCMConstants.LOG_EXTENSION,
+		when="d", interval=1, backupCount=10)
 	fh.setLevel(TCMConstants.LOG_LEVEL)
 	formatter = logging.Formatter(TCMConstants.LOG_FORMAT)
 	fh.setFormatter(formatter)

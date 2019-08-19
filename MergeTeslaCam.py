@@ -31,7 +31,9 @@ ffmpeg_error_pattern = re.compile(ffmpeg_error_regex)
 bad_videos_filename = 'badvideos.txt'
 
 def main():
-	fh = logging.FileHandler(TCMConstants.LOG_PATH + logger_name + TCMConstants.LOG_EXTENSION)
+	fh = logging.TimedRotatingFileHandler(
+		TCMConstants.LOG_PATH + logger_name + TCMConstants.LOG_EXTENSION,
+		when="d", interval=1, backupCount=10)
 	fh.setLevel(TCMConstants.LOG_LEVEL)
 	formatter = logging.Formatter(TCMConstants.LOG_FORMAT)
 	fh.setFormatter(formatter)
@@ -53,7 +55,8 @@ def main():
 				stamp, camera = file.rsplit("-", 1)
 			except ValueError:
 				if file != bad_videos_filename:
-					logger.warn("Unrecognized filename: {0}".format(file))
+					logger.warn(
+						"Unrecognized filename: {0}".format(file))
 				continue
 			process_stamp(stamp)
 

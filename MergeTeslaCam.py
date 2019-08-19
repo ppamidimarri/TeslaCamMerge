@@ -12,6 +12,7 @@ import subprocess
 import datetime
 import signal
 import logging
+import logging.handlers
 import TCMConstants
 import re
 
@@ -31,7 +32,7 @@ ffmpeg_error_pattern = re.compile(ffmpeg_error_regex)
 bad_videos_filename = 'badvideos.txt'
 
 def main():
-	fh = logging.TimedRotatingFileHandler(
+	fh = logging.handlers.TimedRotatingFileHandler(
 		TCMConstants.LOG_PATH + logger_name + TCMConstants.LOG_EXTENSION,
 		when=TCMConstants.WHEN, interval=TCMConstants.INTERVAL,
 		backupCount=TCMConstants.BACKUP_COUNT)

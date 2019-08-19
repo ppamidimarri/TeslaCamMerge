@@ -9,6 +9,7 @@ import time
 import subprocess
 import signal
 import logging
+import logging.handlers
 import TCMConstants
 
 SOURCE_PATH = '/home/pi/Upload'
@@ -21,7 +22,7 @@ logger = logging.getLogger(logger_name)
 logger.setLevel(TCMConstants.LOG_LEVEL)
 
 def main():
-        fh = logging.TimedRotatingFileHandler(
+        fh = logging.handlers.TimedRotatingFileHandler(
  		TCMConstants.LOG_PATH + logger_name + TCMConstants.LOG_EXTENSION,
 		when=TCMConstants.WHEN, interval=TCMConstants.INTERVAL,
 		backupCount=TCMConstants.BACKUP_COUNT)

@@ -39,7 +39,7 @@ def generate_stats_image():
 			logger.debug("HTML output:\n{0}".format(output))
 			with open("{0}/{1}".format(footage_path, TCMConstants.STATS_FILENAME), "w+") as file:
 				file.write(output)
-		command = "export DISPLAY=:0 && {0} --url=file://{1}/{2} --out={1}/{3} --zoom-factor=1.5".format(
+		command = "export DISPLAY=:0 && {0} --url=file://{1}/{2} --out={1}/{3}".format(
 			TCMConstants.CUTYCAPT_PATH, footage_path, TCMConstants.STATS_FILENAME, TCMConstants.STATS_IMAGE)
 		logger.debug("Command: {0}".format(command))
 		completed = subprocess.run(command, shell=True, stdin=subprocess.DEVNULL,

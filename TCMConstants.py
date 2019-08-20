@@ -64,7 +64,7 @@ RCLONE_PATH = '/usr/local/bin/rclone --log-file /home/pavan/log/rclone.log'	# Ve
 FILEBROWSER_PATH = '/usr/local/bin/filebrowser'					# Verify with: which filebrowser
 LSOF_PATH = '/usr/bin/lsof -t'							# Verify with: which lsof
 DF_PATH = '/bin/df'								# Verify with: which df
-CUTYCAPT_PATH = '/usr/bin/cutycapt'						# Verify with: which cutycapt
+CUTYCAPT_PATH = '/usr/bin/cutycapt --zoom-factor=1.5'				# Verify with: which cutycapt
 
 # Video watermark timestamp format (see Python strftime reference)
 WATERMARK_TIMESTAMP_FORMAT = '%b %-d\, %-I\:%M %p'

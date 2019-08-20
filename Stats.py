@@ -12,7 +12,7 @@ import re
 logger = TCMConstants.get_logger('Stats')
 
 def generate_stats_image():
-	if TCMConstants.STATS_FILENAME and datetime.datetime.now().minute in TCMConstants.STATS_FREQUENCY:
+	if TCMConstants.STATS_FILENAME:
 		logger.debug("Generating stats in {0}".format(TCMConstants.STATS_FILENAME))
 		footage_path, raw, fragment = TCMConstants.RAW_PATH.rsplit("/", 2)
 		logger.debug("Footage root location: {0}".format(footage_path))
@@ -39,7 +39,7 @@ def generate_stats_image():
 			logger.debug("HTML output:\n{0}".format(output))
 			with open("{0}/{1}".format(footage_path, TCMConstants.STATS_FILENAME), "w+") as file:
 				file.write(output)
-		command = "export DISPLAY=:0 && {0} --url=file://{1}/{2} --out={1}/{3} --min-width=1600 --min-height=1200".format(
+		command = "export DISPLAY=:0 && {0} --url=file://{1}/{2} --out={1}/{3} --zoom-factor=1.5".format(
 			TCMConstants.CUTYCAPT_PATH, footage_path, TCMConstants.STATS_FILENAME, TCMConstants.STATS_IMAGE)
 		logger.debug("Command: {0}".format(command))
 		completed = subprocess.run(command, shell=True, stdin=subprocess.DEVNULL,

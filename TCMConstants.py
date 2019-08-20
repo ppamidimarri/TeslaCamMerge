@@ -49,6 +49,14 @@ LOG_EXTENSION = '.log'
 LOG_FORMAT = '%(asctime)s - %(name)s - %(levelname)s - %(message)s'
 LOG_LEVEL = logging.INFO
 
+# Logging settings for TimedRotatingFileHandler, refer to:
+# https://docs.python.org/3.6/library/logging.handlers.html#timedrotatingfilehandler
+# for details about the three supported options. The default
+# is to rotate once a day and keep ten days' worth of logs.
+LOG_WHEN = 'd'
+LOG_INTERVAL = 1
+LOG_BACKUP_COUNT = 10
+
 # Paths of installed software, including name of the application
 FFMPEG_PATH = '/usr/bin/ffmpeg'							# Verify with: which ffmpeg
 RCLONE_PATH = '/usr/local/bin/rclone --log-file /home/pavan/log/rclone.log'	# Verify with: which rclone
@@ -71,11 +79,6 @@ FAST_TEXT = 'fast.mp4'
 FILENAME_TIMESTAMP_FORMAT = '%Y-%m-%d_%H-%M-%S'
 FILENAME_REGEX  = '(\d{4}(-\d\d){2}_(\d\d-){3})(right_repeater|front|left_repeater).mp4'
 FILENAME_PATTERN = re.compile(FILENAME_REGEX)
-
-# Logging settings for time-rotating file handler
-LOG_WHEN = 'd'
-LOG_INTERVAL = 1
-LOG_BACKUP_COUNT = 10
 
 # Application management constants
 SLEEP_DURATION = 60

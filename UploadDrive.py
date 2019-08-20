@@ -12,8 +12,8 @@ import TCMConstants
 logger = TCMConstants.get_logger('UploadDrive')
 
 def main():
-	signal.signal(signal.SIGINT, exit_gracefully)
-	signal.signal(signal.SIGTERM, exit_gracefully)
+	signal.signal(signal.SIGINT, TCMConstants.exit_gracefully)
+	signal.signal(signal.SIGTERM, TCMConstants.exit_gracefully)
 
 	files = []
 	while True:
@@ -21,7 +21,7 @@ def main():
 			files = os.listdir(TCMConstants.UPLOAD_LOCAL_PATH)
 		except:
 			logger.error("Error listing directory {0}".format(TCMConstants.UPLOAD_LOCAL_PATH))
-			exit_gracefully(TCMConstants.SPECIAL_EXIT_CODE)
+			TCMConstants.exit_gracefully(TCMConstants.SPECIAL_EXIT_CODE)
 
 		for file in files:
 			upload_file(file)
@@ -44,10 +44,6 @@ def upload_file(filename):
 			logger.info("Uploaded file {0}".format(filename))
 	except shutil.Error:
 		logger.error("Failed to upload {0}".format(filename))
-
-def exit_gracefully(signum, frame):
-	logger.info("Received signal number {0}, exiting.".format(signum))
-	exit(signum)
 
 if __name__ == '__main__':
 	main()

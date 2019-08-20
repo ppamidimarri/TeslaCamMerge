@@ -3,6 +3,7 @@ import logging.handlers
 import os
 import subprocess
 import re
+import inspect
 
 # Location where the TeslaCamMerge directory is present. Must NOT include trailing /.
 PROJECT_PATH = '/home/pavan'	# Must contain the directory called TeslaCamMerge (where you cloned this repository), as well as filebrowser.db
@@ -149,3 +150,10 @@ def get_logger(filename):
 	logger.addHandler(fh)
 	logger.info("Starting up")
 	return logger
+
+def exit_gracefully(signum, frame):
+	called_from = inspect.stack()[1]
+	caller = inspect.getmodule(called_from[0]).__file__
+	name = caller.rsplit('/', 1)[1][:-3] # Remove path, remove ".py" at the end
+	logging.getLogger(caller).info("Received signal {0}, exiting".format(signum))
+	exit(signum)

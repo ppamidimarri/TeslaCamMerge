@@ -23,12 +23,12 @@ ALL_VIDEO_PATTERN = re.compile(ALL_VIDEO_REGEX)
 logger = TCMConstants.get_logger('RemoveOld')
 
 def main():
-	signal.signal(signal.SIGINT, exit_gracefully)
-	signal.signal(signal.SIGTERM, exit_gracefully)
+	signal.signal(signal.SIGINT, TCMConstants.exit_gracefully)
+	signal.signal(signal.SIGTERM, TCMConstants.exit_gracefully)
 
 	if not have_required_permissions():
 		logger.error("Missing some required permissions, exiting")
-		exit_gracefully(TCMConstants.SPECIAL_EXIT_CODE, None)
+		TCMConstants.exit_gracefully(TCMConstants.SPECIAL_EXIT_CODE, None)
 
 	while True:
 		for directory in next(os.walk(SOURCE_PATH))[1]:
@@ -56,10 +56,6 @@ def have_required_permissions():
 			path, True, logger)
 	return have_perms and TCMConstants.check_permissions(
 		SOURCE_PATH, True, logger)
-
-def exit_gracefully(signum, frame):
-	logger.info("Received signal number {0}, exiting.".format(signum))
-	exit(signum)
 
 ### Loop functions ###
 

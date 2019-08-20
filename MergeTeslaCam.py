@@ -138,11 +138,8 @@ def get_ffmpeg_command(stamp, video_type):
 def add_to_bad_videos(name):
 	logger.debug("Skipping over bad source file: {0}".format(name))
 	with open(TCMConstants.RAW_PATH + bad_videos_filename, "a+") as file:
-		name_in_file = False
-		for line in file:
-			if name in line:
-				name_in_file = True
-		if not name_in_file:
+		file_contents = file.read()
+		if name not in file_contents:
 			file.write("{0}\n".format(name.replace(TCMConstants.RAW_PATH, '')))
 
 ### Other utility functions ###

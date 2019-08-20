@@ -1,6 +1,6 @@
 #!/usr/bin/env python3
 
-# This script generates a text file with statistics if STATS_FILENAME is set
+# This script generates an image with statistics if STATS_FILENAME is set
 
 import os
 import time

@@ -10,8 +10,6 @@ import os
 import time
 import shutil
 import signal
-import logging
-import logging.handlers
 import TCMConstants
 import Stats
 import datetime
@@ -22,21 +20,9 @@ VIDEO_PATHS = [TCMConstants.RAW_PATH, TCMConstants.FULL_PATH, TCMConstants.FAST_
 ALL_VIDEO_REGEX = "{0}|fast|full).mp4".format(TCMConstants.FILENAME_REGEX[:-5])
 ALL_VIDEO_PATTERN = re.compile(ALL_VIDEO_REGEX)
 
-logger_name = 'RemoveOld'
-logger = logging.getLogger(logger_name)
-logger.setLevel(TCMConstants.LOG_LEVEL)
+logger = TCMConstants.get_logger('RemoveOld')
 
 def main():
-        fh = logging.handlers.TimedRotatingFileHandler(
-		TCMConstants.LOG_PATH + logger_name + TCMConstants.LOG_EXTENSION,
-		when=TCMConstants.WHEN, interval=TCMConstants.INTERVAL,
-		backupCount=TCMConstants.BACKUP_COUNT)
-	fh.setLevel(TCMConstants.LOG_LEVEL)
-	formatter = logging.Formatter(TCMConstants.LOG_FORMAT)
-	fh.setFormatter(formatter)
-	logger.addHandler(fh)
-	logger.info("Starting up")
-
 	signal.signal(signal.SIGINT, exit_gracefully)
 	signal.signal(signal.SIGTERM, exit_gracefully)
 

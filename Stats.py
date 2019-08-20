@@ -4,24 +4,12 @@
 
 import os
 import time
-import logging
-import logging.handlers
 import TCMConstants
 import subprocess
 import datetime
 import re
 
-logger_name = 'Stats'
-logger = logging.getLogger(logger_name)
-logger.setLevel(TCMConstants.LOG_LEVEL)
-fh = logging.handlers.TimedRotatingFileHandler(
-	TCMConstants.LOG_PATH + logger_name + TCMConstants.LOG_EXTENSION,
-	when="d", interval=1, backupCount=10)
-fh.setLevel(TCMConstants.LOG_LEVEL)
-formatter = logging.Formatter(TCMConstants.LOG_FORMAT)
-fh.setFormatter(formatter)
-logger.addHandler(fh)
-logger.info("Starting up")
+logger = TCMConstants.get_logger('Stats')
 
 def generate_stats_image():
 	if TCMConstants.STATS_FILENAME and datetime.datetime.now().minute in TCMConstants.STATS_FREQUENCY:

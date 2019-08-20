@@ -11,14 +11,8 @@ import time
 import subprocess
 import datetime
 import signal
-import logging
-import logging.handlers
 import TCMConstants
 import re
-
-logger_name = 'MergeTeslaCam'
-logger = logging.getLogger(logger_name)
-logger.setLevel(TCMConstants.LOG_LEVEL)
 
 # ffmpeg commands and filters
 ffmpeg_base = "{0} -hide_banner -loglevel error".format(TCMConstants.FFMPEG_PATH)
@@ -31,17 +25,9 @@ ffmpeg_error_pattern = re.compile(ffmpeg_error_regex)
 # Text file containing the names of bad videos (moov atom not found by ffmpeg)
 bad_videos_filename = 'badvideos.txt'
 
-def main():
-	fh = logging.handlers.TimedRotatingFileHandler(
-		TCMConstants.LOG_PATH + logger_name + TCMConstants.LOG_EXTENSION,
-		when=TCMConstants.WHEN, interval=TCMConstants.INTERVAL,
-		backupCount=TCMConstants.BACKUP_COUNT)
-	fh.setLevel(TCMConstants.LOG_LEVEL)
-	formatter = logging.Formatter(TCMConstants.LOG_FORMAT)
-	fh.setFormatter(formatter)
-	logger.addHandler(fh)
-	logger.info("Starting up")
+logger = TCMConstants.get_logger('MergeTC')
 
+def main():
 	signal.signal(signal.SIGINT, exit_gracefully)
 	signal.signal(signal.SIGTERM, exit_gracefully)
 

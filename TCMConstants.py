@@ -3,7 +3,7 @@ import logging.handlers
 import os
 import subprocess
 import re
-import inspect
+import sys
 
 # Location where the TeslaCamMerge directory is present. Must NOT include trailing /.
 PROJECT_PATH = '/home/pavan'	# Must contain the directory called TeslaCamMerge (where you cloned this repository), as well as filebrowser.db
@@ -138,7 +138,7 @@ def check_file_for_write(file, logger):
 		return True
 
 def get_logger(filename):
-	logger = logging.getLogger(filename)
+	logger = logging.getLogger(get_basename())
 	logger.setLevel(LOG_LEVEL)
 	fh = logging.handlers.TimedRotatingFileHandler(
 		LOG_PATH + filename + LOG_EXTENSION,
@@ -152,13 +152,8 @@ def get_logger(filename):
 	return logger
 
 def exit_gracefully(signum, frame):
-	top_frame = frame.f_back
-	while top_frame:
-		if top_frame.f_back:
-			top_frame = top_frame.f_back
-		else:
-			break
-	caller = inspect.getframeinfo(top_frame).filename
-	name = caller.rsplit('/', 1)[1][:-3] # Remove path, remove ".py" at the end
-	logging.getLogger(name).info("Received signal {0}, exiting".format(signum))
+	logging.getLogger(get_basename()).info("Received signal {0}, exiting".format(signum))
 	exit(signum)
+
+def get_basename():
+	return os.path.splitext(os.path.basename(sys.argv[0]))

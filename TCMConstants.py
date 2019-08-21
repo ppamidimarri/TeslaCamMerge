@@ -156,4 +156,4 @@ def exit_gracefully(signum, frame):
 	exit(signum)
 
 def get_basename():
-	return os.path.splitext(os.path.basename(sys.argv[0]))
+	return os.path.splitext(os.path.basename(sys.argv[0]))[0]

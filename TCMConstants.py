@@ -138,10 +138,11 @@ def check_file_for_write(file, logger):
 		return True
 
 def get_logger(filename):
-	logger = logging.getLogger(get_basename())
+	basename = get_basename()
+	logger = logging.getLogger(basename)
 	logger.setLevel(LOG_LEVEL)
 	fh = logging.handlers.TimedRotatingFileHandler(
-		LOG_PATH + filename + LOG_EXTENSION,
+		LOG_PATH + basename + LOG_EXTENSION,
 		when=LOG_WHEN, interval=LOG_INTERVAL,
 		backupCount=LOG_BACKUP_COUNT)
 	fh.setLevel(LOG_LEVEL)

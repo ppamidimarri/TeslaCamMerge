@@ -28,12 +28,12 @@ bad_videos_filename = 'badvideos.txt'
 logger = TCMConstants.get_logger('MergeTeslaCam')
 
 def main():
-	signal.signal(signal.SIGINT, TCMConstants.exit_gracefully)
-	signal.signal(signal.SIGTERM, TCMConstants.exit_gracefully)
+	signal.signal(signal.SIGINT, exit_gracefully)
+	signal.signal(signal.SIGTERM, exit_gracefully)
 
 	if not have_required_permissions():
 		logger.error("Missing some required permissions, exiting")
-		TCMConstants.exit_gracefully(TCMConstants.SPECIAL_EXIT_CODE, None)
+		exit_gracefully(TCMConstants.SPECIAL_EXIT_CODE, None)
 
 	while True:
 		raw_files = os.listdir(TCMConstants.RAW_PATH)
@@ -57,6 +57,10 @@ def have_required_permissions():
 		TCMConstants.RAW_PATH, False, logger) and TCMConstants.check_permissions(
 		TCMConstants.FULL_PATH, True, logger) and TCMConstants.check_permissions(
 		TCMConstants.FAST_PATH, True, logger)
+
+def exit_gracefully(signum, frame):
+	logger.info("Received signal {0}, exiting".format(signum))
+	exit(signum)
 
 ### Loop functions ###
 

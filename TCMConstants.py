@@ -152,8 +152,7 @@ def get_logger(filename):
 	return logger
 
 def exit_gracefully(signum, frame):
-	called_from = inspect.stack()[1]
-	caller = inspect.getmodule(called_from[0]).__file__
+	caller = inspect.getframeinfo(frame).filename
 	name = caller.rsplit('/', 1)[1][:-3] # Remove path, remove ".py" at the end
 	logging.getLogger(name).info("Received signal {0}, exiting".format(signum))
 	exit(signum)

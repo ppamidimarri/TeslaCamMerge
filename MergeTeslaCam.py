@@ -25,7 +25,7 @@ ffmpeg_error_pattern = re.compile(ffmpeg_error_regex)
 # Text file containing the names of bad videos (moov atom not found by ffmpeg)
 bad_videos_filename = 'badvideos.txt'
 
-logger = TCMConstants.get_logger('MergeTeslaCam')
+logger = TCMConstants.get_logger()
 
 def main():
 	signal.signal(signal.SIGINT, TCMConstants.exit_gracefully)

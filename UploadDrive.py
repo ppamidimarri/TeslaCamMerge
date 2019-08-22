@@ -9,7 +9,7 @@ import subprocess
 import signal
 import TCMConstants
 
-logger = TCMConstants.get_logger('UploadDrive')
+logger = TCMConstants.get_logger()
 
 def main():
 	signal.signal(signal.SIGINT, TCMConstants.exit_gracefully)

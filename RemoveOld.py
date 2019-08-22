@@ -20,7 +20,7 @@ VIDEO_PATHS = [TCMConstants.RAW_PATH, TCMConstants.FULL_PATH, TCMConstants.FAST_
 ALL_VIDEO_REGEX = "{0}|fast|full).mp4".format(TCMConstants.FILENAME_REGEX[:-5])
 ALL_VIDEO_PATTERN = re.compile(ALL_VIDEO_REGEX)
 
-logger = TCMConstants.get_logger('RemoveOld')
+logger = TCMConstants.get_logger()
 
 def main():
 	signal.signal(signal.SIGINT, TCMConstants.exit_gracefully)

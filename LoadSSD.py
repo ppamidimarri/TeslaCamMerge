@@ -11,7 +11,7 @@ import signal
 import re
 import TCMConstants
 
-logger = TCMConstants.get_logger('LoadSSD')
+logger = TCMConstants.get_logger()
 
 def main():
 	signal.signal(signal.SIGINT, TCMConstants.exit_gracefully)

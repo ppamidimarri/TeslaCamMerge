@@ -8,8 +8,9 @@ import TCMConstants
 import subprocess
 import datetime
 import re
+import logging
 
-logger = TCMConstants.get_logger('Stats')
+logger = logging.getLogger(TCMConstants.get_basename())
 
 def generate_stats_image():
 	if TCMConstants.STATS_FILENAME:

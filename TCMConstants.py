@@ -137,7 +137,7 @@ def check_file_for_write(file, logger):
 	else:
 		return True
 
-def get_logger(filename):
+def get_logger():
 	basename = get_basename()
 	logger = logging.getLogger(basename)
 	logger.setLevel(LOG_LEVEL)

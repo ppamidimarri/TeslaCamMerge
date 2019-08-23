@@ -15,7 +15,7 @@ import TCMConstants
 import re
 
 # ffmpeg commands and filters
-ffmpeg_base = "{0} -hide_banner -loglevel error".format(TCMConstants.FFMPEG_PATH)
+ffmpeg_base = "{0} -hide_banner -loglevel error -timelimit 1800".format(TCMConstants.FFMPEG_PATH)
 ffmpeg_mid_full = '-filter_complex "[1:v]scale=w=1.2*iw:h=1.2*ih[top];[0:v]scale=w=0.6*iw:h=0.6*ih[right];[2:v]scale=w=0.6*iw:h=0.6*ih[left];[left][right]hstack=inputs=2[bottom];[top][bottom]vstack=inputs=2[full];[full]drawtext=text=\''
 ffmpeg_end_full = '\':fontcolor=white:fontsize=48:box=1:boxcolor=black@0.5:boxborderw=5:x=(w-text_w)/2" -movflags +faststart -threads 0'
 ffmpeg_end_fast = '-vf "setpts=0.09*PTS" -c:v libx264 -crf 28 -profile:v main -tune fastdecode -movflags +faststart -threads 0'

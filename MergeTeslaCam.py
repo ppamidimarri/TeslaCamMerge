@@ -24,6 +24,7 @@ ffmpeg_error_pattern = re.compile(ffmpeg_error_regex)
 
 # Text file containing the names of bad videos (moov atom not found by ffmpeg)
 bad_videos_filename = 'badvideos.txt'
+bad_sizes_filename = 'badsizes.txt'
 
 logger = TCMConstants.get_logger()
 
@@ -83,10 +84,38 @@ def stamp_is_all_ready(stamp):
 	front_file = "{0}{1}-{2}".format(TCMConstants.RAW_PATH, stamp, TCMConstants.FRONT_TEXT)
 	left_file = "{0}{1}-{2}".format(TCMConstants.RAW_PATH, stamp, TCMConstants.LEFT_TEXT)
 	right_file = "{0}{1}-{2}".format(TCMConstants.RAW_PATH, stamp, TCMConstants.RIGHT_TEXT)
-	if TCMConstants.check_file_for_read(front_file, logger) and TCMConstants.check_file_for_read(left_file, logger) and TCMConstants.check_file_for_read(right_file, logger):
-		return True
+	if file_sizes_in_same_range(stamp, front_file, left_file, right_file):
+		if TCMConstants.check_file_for_read(front_file, logger) and TCMConstants.check_file_for_read(left_file, logger) and TCMConstants.check_file_for_read(right_file, logger):
+			return True
+		else:
+			return False
 	else:
 		return False
+
+def file_sizes_in_same_range(stamp, front_file, left_file, right_file):
+	front_size = os.path.getsize(front_file)
+	left_size = os.path.getsize(left_file)
+	right_size = os.path.getsize(right_file)
+	if abs((front_size - left_size) / front_size) > TCMConstants.SIZE_RANGE:
+		add_to_bad_sizes(
+			stamp, TCMConstants.convert_file_size(front_size),
+			TCMConstants.convert_file_size(left_size),
+			TCMConstants.convert_file_size(right_size))
+		return False
+	elif abs((front_size - right_size) / front_size) > TCMConstants.SIZE_RANGE:
+		add_to_bad_sizes(
+			stamp, TCMConstants.convert_file_size(front_size),
+			TCMConstants.convert_file_size(left_size),
+			TCMConstants.convert_file_size(right_size))
+		return False
+	elif abs((left_size - right_size) / left_size) > TCMConstants.SIZE_RANGE:
+		add_to_bad_sizes(
+			stamp, TCMConstants.convert_file_size(front_size),
+			TCMConstants.convert_file_size(left_size),
+			TCMConstants.convert_file_size(right_size))
+		return False
+	else:
+		return True
 
 ### FFMPEG command functions ###
 
@@ -137,6 +166,15 @@ def add_to_bad_videos(name):
 		file_contents = file.read()
 		if name not in file_contents:
 			file.write("{0}\n".format(name.replace(TCMConstants.RAW_PATH, '')))
+
+def add_to_bad_sizes(stamp, front, left, right):
+	logger.warn("Size mismatch for stamp {0}: FRONT {1}, LEFT {2}, RIGHT {3}".format(
+		stamp, front, left, right))
+	with open(TCMConstants.RAW_PATH + bad_sizes_filename, "a+") as file:
+		file_contents = file.read()
+		if stamp not in file_contents:
+			file.write("{0}: Front {1}, Left {2}, Right {3}\n".format(
+				stamp, front, left, right))
 
 ### Other utility functions ###
 

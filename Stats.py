@@ -89,19 +89,7 @@ def get_folder_details(path, file):
 			if not os.path.islink(fp):
 				total_size += os.path.getsize(fp)
 				num_files += 1
-	return "{0:-10d}".format(num_files), convert_file_size(total_size)
-
-def convert_file_size(size):
-	if size <= 1024:
-		return "{0:-6d}B".format(size)
-	elif size <= 1024*1024:
-		return "{0:-6.1f}K".format(size/1024)
-	elif size <= 1024*1024*1024:
-		return "{0:-6.1f}M".format(size/(1024*1024))
-	elif size <= 1024*1024*1024*1024:
-		return "{0:-6.1f}G".format(size/(1024*1024*1024))
-	else:
-		return "{0:-6.1f}G".format(size/(1024*1024*1024))
+	return "{0:-10d}".format(num_files), TCMConstants.convert_file_size(total_size)
 
 def get_disk_usage_details(footage_path):
 	command = "{0} -h {1}".format(TCMConstants.DF_PATH, footage_path)

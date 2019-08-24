@@ -84,6 +84,7 @@ FILENAME_PATTERN = re.compile(FILENAME_REGEX)
 # Application management constants
 SLEEP_DURATION = 60
 SPECIAL_EXIT_CODE = 115
+SIZE_RANGE = 0.2
 
 # Common functions
 
@@ -158,3 +159,15 @@ def exit_gracefully(signum, frame):
 
 def get_basename():
 	return os.path.splitext(os.path.basename(sys.argv[0]))[0]
+
+def convert_file_size(size):
+	if size <= 1024:
+		return "{0:-6d}B".format(size)
+	elif size <= 1024*1024:
+		return "{0:-6.1f}K".format(size/1024)
+	elif size <= 1024*1024*1024:
+		return "{0:-6.1f}M".format(size/(1024*1024))
+	elif size <= 1024*1024*1024*1024:
+		return "{0:-6.1f}G".format(size/(1024*1024*1024))
+	else:
+		return "{0:-6.1f}G".format(size/(1024*1024*1024))

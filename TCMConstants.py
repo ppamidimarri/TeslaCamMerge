@@ -69,6 +69,14 @@ CUTYCAPT_PATH = '/usr/bin/cutycapt --zoom-factor=1.5'				# Verify with: which cu
 # Video watermark timestamp format (see Python strftime reference)
 WATERMARK_TIMESTAMP_FORMAT = '%b %-d\, %-I\:%M %p'
 
+# Names of text files to be placed in RAW_PATH that will list bad input files
+# created by TeslaCam. BAD_VIDEOS_FILENAME will contain the names of files that
+# FFMPEG reports errors for (e.g. moov atom not found). BAD_SIZES_FILENAME
+# will contain one row for each timestamps where the sizes of the three files
+# drastically different (i.e. outside the range specified below in SIZE_RANGE)
+BAD_VIDEOS_FILENAME = 'badvideos.txt'
+BAD_SIZES_FILENAME = 'badsizes.txt'
+
 ### Do not modify anything below this line ###
 
 # Characteristics of filenames output by TeslaCam

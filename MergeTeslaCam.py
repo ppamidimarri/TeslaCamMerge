@@ -22,10 +22,6 @@ ffmpeg_end_fast = '-vf "setpts=0.09*PTS" -c:v libx264 -crf 28 -profile:v main -t
 ffmpeg_error_regex = '(.*): Invalid data found when processing input'
 ffmpeg_error_pattern = re.compile(ffmpeg_error_regex)
 
-# Text file containing the names of bad videos (moov atom not found by ffmpeg)
-bad_videos_filename = 'badvideos.txt'
-bad_sizes_filename = 'badsizes.txt'
-
 logger = TCMConstants.get_logger()
 
 def main():
@@ -43,7 +39,7 @@ def main():
 			try:
 				stamp, camera = file.rsplit("-", 1)
 			except ValueError:
-				if file != bad_videos_filename:
+				if file != TCMConstants.BAD_VIDEOS_FILENAME and file != TCMConstants.BAD_SIZES_FILENAME:
 					logger.warn(
 						"Unrecognized filename: {0}".format(file))
 				continue
@@ -162,7 +158,7 @@ def get_ffmpeg_command(stamp, video_type):
 
 def add_to_bad_videos(name):
 	logger.debug("Skipping over bad source file: {0}".format(name))
-	with open(TCMConstants.RAW_PATH + bad_videos_filename, "a+") as file:
+	with open(TCMConstants.RAW_PATH + TCMConstants.BAD_VIDEOS_FILENAME, "a+") as file:
 		file_contents = file.read()
 		if name not in file_contents:
 			file.write("{0}\n".format(name.replace(TCMConstants.RAW_PATH, '')))
@@ -170,7 +166,7 @@ def add_to_bad_videos(name):
 def add_to_bad_sizes(stamp, front, left, right):
 	logger.warn("Size mismatch for stamp {0}: FRONT {1}, LEFT {2}, RIGHT {3}".format(
 		stamp, front, left, right))
-	with open(TCMConstants.RAW_PATH + bad_sizes_filename, "a+") as file:
+	with open(TCMConstants.RAW_PATH + TCMConstants.BAD_SIZES_FILENAME, "a+") as file:
 		file_contents = file.read()
 		if stamp not in file_contents:
 			file.write("{0}: Front {1}, Left {2}, Right {3}\n".format(

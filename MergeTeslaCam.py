@@ -158,37 +158,33 @@ def get_ffmpeg_command(stamp, video_type):
 
 def add_to_bad_videos(name):
 	logger.debug("Skipping over bad source file: {0}".format(name))
-	files = []
-	if os.path.isfile(TCMConstants.RAW_PATH + TCMConstants.BAD_VIDEOS_FILENAME):
-		with open(TCMConstants.RAW_PATH + TCMConstants.BAD_VIDEOS_FILENAME, "r+") as file:
-			files = file.readlines()
-			for line in files:
-				if name in line:
-					return
-	files.append("{0}\n".format(name.replace(TCMConstants.RAW_PATH, '')))
-	with open(TCMConstants.RAW_PATH + TCMConstants.BAD_VIDEOS_FILENAME, "w+") as writer:
-		outlist = sorted(files)
-		for line in outlist:
-			writer.write(line)
+	add_string_to_sorted_file(
+		TCMConstants.RAW_PATH + TCMConstants.BAD_VIDEOS_FILENAME,
+		name, "{0}\n".format(name.replace(TCMConstants.RAW_PATH, '')))
 
 def add_to_bad_sizes(stamp, front, left, right):
 	logger.warn("Size mismatch for stamp {0}: FRONT {1}, LEFT {2}, RIGHT {3}".format(
 		stamp, front, left, right))
+	add_string_to_sorted_file(
+		TCMConstants.RAW_PATH + TCMConstants.BAD_SIZES_FILENAME,
+		stamp,
+		"{0}: Front {1}, Left {2}, Right {3}\n".format(stamp, front, left, right))
+
+### Other utility functions ###
+
+def add_string_to_sorted_file(name, key, string):
 	files = []
-	if os.path.isfile(TCMConstants.RAW_PATH + TCMConstants.BAD_SIZES_FILENAME):
-		with open(TCMConstants.RAW_PATH + TCMConstants.BAD_SIZES_FILENAME, "r+") as file:
+	if os.path.isfile(name):
+		with open(name, "r") as file:
 			files = file.readlines()
 			for line in files:
-				if stamp in line:
+				if key in line:
 					return
-	files.append("{0}: Front {1}, Left {2}, Right {3}\n".format(
-		stamp, front, left, right))
-	with open(TCMConstants.RAW_PATH + TCMConstants.BAD_SIZES_FILENAME, "w+") as writer:
+	files.append(string)
+	with open(name, "w+") as writer:
 		outlist = sorted(files)
 		for line in outlist:
 			writer.write(line)
-
-### Other utility functions ###
 
 def format_timestamp(stamp):
 	timestamp = datetime.datetime.strptime(stamp, TCMConstants.FILENAME_TIMESTAMP_FORMAT)

@@ -92,7 +92,8 @@ FILENAME_PATTERN = re.compile(FILENAME_REGEX)
 # Application management constants
 SLEEP_DURATION = 60
 SPECIAL_EXIT_CODE = 115
-SIZE_RANGE = 0.2
+SIZE_RANGE = 0.4
+FFMPEG_TIMELIMIT = 9000
 
 # Common functions
 

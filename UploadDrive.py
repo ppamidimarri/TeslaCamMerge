@@ -6,15 +6,11 @@
 import os
 import time
 import subprocess
-import signal
 import TCMConstants
 
 logger = TCMConstants.get_logger()
 
 def main():
-	signal.signal(signal.SIGINT, TCMConstants.exit_gracefully)
-	signal.signal(signal.SIGTERM, TCMConstants.exit_gracefully)
-
 	files = []
 	while True:
 		try:

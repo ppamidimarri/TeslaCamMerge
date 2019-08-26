@@ -9,7 +9,6 @@
 import os
 import time
 import shutil
-import signal
 import TCMConstants
 import Stats
 import datetime
@@ -23,9 +22,6 @@ ALL_VIDEO_PATTERN = re.compile(ALL_VIDEO_REGEX)
 logger = TCMConstants.get_logger()
 
 def main():
-	signal.signal(signal.SIGINT, TCMConstants.exit_gracefully)
-	signal.signal(signal.SIGTERM, TCMConstants.exit_gracefully)
-
 	if not have_required_permissions():
 		logger.error("Missing some required permissions, exiting")
 		TCMConstants.exit_gracefully(TCMConstants.SPECIAL_EXIT_CODE, None)

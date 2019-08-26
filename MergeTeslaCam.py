@@ -10,7 +10,6 @@ import os
 import time
 import subprocess
 import datetime
-import signal
 import TCMConstants
 import re
 import logging
@@ -27,9 +26,6 @@ ffmpeg_error_pattern = re.compile(ffmpeg_error_regex)
 logger = TCMConstants.get_logger()
 
 def main():
-	signal.signal(signal.SIGINT, TCMConstants.exit_gracefully)
-	signal.signal(signal.SIGTERM, TCMConstants.exit_gracefully)
-
 	if not have_required_permissions():
 		logger.error("Missing some required permissions, exiting")
 		TCMConstants.exit_gracefully(TCMConstants.SPECIAL_EXIT_CODE, None)

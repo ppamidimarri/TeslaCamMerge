@@ -19,8 +19,10 @@ SSD_MOUNT_POINT = '/home/pavan'				# Mount point for the SSD
 # Location of CIFS share. MUST include trailing /. PROJECT_USER must have read-write permissions.
 SHARE_PATH = '/samba/fjnuser/'
 
-# rclone configuration entry for Google Drive.
-UPLOAD_REMOTE_PATH = 'gdrive:/TeslaCam'	# Properly-configured entry in your rclone.conf file. Any subdirectory must already exist on Google Drive.
+# rclone configuration entry for Google Drive. UPLOAD_REMOTE_PATH
+# should be a properly-configured entry in your rclone.conf file.
+# Any subdirectory must already exist on Google Drive.
+UPLOAD_REMOTE_PATH = 'gdrive:/TeslaCam'
 
 # Number of days to keep videos: applies to raw, full and fast videos.
 # Videos that are older than these and in the FULL_PATH, FAST_PATH and
@@ -90,10 +92,10 @@ FILENAME_REGEX  = '(\d{4}(-\d\d){2}_(\d\d-){3})(right_repeater|front|left_repeat
 FILENAME_PATTERN = re.compile(FILENAME_REGEX)
 
 # Application management constants
-SLEEP_DURATION = 60
-SPECIAL_EXIT_CODE = 115
-SIZE_RANGE = 0.4
-FFMPEG_TIMELIMIT = 9000
+SLEEP_DURATION = 60		# Seconds between looping in main tasks
+SPECIAL_EXIT_CODE = 115		# Exit code used by the app, has to be non-zero for systemctl to auto-restart crashed services
+SIZE_RANGE = 0.4		# Maximum size difference in percentage between video files, timsestamps with bigger size differences are not merged
+FFMPEG_TIMELIMIT = 9000		# CPU time limit in seconds for FFMPEG commands to run
 
 # Common functions
 

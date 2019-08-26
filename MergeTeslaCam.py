@@ -34,6 +34,7 @@ def main():
 		TCMConstants.exit_gracefully(TCMConstants.SPECIAL_EXIT_CODE, None)
 
 	while True:
+		logger.info("Starting new iteration")
 		raw_files = os.listdir(TCMConstants.RAW_PATH)
 		for file in raw_files:
 			logger.debug("Starting with file {0}".format(file))
@@ -155,22 +156,25 @@ def get_ffmpeg_command(stamp, video_type):
 	return command
 
 def add_to_bad_videos(name):
-	logger.debug("Skipping over bad source file: {0}".format(name))
 	add_string_to_sorted_file(
 		TCMConstants.RAW_PATH + TCMConstants.BAD_VIDEOS_FILENAME,
-		name, "{0}\n".format(name.replace(TCMConstants.RAW_PATH, '')))
+		name, "{0}\n".format(name.replace(TCMConstants.RAW_PATH, '')),
+		"Skipping over bad source file: {0}".format(name),
+		logging.DEBUG)
 
 def add_to_bad_sizes(stamp, front, left, right):
-	logger.warn("Size mismatch for stamp {0}: FRONT {1}, LEFT {2}, RIGHT {3}".format(
-		stamp, front, left, right))
 	add_string_to_sorted_file(
 		TCMConstants.RAW_PATH + TCMConstants.BAD_SIZES_FILENAME,
 		stamp,
-		"{0}: Front {1}, Left {2}, Right {3}\n".format(stamp, front, left, right))
+		"{0}: Front {1}, Left {2}, Right {3}\n".format(
+			stamp, front, left, right),
+		"Size issue at {0}: Front {1}, Left {2}, Right {3}".format(
+			stamp, front, left, right),
+		logging.WARN)
 
 ### Other utility functions ###
 
-def add_string_to_sorted_file(name, key, string):
+def add_string_to_sorted_file(name, key, string, log_message, log_level):
 	files = []
 	if os.path.isfile(name):
 		with open(name, "r") as file:
@@ -181,6 +185,7 @@ def add_string_to_sorted_file(name, key, string):
 	files.append(string)
 	with open(name, "w+") as writer:
 		outlist = sorted(files)
+		logger.log(log_level, log_message)
 		for line in outlist:
 			writer.write(line)
 

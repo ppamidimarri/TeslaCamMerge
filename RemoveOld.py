@@ -49,9 +49,9 @@ def have_required_permissions():
 	have_perms = True
 	for path in VIDEO_PATHS:
 		have_perms = have_perms and TCMConstants.check_permissions(
-			path, True, logger)
+			path, True)
 	return have_perms and TCMConstants.check_permissions(
-		SOURCE_PATH, True, logger)
+		SOURCE_PATH, True)
 
 ### Loop functions ###
 

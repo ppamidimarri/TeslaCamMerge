@@ -13,6 +13,7 @@ import datetime
 import signal
 import TCMConstants
 import re
+import logging
 
 # ffmpeg commands and filters
 ffmpeg_base = "{0} -hide_banner -loglevel error -timelimit {1}".format(

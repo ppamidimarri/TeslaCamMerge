@@ -31,14 +31,14 @@ def main():
 
 def have_required_permissions():
 	return TCMConstants.check_permissions(
-		TCMConstants.SHARE_PATH, True, logger) and TCMConstants.check_permissions(
-		TCMConstants.RAW_PATH, True, logger)
+		TCMConstants.SHARE_PATH, True) and TCMConstants.check_permissions(
+		TCMConstants.RAW_PATH, True)
 
 ### Loop functions ###
 
 def move_file(file):
 	logger.info("Moving file {0}".format(file))
-	if TCMConstants.check_file_for_read(file, logger):
+	if TCMConstants.check_file_for_read(file):
 		try:
 			shutil.move(file, TCMConstants.RAW_PATH)
 			logger.debug("Moved file {0}".format(file))

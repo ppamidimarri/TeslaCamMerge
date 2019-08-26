@@ -39,8 +39,7 @@ def main():
 				stamp, camera = file.rsplit("-", 1)
 			except ValueError:
 				if file != TCMConstants.BAD_VIDEOS_FILENAME and file != TCMConstants.BAD_SIZES_FILENAME:
-					logger.warn(
-						"Unrecognized filename: {0}".format(file))
+					logger.warn("Unrecognized filename: {0}".format(file))
 				continue
 			process_stamp(stamp)
 
@@ -50,9 +49,9 @@ def main():
 
 def have_required_permissions():
 	return TCMConstants.check_permissions(
-		TCMConstants.RAW_PATH, False, logger) and TCMConstants.check_permissions(
-		TCMConstants.FULL_PATH, True, logger) and TCMConstants.check_permissions(
-		TCMConstants.FAST_PATH, True, logger)
+		TCMConstants.RAW_PATH, False) and TCMConstants.check_permissions(
+		TCMConstants.FULL_PATH, True) and TCMConstants.check_permissions(
+		TCMConstants.FAST_PATH, True)
 
 ### Loop functions ###
 
@@ -60,12 +59,12 @@ def process_stamp(stamp):
 	logger.debug("Processing stamp {0}".format(stamp))
 	if stamp_is_all_ready(stamp):
 		logger.debug("Stamp {0} is ready to go".format(stamp))
-		if TCMConstants.check_file_for_write("{0}{1}-{2}".format(TCMConstants.FULL_PATH, stamp, TCMConstants.FULL_TEXT), logger):
+		if TCMConstants.check_file_for_write("{0}{1}-{2}".format(TCMConstants.FULL_PATH, stamp, TCMConstants.FULL_TEXT)):
 			run_ffmpeg_command("Merge", stamp, 0)
 		else:
 			logger.debug("Full file exists for stamp {0}".format(stamp))
-		if TCMConstants.check_file_for_read("{0}{1}-{2}".format(TCMConstants.FULL_PATH, stamp, TCMConstants.FULL_TEXT), logger):
-			if TCMConstants.check_file_for_write("{0}{1}-{2}".format(TCMConstants.FAST_PATH, stamp, TCMConstants.FAST_TEXT), logger):
+		if TCMConstants.check_file_for_read("{0}{1}-{2}".format(TCMConstants.FULL_PATH, stamp, TCMConstants.FULL_TEXT)):
+			if TCMConstants.check_file_for_write("{0}{1}-{2}".format(TCMConstants.FAST_PATH, stamp, TCMConstants.FAST_TEXT)):
 				run_ffmpeg_command("Fast preview", stamp, 1)
 			else:
 				logger.debug("Fast file exists for stamp {0}".format(stamp))
@@ -79,7 +78,7 @@ def stamp_is_all_ready(stamp):
 	front_file = "{0}{1}-{2}".format(TCMConstants.RAW_PATH, stamp, TCMConstants.FRONT_TEXT)
 	left_file = "{0}{1}-{2}".format(TCMConstants.RAW_PATH, stamp, TCMConstants.LEFT_TEXT)
 	right_file = "{0}{1}-{2}".format(TCMConstants.RAW_PATH, stamp, TCMConstants.RIGHT_TEXT)
-	if TCMConstants.check_file_for_read(front_file, logger) and TCMConstants.check_file_for_read(left_file, logger) and TCMConstants.check_file_for_read(right_file, logger) and file_sizes_in_same_range(stamp, front_file, left_file, right_file):
+	if TCMConstants.check_file_for_read(front_file) and TCMConstants.check_file_for_read(left_file) and TCMConstants.check_file_for_read(right_file) and file_sizes_in_same_range(stamp, front_file, left_file, right_file):
 		return True
 	else:
 		return False

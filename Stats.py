@@ -75,7 +75,7 @@ def get_directory_table_rows(path):
 		if item == TCMConstants.STATS_FILENAME or item == TCMConstants.STATS_IMAGE:
 			continue
 		num_files, total_size = get_folder_details(path, item)
-		output += "<tr><td>{0}</td><td class='number'>{1}</td><td class='number'>{2}</td></tr>".format(
+		output += "<tr><td>{0}</td><td class='number'>{1:,d}</td><td class='number'>{2}</td></tr>".format(
 			item, num_files, total_size)
 	return output
 
@@ -89,7 +89,7 @@ def get_folder_details(path, file):
 			if not os.path.islink(fp):
 				total_size += os.path.getsize(fp)
 				num_files += 1
-	return "{0:-10d}".format(num_files), TCMConstants.convert_file_size(total_size)
+	return num_files, TCMConstants.convert_file_size(total_size)
 
 def get_disk_usage_details(footage_path):
 	command = "{0} -h {1}".format(TCMConstants.DF_PATH, footage_path)

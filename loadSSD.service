@@ -1,7 +1,7 @@
 [Unit]
 Description=Load SSD with dashcam clips received over CIFS share
-After=network.target systemd-user-session.service
-RequiresMountsFor=SSD_MOUNT_POINT
+Partof=tcm.service
+After=tcm.service
 
 [Service]
 User=PROJECT_USER
@@ -11,4 +11,4 @@ Restart=on-failure
 RestartSec=60
 
 [Install]
-WantedBy=smbd.service
+WantedBy=tcm.service

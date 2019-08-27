@@ -1,7 +1,8 @@
 [Unit]
 Description=Merge Tesla dashcam videos from all three cameras
-After=network.target multi-user.target loadSSD.service uploadDrive.service
-RequiresMountsFor=SSD_MOUNT_POINT
+Partof=tcm.service
+After=tcm.service
+After=loadSSD.service
 
 [Service]
 User=PROJECT_USER
@@ -11,4 +12,4 @@ Restart=on-failure
 RestartSec=60
 
 [Install]
-WantedBy=smbd.service
+WantedBy=tcm.service

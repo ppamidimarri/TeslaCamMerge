@@ -1,0 +1,13 @@
+[Unit]
+Description=TeslaCamMerge application
+After=network.target multi-user.target
+RequiresMountsFor=SSD_MOUNT_POINT
+
+[Service]
+User=PROJECT_USER
+Type=oneshot
+ExecStart=/bin/true
+RemainAfterExit=yes
+
+[Install]
+WantedBy=smbd.service

@@ -1,13 +1,13 @@
 [Unit]
-Description=Upload selected dashcam footage to Google Drive
+Description=Download dashcam footage from remote location
 Partof=tcm.service
 After=tcm.service
-After=loadSSD.service
+After=mergeTeslaCam.service
 
 [Service]
 User=PROJECT_USER
 ExecStartPre=/bin/sleep 60
-ExecStart=PROJECT_PATH/TeslaCamMerge/UploadDrive.py
+ExecStart=PROJECT_PATH/TeslaCamMerge/DownloadTC.py
 Restart=on-failure
 RestartSec=60
 

@@ -19,8 +19,8 @@ def main():
 	process_service_file('mergeTeslaCam.service')
 	process_service_file('uploadDrive.service')
 	process_service_file('startFileBrowser.service')
-	process_service_files('removeOld.service')
-	process_service_files('downloadTC.service')
+	process_service_file('removeOld.service')
+	process_service_file('downloadTC.service')
 
 def process_service_file(name):
 	if os.path.isfile(name):

@@ -154,6 +154,8 @@ You can check the logs of the TeslaCamMerge application in `LOG_PATH` in `TCMCon
 1. Go into your footage path, e.g. `cd ~/Footage`
 2. Create a symbolic link to your log path there, e.g. `ln -s ~/log .`
 
+Once you have your setup working reliably and you are no longer looking at the logs regularly, you may disable this by deleting the link with `rm log` in the footage directory.
+
 **I. Configure your Pi Zero W**
 
 Follow the [one-step setup instructions](https://github.com/marcone/teslausb/blob/main-dev/doc/OneStepSetup.md) with the pre-built image and the Jetson Nano as the share server, and the username and password for the SMB share you have set up above. 

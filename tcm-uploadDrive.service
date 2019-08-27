@@ -1,6 +1,6 @@
 [Unit]
 Description=Upload selected dashcam footage to Google Drive
-Partof=tcm.service
+PartOf=tcm.service
 After=tcm.service
 After=loadSSD.service
 

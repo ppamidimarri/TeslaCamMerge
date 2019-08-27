@@ -135,16 +135,19 @@ If you do not need the ability to upload your videos to the cloud, you can safel
 3. `cd TeslaCamMerge`
 4. `chmod +x *.py`
 5. Modify the paths and other entries in `TCMConstants.py` to match your structure from all the previous steps
-6. Once all paths are correct, run `python3 CreateServiceFiles.py`, then verify that the service files have been updated with your information (e.g. verify that `mergeTeslaCam.service` has the correct user ID, path to `MergeTeslaCam.py`, and SSD mount point)
+6. Once all paths are correct, run `python3 CreateServiceFiles.py`, then verify that the service files have been updated with your information (e.g. verify that `mergeTeslaCam.service` has the correct Unix user ID and correct path to `MergeTeslaCam.py`)
 7. `sudo cp *.service /lib/systemd/system`
 8. `sudo systemctl daemon-reload`
-9. `sudo systemctl enable loadSSD.service`
-10. `sudo systemctl enable mergeTeslaCam.service`
-11. `sudo systemctl enable startFileBrowser.service`
-12. `sudo systemctl enable uploadDrive.service`
-13. `sudo systemctl enable removeOld.service`
+9. `sudo systemctl enable loadSSD`
+10. `sudo systemctl enable mergeTeslaCam`
+11. `sudo systemctl enable startFileBrowser`
+12. `sudo systemctl enable uploadDrive`
+13. `sudo systemctl enable removeOld`
+14. `sudo systemctl enable tcm`
 14. `sudo reboot`
-15. Verify that your services are running, with `systemctl status mergeTeslaCam.service`, etc. (once for each of the four services)
+15. Verify that your services are running, with `systemctl status tcm`
+
+You can stop all the services together with `sudo systemctl stop tcm` and start them all together (in the correct sequence) with `sudo systemctl start tcm`. You can also start or stop any service individually.
 
 Now you are done with setting up your Jetson Nano! 
 

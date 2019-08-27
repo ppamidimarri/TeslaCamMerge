@@ -1,7 +1,8 @@
 [Unit]
 Description=Start filebrowser with database in project path
-After=network.target multi-user.target mergeTeslaCam.service
-RequiresMountsFor=SSD_MOUNT_POINT
+Partof=tcm.service
+After=tcm.service
+After=mergeTeslaCam.service
 
 [Service]
 User=PROJECT_USER
@@ -11,4 +12,4 @@ Restart=on-failure
 RestartSec=60
 
 [Install]
-WantedBy=smbd.service
+WantedBy=tcm.service

@@ -1,6 +1,6 @@
 [Unit]
 Description=Start filebrowser with database in project path
-Partof=tcm.service
+PartOf=tcm.service
 After=tcm.service
 After=mergeTeslaCam.service
 

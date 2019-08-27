@@ -1,6 +1,6 @@
 [Unit]
 Description=Load SSD with dashcam clips received over CIFS share
-Partof=tcm.service
+PartOf=tcm.service
 After=tcm.service
 
 [Service]

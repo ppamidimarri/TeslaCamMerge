@@ -1,6 +1,6 @@
 [Unit]
 Description=Remove old empty directories from CIFS share path
-Partof=tcm.service
+PartOf=tcm.service
 After=tcm.service
 After=mergeTeslaCam.service
 

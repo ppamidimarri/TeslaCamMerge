@@ -1,6 +1,6 @@
 [Unit]
 Description=Merge Tesla dashcam videos from all three cameras
-Partof=tcm.service
+PartOf=tcm.service
 After=tcm.service
 After=loadSSD.service
 

@@ -148,11 +148,17 @@ If you do not need the ability to upload your videos to the cloud, you can safel
 
 Now you are done with setting up your Jetson Nano! 
 
-**H. Configure your Pi Zero W**
+**H. Make your logs visible over the website**
+You can check the logs of the TeslaCamMerge application in `LOG_PATH` in `TCMConstants.py` after logging in to your device over SSH. You can choose to make these logs visible over the web for easier access. I had this enabled only while debugging, as it may be risky to expose these logs over the web without needing to SSH in first. If you really want to do this, the steps are below:
+
+1. Go into your footage path, e.g. `cd ~/Footage`
+2. Create a symbolic link to your log path there, e.g. `ln -s ~/log .`
+
+**I. Configure your Pi Zero W**
 
 Follow the [one-step setup instructions](https://github.com/marcone/teslausb/blob/main-dev/doc/OneStepSetup.md) with the pre-built image and the Jetson Nano as the share server, and the username and password for the SMB share you have set up above. 
 
-**I. Make your footage accessible over the internet**
+**J. Make your footage accessible over the internet**
 
 This is an optional step. You can access your videos using a browser on your phone or computer at home. If you want to access them over the internet, you need to set up a reverse proxy. You can set up the reverse proxy on the same Jetson Nano or Raspberry Pi you run this project on (but not the Pi Zero W). I use nginx for the reverse proxy, and here is an outline of how to get it going. Please research how to set up a secure reverse proxy before doing this.
 

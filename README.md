@@ -149,6 +149,7 @@ If you do not need the ability to upload your videos to the cloud, you can safel
 Now you are done with setting up your Jetson Nano! 
 
 **H. Make your logs visible over the website**
+
 You can check the logs of the TeslaCamMerge application in `LOG_PATH` in `TCMConstants.py` after logging in to your device over SSH. You can choose to make these logs visible over the web for easier access. I had this enabled only while debugging, as it may be risky to expose these logs over the web without needing to SSH in first. If you really want to do this, the steps are below:
 
 1. Go into your footage path, e.g. `cd ~/Footage`

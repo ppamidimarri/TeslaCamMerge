@@ -187,4 +187,4 @@ def convert_file_size(size):
 	elif size <= 1024*1024*1024*1024:
 		return "{0:-6.1f}G".format(size/(1024*1024*1024))
 	else:
-		return "{0:-6.1f}G".format(size/(1024*1024*1024))
+		return "{0:-6.1f}T".format(size/(1024*1024*1024*1024))

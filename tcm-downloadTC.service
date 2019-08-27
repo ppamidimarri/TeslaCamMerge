@@ -1,6 +1,6 @@
 [Unit]
 Description=Download dashcam footage from remote location
-Partof=tcm.service
+PartOf=tcm.service
 After=tcm.service
 After=mergeTeslaCam.service
 

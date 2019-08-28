@@ -135,7 +135,7 @@ If you do not need the ability to upload your videos to the cloud, you can safel
 3. `cd TeslaCamMerge`
 4. `chmod +x *.py`
 5. Modify the paths and other entries in `TCMConstants.py` to match your structure from all the previous steps
-6. Once all paths are correct, run `python3 CreateServiceFiles.py`, then verify that the service files have been updated with your information (e.g. verify that `mergeTeslaCam.service` has the correct Unix user ID and correct path to `MergeTeslaCam.py`)
+6. Once all paths are correct, run `python3 CreateServiceFiles.py`, then verify that the service files have been updated with your information (e.g. verify that `tcm-mergeTeslaCam.service` has the correct Unix user ID and correct path to `MergeTeslaCam.py`)
 7. `sudo cp *.service /lib/systemd/system`
 8. `sudo systemctl daemon-reload`
 9. `sudo systemctl enable tcm-loadSSD`

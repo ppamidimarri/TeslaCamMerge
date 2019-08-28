@@ -15,12 +15,13 @@ replacements = {
 }
 
 def main():
-	process_service_file('loadSSD.service')
-	process_service_file('mergeTeslaCam.service')
-	process_service_file('uploadDrive.service')
-	process_service_file('startFileBrowser.service')
-	process_service_file('removeOld.service')
-	process_service_file('downloadTC.service')
+	process_service_file('tcm.service')
+	process_service_file('tcm-loadSSD.service')
+	process_service_file('tcm-mergeTeslaCam.service')
+	process_service_file('tcm-uploadDrive.service')
+	process_service_file('tcm-startFileBrowser.service')
+	process_service_file('tcm-removeOld.service')
+	process_service_file('tcm-downloadTC.service')
 
 def process_service_file(name):
 	if os.path.isfile(name):

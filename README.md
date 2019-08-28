@@ -145,7 +145,7 @@ If you do not need the ability to upload your videos to the cloud, you can safel
 13. `sudo systemctl enable removeOld`
 14. `sudo systemctl enable tcm`
 14. `sudo reboot`
-15. Verify that your services are running, with `systemctl status tcm`
+15. `systemctl status tcm-*` and verify that all the services show up as `active (running)` 
 
 You can stop all the services together with `sudo systemctl stop tcm` and start them all together (in the correct sequence) with `sudo systemctl start tcm`. You can also start or stop any service individually.
 

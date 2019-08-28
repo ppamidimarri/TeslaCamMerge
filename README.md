@@ -138,14 +138,9 @@ If you do not need the ability to upload your videos to the cloud, you can safel
 6. Once all paths are correct, run `python3 CreateServiceFiles.py`, then verify that the service files have been updated with your information (e.g. verify that `tcm-mergeTeslaCam.service` has the correct Unix user ID and correct path to `MergeTeslaCam.py`)
 7. `sudo cp *.service /lib/systemd/system`
 8. `sudo systemctl daemon-reload`
-9. `sudo systemctl enable tcm-loadSSD`
-10. `sudo systemctl enable tcm-mergeTeslaCam`
-11. `sudo systemctl enable tcm-startFileBrowser`
-12. `sudo systemctl enable tcm-uploadDrive`
-13. `sudo systemctl enable tcm-removeOld`
-14. `sudo systemctl enable tcm`
-14. `sudo reboot`
-15. `systemctl status tcm-*` and verify that all the services show up as `active (running)` 
+9. `sudo systemctl enable tcm-loadSSD tcm-mergeTeslaCam tcm-startFileBrowser tcm-uploadDrive tcm-removeOld tcm`
+10. `sudo reboot`
+11. `systemctl status tcm-*` and verify that all the services show up as `active (running)` 
 
 You can stop all the services together with `sudo systemctl stop tcm` and start them all together (in the correct sequence) with `sudo systemctl start tcm`. You can also start or stop any service individually.
 

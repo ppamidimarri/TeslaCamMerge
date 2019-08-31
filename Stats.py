@@ -22,6 +22,7 @@ def generate_stats_image():
 			logger.debug("Read template:\n{0}".format(html))
 			device, size, used, available, used_percentage, mount_point = get_disk_usage_details(footage_path)
 			directory_table_rows = get_directory_table_rows(footage_path)
+			service_table_rows = get_service_table_rows()
 			timestamp = datetime.datetime.now().strftime(TCMConstants.STATS_TIMESTAMP_FORMAT)
 			replacements = {
 				"DEVICE" : device,
@@ -31,6 +32,7 @@ def generate_stats_image():
 				"USED_PERCENTAGE" : used_percentage,
 				"MOUNT_POINT" : mount_point,
 				"DIRECTORY_TABLE_ROWS" : directory_table_rows,
+				"SERVICE_TABLE_ROWS" : service_table_rows,
 				"TIMESTAMP" : timestamp,
 				"DISK_COLOR" : get_disk_color(used_percentage)
 			}
@@ -77,6 +79,44 @@ def get_directory_table_rows(path):
 		num_files, total_size = get_folder_details(path, item)
 		output += "<tr><td>{0}</td><td class='number'>{1:,d}</td><td class='number'>{2}</td></tr>".format(
 			item, num_files, total_size)
+	return output
+
+def get_service_table_rows():
+	command = "{0} show -p Id -p Name -p SubState --value tcm-*".format(
+		TCMConstants.SYSTEMCTL_PATH)
+	output = get_service_details(command)
+	creds = ""
+	try:
+		import DownloadTC
+		creds = DownloadTC.SERVER_CREDENTIALS
+	except:
+		logger.debug("No TCM2ndHome connected")
+	if creds:
+		command = "{0} show -p Id -p Name -p SubState --value tcm2-* -H {1}".format(
+			TCMConstants.SYSTEMCTL_PATH, creds)
+		output += get_service_details(command)
+	return output
+
+def get_service_details(command):
+	output = ""
+	completed = subprocess.run(command, shell=True, stdin=subprocess.DEVNULL,
+		stdout=subprocess.PIPE, stderr=subprocess.PIPE)
+	if completed.stderr or completed.returncode != 0:
+		logger.error("Error running systemctl command, returncode: {0}, stdout: {1}, stderr: {2}".format(
+			completed.returncode, completed.stdout, completed.stderr))
+	else:
+		lines = completed.stdout.splitlines()
+		i = 0
+		while i < len(lines):
+			if i % 3 == 0:
+				name = lines[i].decode("UTF-8").split(".")[0]
+				service_class = ""
+				if lines[i+1].decode("UTF-8") == "running":
+					service_class = "servicerunning"
+				else:
+					service_class = "servicedead"
+				output += "<tr><td class='{0}'>{1}</td></tr>".format(service_class, name)
+			i += 1
 	return output
 
 def get_folder_details(path, file):

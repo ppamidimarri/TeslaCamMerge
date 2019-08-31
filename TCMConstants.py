@@ -68,6 +68,7 @@ FILEBROWSER_PATH = '/usr/local/bin/filebrowser'					# Verify with: which filebro
 LSOF_PATH = '/usr/bin/lsof -t'							# Verify with: which lsof
 DF_PATH = '/bin/df'								# Verify with: which df
 CUTYCAPT_PATH = '/usr/bin/cutycapt --zoom-factor=1.5'				# Verify with: which cutycapt
+SYSTEMCTL_PATH = "/bin/systemctl"						# Verify with: which systemctl
 
 # Video watermark timestamp format (see Python strftime reference)
 WATERMARK_TIMESTAMP_FORMAT = '%b %-d\, %-I\:%M %p'

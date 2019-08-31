@@ -105,6 +105,7 @@ This location is different from the SMB share for two reasons: (a) flatten the d
 4. `mkdir Full`
 5. `mkdir Fast`
 6. `mkdir Upload`
+7. `mkdir Saved` -- footage you manually move into this folder will not be deleted even if it is old
 
 **E. Install and set up [filebrowser](https://filebrowser.xyz/)**
 1. `cd ~`

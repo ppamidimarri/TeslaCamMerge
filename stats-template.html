@@ -2,6 +2,20 @@
 <head>
 <title>Footage Details</title>
 <style>
+.floatLeft {
+	width: 50%;
+	float: left;
+}
+
+.floatRight {
+	width: 45%;
+	float: right;
+}
+
+.container {
+	overflow: hidden;
+}
+
 body {
 	font-family: Arial, Helvetica, sans-serif;
 }
@@ -38,6 +52,16 @@ td.diskspace {
 	background-color: DISK_COLOR;
 }
 
+td.servicerunning {
+	text-align: center;
+	background-color: rgb(0, 255, 0);
+}
+
+td.servicedead {
+	text-align: center;
+	background-color: rgb(255, 0, 0);
+}
+
 table {
 	border-collapse: collapse;
 }
@@ -56,6 +80,8 @@ table, th, td {
 </style>
 </head>
 <body><h1>Footage Details</h1>
+<div class="container">
+<div class="floatLeft">
 <h2>Video Files</h2>
 <table><thead><tr>
 	<th>Folder</th>
@@ -65,6 +91,17 @@ table, th, td {
 <tbody>
 DIRECTORY_TABLE_ROWS
 </tbody></table>
+</div>
+<div class="floatRight">
+<h2>Services</h2>
+<table><thead><tr>
+	<th>Service</th>
+</tr></thead>
+<tbody>
+SERVICE_TABLE_ROWS
+</tbody></table>
+</div>
+</div>
 <div class="spacer">&nbsp;</div>
 <h2>Disk Space Details</h2>
 <table><thead><tr>

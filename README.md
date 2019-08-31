@@ -214,6 +214,15 @@ List view:
 Video view:
 ![Video display](https://i.imgur.com/JBeHL8F.png)
 
+Statistics view:
+![Statistics](https://i.imgur.com/EibaOW2.png)
+
+Bad videos that ffmpeg can't process:
+![Bad videos](https://i.imgur.com/hbBJjxk.png)
+
+File size mismatches:
+![Bad sizes](https://i.imgur.com/e2LXQNf.png)
+
 **Mobile browser view of the website**
 
 Main page:
@@ -239,3 +248,12 @@ File information:
 
 Video view:
 ![Video display on mobile](https://i.imgur.com/dNOVmah.jpg)
+
+Statistics view:
+![Statistics on mobile](https://i.imgur.com/dliGXJB.png)
+
+Bad videos that ffmpeg can't process:
+![Bad videos on mobile](https://i.imgur.com/QwjqAQz.png)
+
+Videos with big size variations:
+![Bad sizes on mobile](https://i.imgur.com/fFc3Vj6.png)

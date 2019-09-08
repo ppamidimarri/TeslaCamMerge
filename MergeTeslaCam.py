@@ -140,9 +140,10 @@ def get_ffmpeg_command(stamp, video_type):
 	return command
 
 def add_to_bad_videos(name):
+	simple_name = name.replace(TCMConstants.RAW_PATH, '')
 	add_string_to_sorted_file(
 		TCMConstants.RAW_PATH + TCMConstants.BAD_VIDEOS_FILENAME,
-		name, "{0}\n".format(name.replace(TCMConstants.RAW_PATH, '')),
+		simple_name, "{0}\n".format(simple_name),
 		"Skipping over bad source file: {0}".format(name),
 		logging.DEBUG)
 

@@ -87,14 +87,21 @@ def file_sizes_in_same_range(stamp, front_file, left_file, right_file):
 	front_size = os.path.getsize(front_file)
 	left_size = os.path.getsize(left_file)
 	right_size = os.path.getsize(right_file)
-	if abs((front_size - left_size) / front_size) > TCMConstants.SIZE_RANGE or abs((front_size - right_size) / front_size) > TCMConstants.SIZE_RANGE or abs((left_size - right_size) / left_size) > TCMConstants.SIZE_RANGE:
+	if front_size == 0 or left_size == 0 or right_size == 0:
 		add_to_bad_sizes(
 			stamp, TCMConstants.convert_file_size(front_size),
 			TCMConstants.convert_file_size(left_size),
 			TCMConstants.convert_file_size(right_size))
 		return False
 	else:
-		return True
+		if abs((front_size - left_size) / front_size) > TCMConstants.SIZE_RANGE or abs((front_size - right_size) / front_size) > TCMConstants.SIZE_RANGE or abs((left_size - right_size) / left_size) > TCMConstants.SIZE_RANGE:
+			add_to_bad_sizes(
+				stamp, TCMConstants.convert_file_size(front_size),
+				TCMConstants.convert_file_size(left_size),
+				TCMConstants.convert_file_size(right_size))
+			return False
+		else:
+			return True
 
 ### FFMPEG command functions ###
 

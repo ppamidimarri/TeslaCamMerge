@@ -10,9 +10,8 @@ import datetime
 import re
 import logging
 
-logger = logging.getLogger(TCMConstants.get_basename())
-
 def generate_stats_image():
+	logger = logging.getLogger(TCMConstants.get_basename())
 	if TCMConstants.STATS_FILENAME:
 		logger.debug("Generating stats in {0}".format(TCMConstants.STATS_FILENAME))
 		footage_path, raw, fragment = TCMConstants.RAW_PATH.rsplit("/", 2)
@@ -90,7 +89,7 @@ def get_service_table_rows():
 		import DownloadTC
 		creds = DownloadTC.SERVER_CREDENTIALS
 	except:
-		logger.debug("No TCM2ndHome connected")
+		logging.getLogger(TCMConstants.get_basename()).debug("No TCM2ndHome connected")
 	if creds:
 		command = "{0} show -p Id -p Name -p SubState --value tcm2-* -H {1}".format(
 			TCMConstants.SYSTEMCTL_PATH, creds)
@@ -102,8 +101,9 @@ def get_service_details(command):
 	completed = subprocess.run(command, shell=True, stdin=subprocess.DEVNULL,
 		stdout=subprocess.PIPE, stderr=subprocess.PIPE)
 	if completed.stderr or completed.returncode != 0:
-		logger.error("Error running systemctl command, returncode: {0}, stdout: {1}, stderr: {2}".format(
-			completed.returncode, completed.stdout, completed.stderr))
+		logging.getLogger(TCMConstants.get_basename()).error(
+			"Error running systemctl command, returncode: {0}, stdout: {1}, stderr: {2}".format(
+				completed.returncode, completed.stdout, completed.stderr))
 	else:
 		lines = completed.stdout.splitlines()
 		i = 0
@@ -132,6 +132,7 @@ def get_folder_details(path, file):
 	return num_files, TCMConstants.convert_file_size(total_size)
 
 def get_disk_usage_details(footage_path):
+	logger = logging.getLogger(TCMConstants.get_basename())
 	command = "{0} -h {1}".format(TCMConstants.DF_PATH, footage_path)
 	completed = subprocess.run(command, shell=True, stdin=subprocess.DEVNULL,
 		stdout=subprocess.PIPE, stderr=subprocess.PIPE)

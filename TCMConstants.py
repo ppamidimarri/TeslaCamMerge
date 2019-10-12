@@ -11,11 +11,24 @@ PROJECT_PATH = '/home/pavan'	# Must contain the directory called TeslaCamMerge (
 PROJECT_USER = 'pavan'		# User ID for the application to run as. This user needs to have read permission on all the paths listed here, plus write permission on the SSD and CIFS share
 
 # Locations of the stored footage on the SSD. MUST include trailing /. PROJECT_USER must have read-write permissions on all these paths.
-FULL_PATH = '/home/pavan/Footage/Full/'			# Where the merged files are stored
-RAW_PATH = '/home/pavan/Footage/Raw/'			# Where the raw footage from TeslaCam is stored
-FAST_PATH = '/home/pavan/Footage/Fast/'			# Where the fast preview files are stored
+#FULL_PATH = '/home/pavan/Footage/Full/'			# Where the merged files are stored
+#RAW_PATH = '/home/pavan/Footage/Raw/'			# Where the raw footage from TeslaCam is stored
+#FAST_PATH = '/home/pavan/Footage/Fast/'			# Where the fast preview files are stored
 UPLOAD_LOCAL_PATH = '/home/pavan/Footage/Upload/'	# Any files placed in this directory will be uploaded to Google Drive
 SSD_MOUNT_POINT = '/home/pavan'				# Mount point for the SSD
+
+# Folder names for different types of videos
+FAST_FOLDER = 'Fast'
+FULL_FOLDER = 'Full'
+RAW_FOLDER = 'Raw'
+
+# TeslaCam input folders. These are the root folders in the
+# TeslaCam share (e.g. 'SavedClips', 'SentryClips') in which timestamp
+# folders are placed by TeslaCam
+FOOTAGE_FOLDERS = ['SavedClips', 'SentryClips']
+
+# Root location of all footage used and created by the application. MUST include trailing /.
+FOOTAGE_PATH = '/home/pavan/Footage/'
 
 # Location of CIFS share. MUST include trailing /. PROJECT_USER must have read-write permissions.
 SHARE_PATH = '/samba/fjnuser/'
@@ -44,14 +57,14 @@ DAYS_TO_KEEP = 30
 # 59 to the list.
 STATS_FILENAME = 'stats.html'
 STATS_IMAGE = 'stats.png'
-STATS_FREQUENCY = [0, 30]
+STATS_FREQUENCY = [0, 30, 40, 41, 42]
 STATS_TIMESTAMP_FORMAT = '%-I:%M %p on %a %b %-d, %Y'
 
 # Settings for application logs
 LOG_PATH = '/home/pavan/log/'	# Must include trailing /, PROJECT_USER needs read-write permissions
 LOG_EXTENSION = '.log'
 LOG_FORMAT = '%(asctime)s - %(name)s - %(levelname)s - %(message)s'
-LOG_LEVEL = logging.INFO
+LOG_LEVEL = logging.DEBUG
 
 # Logging settings for TimedRotatingFileHandler, refer to:
 # https://docs.python.org/3.6/library/logging.handlers.html#timedrotatingfilehandler
@@ -87,10 +100,11 @@ BAD_SIZES_FILENAME = 'bad_sizes.txt'
 FRONT_TEXT = 'front.mp4'
 LEFT_TEXT = 'left_repeater.mp4'
 RIGHT_TEXT = 'right_repeater.mp4'
+BACK_TEXT = 'back.mp4'
 FULL_TEXT = 'full.mp4'
 FAST_TEXT = 'fast.mp4'
 FILENAME_TIMESTAMP_FORMAT = '%Y-%m-%d_%H-%M-%S'
-FILENAME_REGEX  = '(\d{4}(-\d\d){2}_(\d\d-){3})(right_repeater|front|left_repeater).mp4'
+FILENAME_REGEX  = '(\d{4}(-\d\d){2}_(\d\d-){3})(right_repeater|front|left_repeater|back).mp4'
 FILENAME_PATTERN = re.compile(FILENAME_REGEX)
 
 # Application management constants

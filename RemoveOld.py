@@ -15,7 +15,14 @@ import datetime
 import re
 
 SOURCE_PATH = TCMConstants.SHARE_PATH
-VIDEO_PATHS = [TCMConstants.RAW_PATH, TCMConstants.FULL_PATH, TCMConstants.FAST_PATH]
+#VIDEO_PATHS = [TCMConstants.RAW_PATH, TCMConstants.FULL_PATH, TCMConstants.FAST_PATH]
+
+VIDEO_PATHS = []
+for folder in TCMConstants.FOOTAGE_FOLDERS:
+	VIDEO_PATHS.append("{0}{1}/{2}".format(TCMConstants.FOOTAGE_PATH, folder, TCMConstants.RAW_FOLDER))
+	VIDEO_PATHS.append("{0}{1}/{2}".format(TCMConstants.FOOTAGE_PATH, folder, TCMConstants.FULL_FOLDER))
+	VIDEO_PATHS.append("{0}{1}/{2}".format(TCMConstants.FOOTAGE_PATH, folder, TCMConstants.FAST_FOLDER))
+
 ALL_VIDEO_REGEX = "{0}|fast|full).mp4".format(TCMConstants.FILENAME_REGEX[:-5])
 ALL_VIDEO_PATTERN = re.compile(ALL_VIDEO_REGEX)
 
@@ -67,14 +74,14 @@ def remove_empty_old_directory(path, name):
 
 def remove_old_file(path, file):
 	if is_old_enough(extract_stamp(file)):
-		logger.info("Removing old file: {0}{1}".format(path, file))
+		logger.info("Removing old file: {0}/{1}".format(path, file))
 		try:
-			os.remove("{0}{1}".format(path, file))
+			os.remove("{0}/{1}".format(path, file))
 			pass
 		except:
-			logger.error("Error removing file: {0}{1}".format(path, file))
+			logger.error("Error removing file: {0}/{1}".format(path, file))
 	else:
-		logger.debug("File {0}{1} is not ready for deletion, skipping".format(path, file))
+		logger.debug("File {0}/{1} is not ready for deletion, skipping".format(path, file))
 
 def extract_stamp(file):
 	match = ALL_VIDEO_PATTERN.match(file)

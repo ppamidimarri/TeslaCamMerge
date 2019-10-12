@@ -14,13 +14,13 @@ def generate_stats_image():
 	logger = logging.getLogger(TCMConstants.get_basename())
 	if TCMConstants.STATS_FILENAME:
 		logger.debug("Generating stats in {0}".format(TCMConstants.STATS_FILENAME))
-		footage_path, raw, fragment = TCMConstants.RAW_PATH.rsplit("/", 2)
-		logger.debug("Footage root location: {0}".format(footage_path))
+	#	footage_path, raw, fragment = TCMConstants.RAW_PATH.rsplit("/", 2)
+		logger.debug("Footage root location: {0}".format(TCMConstants.FOOTAGE_PATH))
 		with open("{0}/TeslaCamMerge/stats-template.html".format(TCMConstants.PROJECT_PATH), "r") as template:
 			html = template.read()
 			logger.debug("Read template:\n{0}".format(html))
-			device, size, used, available, used_percentage, mount_point = get_disk_usage_details(footage_path)
-			directory_table_rows = get_directory_table_rows(footage_path)
+			device, size, used, available, used_percentage, mount_point = get_disk_usage_details(TCMConstants.FOOTAGE_PATH)
+			directory_table_rows = get_directory_table_rows(TCMConstants.FOOTAGE_PATH)
 			service_table_rows = get_service_table_rows()
 			timestamp = datetime.datetime.now().strftime(TCMConstants.STATS_TIMESTAMP_FORMAT)
 			replacements = {
@@ -39,19 +39,19 @@ def generate_stats_image():
 			for line in html.splitlines():
 				output += do_replacements(line, replacements)
 			logger.debug("HTML output:\n{0}".format(output))
-			with open("{0}/{1}".format(footage_path, TCMConstants.STATS_FILENAME), "w+") as file:
+			with open("{0}/{1}".format(TCMConstants.FOOTAGE_PATH, TCMConstants.STATS_FILENAME), "w+") as file:
 				file.write(output)
 		command = "export DISPLAY=:0 && {0} --url=file://{1}/{2} --out={1}/{3}".format(
-			TCMConstants.CUTYCAPT_PATH, footage_path, TCMConstants.STATS_FILENAME, TCMConstants.STATS_IMAGE)
+			TCMConstants.CUTYCAPT_PATH, TCMConstants.FOOTAGE_PATH, TCMConstants.STATS_FILENAME, TCMConstants.STATS_IMAGE)
 		logger.debug("Command: {0}".format(command))
 		completed = subprocess.run(command, shell=True, stdin=subprocess.DEVNULL,
 			stdout=subprocess.PIPE, stderr=subprocess.PIPE)
 		if completed.returncode == 0:
 			logger.info("Updated stats image")
 			try:
-				os.remove("{0}/{1}".format(footage_path, TCMConstants.STATS_FILENAME))
+				os.remove("{0}/{1}".format(TCMConstants.FOOTAGE_PATH, TCMConstants.STATS_FILENAME))
 			except:
-				logger.error("Error removing: {0}/{1}".format(footage_path, TCMConstants.STATS_FILENAME))
+				logger.error("Error removing: {0}/{1}".format(TCMConstants.FOOTAGE_PATH, TCMConstants.STATS_FILENAME))
 		else:
 			logger.error("Error running cutycapt command {0}, returncode: {3}, stdout: {1}, stderr: {2}".format(
 				command, completed.stdout, completed.stderr, completed.returncode))

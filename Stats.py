@@ -143,4 +143,4 @@ def get_disk_usage_details(footage_path):
 	else:
 		logger.debug("Disk space raw result:\n{0}".format(completed.stdout.decode("UTF-8")))
 		line = completed.stdout.decode("UTF-8").splitlines()[1]
-		return line[0:15].strip(), line[15:21].strip(), line[21:27].strip(), line[26:33].strip(), line[32:38].strip(), line[37:].strip()
+		return re.split("\s+", line)

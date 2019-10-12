@@ -14,7 +14,6 @@ def generate_stats_image():
 	logger = logging.getLogger(TCMConstants.get_basename())
 	if TCMConstants.STATS_FILENAME:
 		logger.debug("Generating stats in {0}".format(TCMConstants.STATS_FILENAME))
-	#	footage_path, raw, fragment = TCMConstants.RAW_PATH.rsplit("/", 2)
 		logger.debug("Footage root location: {0}".format(TCMConstants.FOOTAGE_PATH))
 		with open("{0}/TeslaCamMerge/stats-template.html".format(TCMConstants.PROJECT_PATH), "r") as template:
 			html = template.read()

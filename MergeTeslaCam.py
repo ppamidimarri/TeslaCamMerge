@@ -55,10 +55,6 @@ def have_required_permissions():
 		retVal = retVal and TCMConstants.check_permissions("{0}{1}/{2}".format(TCMConstants.FOOTAGE_PATH, folder, TCMConstants.FULL_FOLDER), True)
 		retVal = retVal and TCMConstants.check_permissions("{0}{1}/{2}".format(TCMConstants.FOOTAGE_PATH, folder, TCMConstants.FAST_FOLDER), True)
 	return retVal
-#	return TCMConstants.check_permissions(
-#		TCMConstants.RAW_PATH, False) and TCMConstants.check_permissions(
-#		TCMConstants.FULL_PATH, True) and TCMConstants.check_permissions(
-#		TCMConstants.FAST_PATH, True)
 
 ### Loop functions ###
 
@@ -149,17 +145,10 @@ def get_ffmpeg_command(folder, stamp, video_type):
 			ffmpeg_base, TCMConstants.FOOTAGE_PATH, folder, TCMConstants.RAW_FOLDER, stamp, TCMConstants.RIGHT_TEXT,
 			TCMConstants.FRONT_TEXT, TCMConstants.LEFT_TEXT, TCMConstants.BACK_TEXT, ffmpeg_mid_full,
 			format_timestamp(stamp), ffmpeg_end_full, TCMConstants.FULL_FOLDER, TCMConstants.FULL_TEXT)
-#		command = "{0} -i {1}{2}-{3} -i {1}{2}-{4} -i {1}{2}-{5} {6}{7}{8} {9}{2}-{10}".format(
-#			ffmpeg_base, TCMConstants.RAW_PATH, stamp, TCMConstants.RIGHT_TEXT,
-#			TCMConstants.FRONT_TEXT, TCMConstants.LEFT_TEXT, ffmpeg_mid_full,
-#			format_timestamp(stamp), ffmpeg_end_full, TCMConstants.FULL_PATH, TCMConstants.FULL_TEXT)
 	elif video_type == 1:
 		command = "{0} -i {1}{2}/{3}/{4}-{5} {6} {1}{2}/{7}/{4}-{8}".format(
 			ffmpeg_base, TCMConstants.FOOTAGE_PATH, folder, TCMConstants.FULL_FOLDER, stamp, TCMConstants.FULL_TEXT, ffmpeg_end_fast,
 			TCMConstants.FAST_FOLDER, TCMConstants.FAST_TEXT)
-#		command = "{0} -i {1}{2}-{3} {4} {5}{2}-{6}".format(
-#			ffmpeg_base, TCMConstants.FULL_PATH, stamp, TCMConstants.FULL_TEXT, ffmpeg_end_fast,
-#			TCMConstants.FAST_PATH, TCMConstants.FAST_TEXT)
 	else:
 		logger.error("Unrecognized video type {0} for {1} in {2}".format(video_type, stamp, folder))
 	return command

@@ -15,7 +15,6 @@ import datetime
 import re
 
 SOURCE_PATH = TCMConstants.SHARE_PATH
-#VIDEO_PATHS = [TCMConstants.RAW_PATH, TCMConstants.FULL_PATH, TCMConstants.FAST_PATH]
 
 VIDEO_PATHS = []
 for folder in TCMConstants.FOOTAGE_FOLDERS:

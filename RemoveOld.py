@@ -33,12 +33,13 @@ def main():
 		TCMConstants.exit_gracefully(TCMConstants.SPECIAL_EXIT_CODE, None)
 
 	while True:
-		for directory in next(os.walk(SOURCE_PATH))[1]:
-			if os.listdir("{0}{1}".format(SOURCE_PATH, directory)):
-				logger.debug("Directory {0}{1} not empty, skipping".format(
-					SOURCE_PATH, directory))
-			else:
-				remove_empty_old_directory(SOURCE_PATH, directory)
+		for folder in TCMConstants.FOOTAGE_FOLDERS:
+			for directory in next(os.walk("{0}{1}".format(SOURCE_PATH, folder)))[1]:
+				if os.listdir("{0}{1}/{2}".format(SOURCE_PATH, folder, directory)):
+					logger.debug("Directory {0}{1}/{2} not empty, skipping".format(
+						SOURCE_PATH, folder, directory))
+				else:
+					remove_empty_old_directory("{0}{1}".format(SOURCE_PATH, folder), directory)
 
 		for path in VIDEO_PATHS:
 			for file in os.listdir(path):

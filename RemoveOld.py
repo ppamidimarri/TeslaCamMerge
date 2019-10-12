@@ -57,8 +57,10 @@ def have_required_permissions():
 	for path in VIDEO_PATHS:
 		have_perms = have_perms and TCMConstants.check_permissions(
 			path, True)
-	return have_perms and TCMConstants.check_permissions(
-		SOURCE_PATH, True)
+	for folder in TCMConstants.FOOTAGE_FOLDERS:
+		have_perms = have_perms and TCMConstants.check_permissions(
+			"{0}{1}".format(SOURCE_PATH, folder), True)
+	return have_perms
 
 ### Loop functions ###
 

@@ -77,6 +77,16 @@ def get_directory_table_rows(path):
 		num_files, total_size = get_folder_details(path, item)
 		output += "<tr><td>{0}</td><td class='number'>{1:,d}</td><td class='number'>{2}</td></tr>".format(
 			item, num_files, total_size)
+		if item in TCMConstants.FOOTAGE_FOLDERS and num_files > 0:
+			raw_files, raw_size = get_folder_details("{0}/{1}".format(path, item), TCMConstants.RAW_FOLDER)
+			output += "<tr><td class='small'>&emsp;{0}</td><td class='smallnumber'>{1:,d}</td><td class='smallnumber'>{2}</td></tr>".format(
+				TCMConstants.RAW_FOLDER, raw_files, raw_size)
+			full_files, full_size = get_folder_details("{0}/{1}".format(path, item), TCMConstants.FULL_FOLDER)
+			output += "<tr><td class='small'>&emsp;{0}</td><td class='smallnumber'>{1:,d}</td><td class='smallnumber'>{2}</td></tr>".format(
+				TCMConstants.FULL_FOLDER, full_files, full_size)
+			fast_files, fast_size = get_folder_details("{0}/{1}".format(path, item), TCMConstants.FAST_FOLDER)
+			output += "<tr><td class='small'>&emsp;{0}</td><td class='smallnumber'>{1:,d}</td><td class='smallnumber'>{2}</td></tr>".format(
+				TCMConstants.FAST_FOLDER, fast_files, fast_size)
 	return output
 
 def get_service_table_rows():

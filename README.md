@@ -11,13 +11,17 @@
 
 ## Introduction
 
-Tesla's in-built dashcam creates three separate video files, one each from the front, left and right cameras. I built this project to do the following:
+Tesla's in-built dashcam (TeslaCam) creates four separate video files, one each from the front, left, right and rear cameras as of software version 10.0. I built this project to do the following:
 1. Use the [teslausb](https://github.com/marcone/teslausb) project to have the car store videos on a Raspberry Pi Zero W and transfer the recorded videos to a network share when connected to WiFi at home
-2. Merge the three videos into one 
+2. Merge the four videos into one
 3. Create a sped-up "fast preview" version of the merged video
 4. Show the videos (raw, merged or fast previews) over a web browser
 5. Move selected videos to cloud storage (e.g. Google Drive)
 6. Auto-delete files older than 30 days (configurable), unless they are moved to another folder for safe-keeping
+
+Update on October 12: The current verison of this application supports software version 10.0 (2019.32.12.1 or later). If your car is on version 9, please download an older version prior to this date.
+
+To-Do: Update example videos and screenshots with v10 results including rear view camera footage.
 
 ## How it works
 
@@ -101,11 +105,16 @@ This location is different from the SMB share for two reasons: (a) flatten the d
 
 1. Create a directory where all your clips will be stored, (e.g. `/home/<userid>/Footage` with the command `mkdir /home/<userid>/Footage`
 2. Change to that directory using `cd /home/userid>/Footage`
-3. `mkdir Raw`
-4. `mkdir Full`
-5. `mkdir Fast`
-6. `mkdir Upload`
-7. `mkdir Saved` -- footage you manually move into this folder will not be deleted even if it is old
+3. `mkdir SavedClips`
+4. `mkdir SentryClips`
+3. `mkdir SavedClips/Raw`
+4. `mkdir SavedClips/Full`
+5. `mkdir SavedClips/Fast`
+6. `mkdir SentryClips/Raw`
+7. `mkdir SentryClips/Full`
+8. `mkdir SentryClips/Fast`
+9. `mkdir Upload`
+10. `mkdir Keep` -- footage you manually move into this folder will not be deleted even if it is old
 
 **E. Install and set up [filebrowser](https://filebrowser.xyz/)**
 1. `cd ~`

@@ -19,6 +19,12 @@ FAST_FOLDER = 'Fast'
 FULL_FOLDER = 'Full'
 RAW_FOLDER = 'Raw'
 
+# Dimensions of merged video layout
+FRONT_WIDTH = 1280
+FRONT_HEIGHT = 960
+REST_WIDTH = FRONT_WIDTH/3
+REST_HEIGHT = FRONT_HEIGHT/3
+
 # TeslaCam input folders. These are the root folders in the
 # TeslaCam share (e.g. 'SavedClips', 'SentryClips') in which timestamp
 # folders are placed by TeslaCam

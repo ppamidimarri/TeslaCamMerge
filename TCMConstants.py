@@ -20,8 +20,8 @@ FULL_FOLDER = 'Full'
 RAW_FOLDER = 'Raw'
 
 # Dimensions of merged video layout
-FRONT_WIDTH = 1440 # Multiple of 3
-FRONT_HEIGHT = 1080 # Multiple of 3
+FRONT_WIDTH = 960 # Must be a multiple of 12 (both 3 and 4)
+FRONT_HEIGHT = FRONT_WIDTH*3/4
 REST_WIDTH = FRONT_WIDTH/3
 REST_HEIGHT = FRONT_HEIGHT/3
 

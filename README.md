@@ -19,7 +19,7 @@ Tesla's in-built dashcam (TeslaCam) creates four separate video files, one each 
 5. Move selected videos to cloud storage (e.g. Google Drive)
 6. Auto-delete files older than 30 days (configurable), unless they are moved to another folder for safe-keeping
 
-Update on October 12: The current verison of this application supports software version 10.0 (2019.32.12.1 or later). If your car is on version 9, please download an older version prior to this date.
+Update on October 12: The current verison of this application supports software version 10.0 (2019.32.12.1 or later). If your car is on version 9, please download an older version prior to this date. If you are on Tesla software v10 and you get errors about USB drive too slow, try recreating your teslausb with the Raspbian Buster version.
 
 To-Do: Update example videos and screenshots with v10 results including rear view camera footage.
 

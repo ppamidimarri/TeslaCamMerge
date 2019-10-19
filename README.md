@@ -29,6 +29,7 @@ Update on October 18: TeslaCamMerge now supports multiple Tesla cars. Each car s
 |Wife's car|/samba/user2|/home/user/Footage/Wifes_car|
 
 With this example setup, the variables in `TCMConstants.py` should be set to:
+
 |Variable|Value|
 |--------|-----|
 |MULTI_CAR|True|
@@ -36,6 +37,7 @@ With this example setup, the variables in `TCMConstants.py` should be set to:
 |SHARE_PATHS|['/samba/user1/', '/samba/user2/']|
 
 If you want to use a single-Tesla setup, the variables should be set to:
+
 |Variable|Value|
 |--------|-----|
 |MULTI_CAR|False|

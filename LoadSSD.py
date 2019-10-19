@@ -53,13 +53,13 @@ def have_required_permissions():
 ### Loop functions ###
 
 def move_file(file, folder):
-	logger.info(f"Moving file {file}")
+	logger.info(f"Moving file {file} into {folder}")
 	if TCMConstants.check_file_for_read(file):
 		try:
 			shutil.move(file, f"{TCMConstants.FOOTAGE_PATH}{folder}/{TCMConstants.RAW_FOLDER}")
-			logger.debug(f"Moved file {file}")
+			logger.debug(f"Moved file {file} into {folder}")
 		except:
-			logger.error(f"Failed to move {file}")
+			logger.error(f"Failed to move {file} into {folder}")
 	else:
 		logger.debug(f"File {file} still being written, skipping for now")
 

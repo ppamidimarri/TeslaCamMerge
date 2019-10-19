@@ -13,11 +13,11 @@ import logging
 def generate_stats_image():
 	logger = logging.getLogger(TCMConstants.get_basename())
 	if TCMConstants.STATS_FILENAME:
-		logger.debug("Generating stats in {0}".format(TCMConstants.STATS_FILENAME))
-		logger.debug("Footage root location: {0}".format(TCMConstants.FOOTAGE_PATH))
-		with open("{0}/TeslaCamMerge/stats-template.html".format(TCMConstants.PROJECT_PATH), "r") as template:
+		logger.debug(f"Generating stats in {TCMConstants.STATS_FILENAME}")
+		logger.debug(f"Footage root location: {TCMConstants.FOOTAGE_PATH}")
+		with open(f"{TCMConstants.PROJECT_PATH}/TeslaCamMerge/stats-template.html", "r") as template:
 			html = template.read()
-			logger.debug("Read template:\n{0}".format(html))
+			logger.debug(f"Read template:\n{html}")
 			device, size, used, available, used_percentage, mount_point = get_disk_usage_details(TCMConstants.FOOTAGE_PATH)
 			directory_table_rows = get_directory_table_rows(TCMConstants.FOOTAGE_PATH)
 			service_table_rows = get_service_table_rows()
@@ -37,23 +37,21 @@ def generate_stats_image():
 			output = ""
 			for line in html.splitlines():
 				output += do_replacements(line, replacements)
-			logger.debug("HTML output:\n{0}".format(output))
-			with open("{0}/{1}".format(TCMConstants.FOOTAGE_PATH, TCMConstants.STATS_FILENAME), "w+") as file:
+			logger.debug(f"HTML output:\n{output}")
+			with open(f"{TCMConstants.FOOTAGE_PATH}/{TCMConstants.STATS_FILENAME}", "w+") as file:
 				file.write(output)
-		command = "export DISPLAY=:0 && {0} --url=file://{1}/{2} --out={1}/{3}".format(
-			TCMConstants.CUTYCAPT_PATH, TCMConstants.FOOTAGE_PATH, TCMConstants.STATS_FILENAME, TCMConstants.STATS_IMAGE)
-		logger.debug("Command: {0}".format(command))
+		command = f"export DISPLAY=:0 && {TCMConstants.CUTYCAPT_PATH} --url=file://{TCMConstants.FOOTAGE_PATH}/{TCMConstants.STATS_FILENAME} --out={TCMConstants.FOOTAGE_PATH}/{TCMConstants.STATS_IMAGE}"
+		logger.debug(f"Command: {command}")
 		completed = subprocess.run(command, shell=True, stdin=subprocess.DEVNULL,
 			stdout=subprocess.PIPE, stderr=subprocess.PIPE)
 		if completed.returncode == 0:
 			logger.info("Updated stats image")
 			try:
-				os.remove("{0}/{1}".format(TCMConstants.FOOTAGE_PATH, TCMConstants.STATS_FILENAME))
+				os.remove(f"{TCMConstants.FOOTAGE_PATH}/{TCMConstants.STATS_FILENAME}")
 			except:
-				logger.error("Error removing: {0}/{1}".format(TCMConstants.FOOTAGE_PATH, TCMConstants.STATS_FILENAME))
+				logger.error(f"Error removing: {TCMConstants.FOOTAGE_PATH}/{TCMConstants.STATS_FILENAME}")
 		else:
-			logger.error("Error running cutycapt command {0}, returncode: {3}, stdout: {1}, stderr: {2}".format(
-				command, completed.stdout, completed.stderr, completed.returncode))
+			logger.error(f"Error running cutycapt command {command}, returncode: {completed.returncode}, stdout: {completed.stdout}, stderr: {completed.stderr}")
 
 def get_disk_color(used_percentage):
 	used = int(used_percentage[:-1])
@@ -75,23 +73,30 @@ def get_directory_table_rows(path):
 		if item == TCMConstants.STATS_FILENAME or item == TCMConstants.STATS_IMAGE:
 			continue
 		num_files, total_size = get_folder_details(path, item)
-		output += "<tr><td>{0}</td><td class='number'>{1:,d}</td><td class='number'>{2}</td></tr>".format(
-			item, num_files, total_size)
-		if item in TCMConstants.FOOTAGE_FOLDERS and num_files > 0:
-			raw_files, raw_size = get_folder_details("{0}/{1}".format(path, item), TCMConstants.RAW_FOLDER)
-			output += "<tr><td class='small'>&emsp;{0}</td><td class='smallnumber'>{1:,d}</td><td class='smallnumber'>{2}</td></tr>".format(
-				TCMConstants.RAW_FOLDER, raw_files, raw_size)
-			full_files, full_size = get_folder_details("{0}/{1}".format(path, item), TCMConstants.FULL_FOLDER)
-			output += "<tr><td class='small'>&emsp;{0}</td><td class='smallnumber'>{1:,d}</td><td class='smallnumber'>{2}</td></tr>".format(
-				TCMConstants.FULL_FOLDER, full_files, full_size)
-			fast_files, fast_size = get_folder_details("{0}/{1}".format(path, item), TCMConstants.FAST_FOLDER)
-			output += "<tr><td class='small'>&emsp;{0}</td><td class='smallnumber'>{1:,d}</td><td class='smallnumber'>{2}</td></tr>".format(
-				TCMConstants.FAST_FOLDER, fast_files, fast_size)
+		output += f"<tr><td>{item}</td><td class='number'>{num_files:,d}</td><td class='number'>{total_size}</td></tr>"
+		if TCMConstants.MULTI_CAR and item in TCMConstants.CAR_LIST and num_files > 0:
+			for folder in TCMConstants.FOOTAGE_FOLDERS:
+				sub_files, sub_size = get_folder_details(f"{path}/{item}", folder)
+				output += f"<tr><td class='small'>&nbsp;&nbsp;{folder}</td><td class='smallnumber'>{sub_files:,d}</td><td class='smallnumber'>{sub_size}</td></tr>"
+				if sub_files > 0:
+					output += get_subdirectory_table_rows(f"{path}/{item}/{folder}", "&nbsp;&nbsp;&nbsp;&nbsp;", "smaller")
+		else:
+			if item in TCMConstants.FOOTAGE_FOLDERS and num_files > 0:
+				output += get_subdirectory_table_rows(f"{path}/{item}", "&nbsp;&nbsp;", "small")
+	return output
+
+def get_subdirectory_table_rows(path, indent, font_class):
+	output = ""
+	raw_files, raw_size = get_folder_details(path, TCMConstants.RAW_FOLDER)
+	output += f"<tr><td class='{font_class}'>{indent}{TCMConstants.RAW_FOLDER}</td><td class='{font_class}number'>{raw_files:,d}</td><td class='{font_class}number'>{raw_size}</td></tr>"
+	full_files, full_size = get_folder_details(path, TCMConstants.FULL_FOLDER)
+	output += f"<tr><td class='{font_class}'>{indent}{TCMConstants.FULL_FOLDER}</td><td class='{font_class}number'>{full_files:,d}</td><td class='{font_class}number'>{full_size}</td></tr>"
+	fast_files, fast_size = get_folder_details(path, TCMConstants.FAST_FOLDER)
+	output += f"<tr><td class='{font_class}'>{indent}{TCMConstants.FULL_FOLDER}</td><td class='{font_class}number'>{fast_files:,d}</td><td class='{font_class}number'>{fast_size}</td></tr>"
 	return output
 
 def get_service_table_rows():
-	command = "{0} show -p Id -p Name -p SubState --value tcm-*".format(
-		TCMConstants.SYSTEMCTL_PATH)
+	command = f"{TCMConstants.SYSTEMCTL_PATH} show -p Id -p Name -p SubState --value tcm-*"
 	output = get_service_details(command)
 	creds = ""
 	try:
@@ -100,8 +105,7 @@ def get_service_table_rows():
 	except:
 		logging.getLogger(TCMConstants.get_basename()).debug("No TCM2ndHome connected")
 	if creds:
-		command = "{0} show -p Id -p Name -p SubState --value tcm2-* -H {1}".format(
-			TCMConstants.SYSTEMCTL_PATH, creds)
+		command = f"{TCMConstants.SYSTEMCTL_PATH} show -p Id -p Name -p SubState --value tcm2-* -H {creds}"
 		output += get_service_details(command)
 	return output
 
@@ -111,8 +115,7 @@ def get_service_details(command):
 		stdout=subprocess.PIPE, stderr=subprocess.PIPE)
 	if completed.stderr or completed.returncode != 0:
 		logging.getLogger(TCMConstants.get_basename()).error(
-			"Error running systemctl command, returncode: {0}, stdout: {1}, stderr: {2}".format(
-				completed.returncode, completed.stdout, completed.stderr))
+			f"Error running systemctl command, returncode: {completed.returncode}, stdout: {completed.stdout}, stderr: {completed.stderr}")
 	else:
 		lines = completed.stdout.splitlines()
 		i = 0
@@ -124,14 +127,14 @@ def get_service_details(command):
 					service_class = "servicerunning"
 				else:
 					service_class = "servicedead"
-				output += "<tr><td class='{0}'>{1}</td></tr>".format(service_class, name)
+				output += f"<tr><td class='{service_class}'>{name}</td></tr>"
 			i += 1
 	return output
 
 def get_folder_details(path, file):
 	total_size = 0
 	num_files = 0
-	for dirpath, dirnames, filenames in os.walk("{0}/{1}".format(path, file)):
+	for dirpath, dirnames, filenames in os.walk(f"{path}/{file}"):
 		for f in filenames:
 			fp = os.path.join(dirpath, f)
 			# Skip symbolic links
@@ -142,12 +145,11 @@ def get_folder_details(path, file):
 
 def get_disk_usage_details(footage_path):
 	logger = logging.getLogger(TCMConstants.get_basename())
-	command = "{0} -h {1}".format(TCMConstants.DF_PATH, footage_path)
+	command = f"{TCMConstants.DF_PATH} -h {footage_path}"
 	completed = subprocess.run(command, shell=True, stdin=subprocess.DEVNULL,
 		stdout=subprocess.PIPE, stderr=subprocess.PIPE)
 	if completed.stderr or completed.returncode != 0:
-		logger.error("Error running df command, returncode: {0}, stdout: {1}, stderr: {2}".format(
-			completed.returncode, completed.stdout, completed.stderr))
+		logger.error(f"Error running df command, returncode: {completed.returncode}, stdout: {completed.stdout}, stderr: {completed.stderr}")
 		return None, None, None, None, None, None
 	else:
 		logger.debug("Disk space raw result:\n{0}".format(completed.stdout.decode("UTF-8")))

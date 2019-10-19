@@ -15,8 +15,7 @@ import re
 import logging
 
 # ffmpeg commands and filters
-ffmpeg_base = "{0} -hide_banner -loglevel error -timelimit {1}".format(
-	TCMConstants.FFMPEG_PATH, TCMConstants.FFMPEG_TIMELIMIT)
+ffmpeg_base = f'{TCMConstants.FFMPEG_PATH} -hide_banner -loglevel error -timelimit {TCMConstants.FFMPEG_TIMELIMIT}'
 ffmpeg_mid_full = f'-filter_complex "[1:v]scale=w={TCMConstants.FRONT_WIDTH}:h={TCMConstants.FRONT_HEIGHT}[top];[0:v]scale=w={TCMConstants.REST_WIDTH}:h={TCMConstants.REST_HEIGHT}[right];[3:v]scale=w={TCMConstants.REST_WIDTH}:h={TCMConstants.REST_HEIGHT}[back];[2:v]scale=w={TCMConstants.REST_WIDTH}:h={TCMConstants.REST_HEIGHT}[left];[left][back][right]hstack=inputs=3[bottom];[top][bottom]vstack=inputs=2[full];[full]drawtext=text=\''
 ffmpeg_end_full = '\':fontcolor=white:fontsize=24:box=1:boxcolor=black@0.5:boxborderw=5:x=(w-text_w)/2" -movflags +faststart -threads 0'
 ffmpeg_end_fast = '-vf "setpts=0.09*PTS" -c:v libx264 -crf 28 -profile:v main -tune fastdecode -movflags +faststart -threads 0'
@@ -32,56 +31,71 @@ def main():
 
 	while True:
 		logger.debug("Starting new iteration")
-		for folder in TCMConstants.FOOTAGE_FOLDERS:
-			raw_files = os.listdir("{0}{1}/{2}".format(TCMConstants.FOOTAGE_PATH, folder, TCMConstants.RAW_FOLDER))
-			for file in raw_files:
-				logger.debug("Starting with file {0}".format(file))
-				try:
-					stamp, camera = file.rsplit("-", 1)
-				except ValueError:
-					if file != TCMConstants.BAD_VIDEOS_FILENAME and file != TCMConstants.BAD_SIZES_FILENAME:
-						logger.warn("Unrecognized filename: {0}".format(file))
-					continue
-				process_stamp(stamp, folder)
+		if TCMConstants.MULTI_CAR:
+			for car in TCMConstants.CAR_LIST:
+				loop_car(f"{car}/")
+		else:
+			loop_car("")
 
 		time.sleep(TCMConstants.SLEEP_DURATION)
 
 ### Startup functions ###
 
 def have_required_permissions():
-	retVal = True
+	have_perms = True
+	if TCMConstants.MULTI_CAR:
+		for car in TCMConstants.CAR_LIST:
+			have_perms = have_perms and check_permissions_for_car(f"{car}/")
+	else:
+		have_perms = have_perms and check_permissions_for_car("")
+	return have_perms
+
+def check_permissions_for_car(car_path):
+	have_perms = True
 	for folder in TCMConstants.FOOTAGE_FOLDERS:
-		retVal = retVal and TCMConstants.check_permissions("{0}{1}/{2}".format(TCMConstants.FOOTAGE_PATH, folder, TCMConstants.RAW_FOLDER), False)
-		retVal = retVal and TCMConstants.check_permissions("{0}{1}/{2}".format(TCMConstants.FOOTAGE_PATH, folder, TCMConstants.FULL_FOLDER), True)
-		retVal = retVal and TCMConstants.check_permissions("{0}{1}/{2}".format(TCMConstants.FOOTAGE_PATH, folder, TCMConstants.FAST_FOLDER), True)
-	return retVal
+		have_perms = have_perms and TCMConstants.check_permissions(f"{TCMConstants.FOOTAGE_PATH}{car_path}{folder}/{TCMConstants.RAW_FOLDER}", False)
+		have_perms = have_perms and TCMConstants.check_permissions(f"{TCMConstants.FOOTAGE_PATH}{car_path}{folder}/{TCMConstants.FULL_FOLDER}", True)
+		have_perms = have_perms and TCMConstants.check_permissions(f"{TCMConstants.FOOTAGE_PATH}{car_path}{folder}/{TCMConstants.FAST_FOLDER}", True)
+	return have_perms
 
 ### Loop functions ###
 
+def loop_car(car_path):
+	for folder in TCMConstants.FOOTAGE_FOLDERS:
+		raw_files = os.listdir(f"{TCMConstants.FOOTAGE_PATH}{car_path}{folder}/{TCMConstants.RAW_FOLDER}")
+		for file in raw_files:
+			logger.debug(f"Starting with file {file}")
+			try:
+				stamp, camera = file.rsplit("-", 1)
+			except ValueError:
+				if file != TCMConstants.BAD_VIDEOS_FILENAME and file != TCMConstants.BAD_SIZES_FILENAME:
+					logger.warn(f"Unrecognized filename: {file}")
+				continue
+			process_stamp(stamp, f"{car_path}{folder}")
+
 def process_stamp(stamp, folder):
-	logger.debug("Processing stamp {0} in {1}".format(stamp, folder))
+	logger.debug(f"Processing stamp {stamp} in {folder}")
 	if stamp_is_all_ready(stamp, folder):
-		logger.debug("Stamp {0} in {1} is ready to go".format(stamp, folder))
-		if TCMConstants.check_file_for_write("{0}{1}/{2}/{3}-{4}".format(TCMConstants.FOOTAGE_PATH, folder, TCMConstants.FULL_FOLDER, stamp, TCMConstants.FULL_TEXT)):
+		logger.debug(f"Stamp {stamp} in {folder} is ready to go")
+		if TCMConstants.check_file_for_write(f"{TCMConstants.FOOTAGE_PATH}{folder}/{TCMConstants.FULL_FOLDER}/{stamp}-{TCMConstants.FULL_TEXT}"):
 			run_ffmpeg_command("Merge", folder, stamp, 0)
 		else:
-			logger.debug("Full file exists for stamp {0}".format(stamp))
-		if TCMConstants.check_file_for_read("{0}{1}/{2}/{3}-{4}".format(TCMConstants.FOOTAGE_PATH, folder, TCMConstants.FULL_FOLDER, stamp, TCMConstants.FULL_TEXT)):
-			if TCMConstants.check_file_for_write("{0}{1}/{2}/{3}-{4}".format(TCMConstants.FOOTAGE_PATH, folder, TCMConstants.FAST_FOLDER, stamp, TCMConstants.FAST_TEXT)):
+			logger.debug(f"Full file exists for stamp {stamp}")
+		if TCMConstants.check_file_for_read(f"{TCMConstants.FOOTAGE_PATH}{folder}/{TCMConstants.FULL_FOLDER}/{stamp}-{TCMConstants.FULL_TEXT}"):
+			if TCMConstants.check_file_for_write(f"{TCMConstants.FOOTAGE_PATH}{folder}/{TCMConstants.FAST_FOLDER}/{stamp}-{TCMConstants.FAST_TEXT}"):
 				run_ffmpeg_command("Fast preview", folder, stamp, 1)
 			else:
-				logger.debug("Fast file exists for stamp {0} at {1}".format(stamp, folder))
+				logger.debug(f"Fast file exists for stamp {stamp} at {folder}")
 		else:
-			logger.warn("Full file {0}{1}/{2}/{3}-{4} not ready for read, postponing fast preview".format(
-				TCMConstants.FOOTAGE_PATH, folder, TCMConstants.FULL_FOLDER, stamp, TCMConstants.FULL_TEXT))
+			logger.warn(f"Full file {TCMConstants.FOOTAGE_PATH}{folder}/{TCMConstants.FULL_FOLDER}/{stamp}-{TCMConstants.FULL_TEXT} not ready for read, postponing fast preview")
 	else:
-		logger.debug("Stamp {0} not yet ready in {1}".format(stamp, folder))
+		logger.debug(f"Stamp {stamp} not yet ready in {folder}")
 
 def stamp_is_all_ready(stamp, folder):
-	front_file = "{0}{1}/{2}/{3}-{4}".format(TCMConstants.FOOTAGE_PATH, folder, TCMConstants.RAW_FOLDER, stamp, TCMConstants.FRONT_TEXT)
-	left_file = "{0}{1}/{2}/{3}-{4}".format(TCMConstants.FOOTAGE_PATH, folder, TCMConstants.RAW_FOLDER, stamp, TCMConstants.LEFT_TEXT)
-	right_file = "{0}{1}/{2}/{3}-{4}".format(TCMConstants.FOOTAGE_PATH, folder, TCMConstants.RAW_FOLDER, stamp, TCMConstants.RIGHT_TEXT)
-	back_file = "{0}{1}/{2}/{3}-{4}".format(TCMConstants.FOOTAGE_PATH, folder, TCMConstants.RAW_FOLDER, stamp, TCMConstants.BACK_TEXT)
+	front_file = f"{TCMConstants.FOOTAGE_PATH}{folder}/{TCMConstants.RAW_FOLDER}/{stamp}-{TCMConstants.FRONT_TEXT}"
+	left_file = f"{TCMConstants.FOOTAGE_PATH}{folder}/{TCMConstants.RAW_FOLDER}/{stamp}-{TCMConstants.LEFT_TEXT}"
+	right_file = f"{TCMConstants.FOOTAGE_PATH}{folder}/{TCMConstants.RAW_FOLDER}/{stamp}-{TCMConstants.RIGHT_TEXT}"
+	back_file = f"{TCMConstants.FOOTAGE_PATH}{folder}/{TCMConstants.RAW_FOLDER}/{stamp}-{TCMConstants.BACK_TEXT}"
 	if TCMConstants.check_file_for_read(front_file) and TCMConstants.check_file_for_read(left_file) and TCMConstants.check_file_for_read(right_file) and TCMConstants.check_file_for_read(back_file) and file_sizes_in_same_range(folder, stamp, front_file, left_file, right_file, back_file):
 		return True
 	else:
@@ -113,31 +127,29 @@ def file_sizes_in_same_range(folder, stamp, front_file, left_file, right_file, b
 ### FFMPEG command functions ###
 
 def run_ffmpeg_command(log_text, folder, stamp, video_type):
-	logger.info("{0} started in {2}: {1}...".format(log_text, stamp, folder))
+	logger.info(f"{log_text} started in {stamp}: {folder}...")
 	command = get_ffmpeg_command(folder, stamp, video_type)
-	logger.debug("Command: {0}".format(command))
+	logger.debug(f"Command: {command}")
 	completed = subprocess.run(command, shell=True,
 		stdin=subprocess.DEVNULL, stdout=subprocess.PIPE,
 		stderr=subprocess.PIPE)
 	if completed.stderr or completed.returncode != 0:
-		logger.error("Error running ffmpeg command: {0}, returncode: {3}, stdout: {1}, stderr: {2}".format(
-			command, completed.stdout, completed.stderr, completed.returncode))
+		logger.error(f"Error running ffmpeg command: {command}, returncode: {completed.returncode}, stdout: {completed.stdout}, stderr: {completed.stderr}")
 		for line in completed.stderr.decode("UTF-8").splitlines():
 			match = ffmpeg_error_pattern.match(line)
 			if match:
 				file = match.group(1)
 				if video_type == 1:
-					logger.debug("Will try to remove bad merged file: {0}".format(file))
+					logger.debug(f"Will try to remove bad merged file: {file}")
 					try:
 						os.remove(file)
 					except:
-						logger.warn("Failed to remove bad file: {0}".format(file))
+						logger.warn(f"Failed to remove bad file: {file}")
 				else:
 					add_to_bad_videos(file)
 	else:
-		logger.debug("FFMPEG stdout: {0}, stderr: {1}".format(
-			completed.stdout, completed.stderr))
-	logger.info("{0} completed: {1}.".format(log_text, stamp))
+		logger.debug(f"FFMPEG stdout: {completed.stdout}, stderr: {completed.stderr}")
+	logger.info(f"{log_text} completed: {stamp}.")
 
 def get_ffmpeg_command(folder, stamp, video_type):
 	if video_type == 0:
@@ -150,25 +162,23 @@ def get_ffmpeg_command(folder, stamp, video_type):
 			ffmpeg_base, TCMConstants.FOOTAGE_PATH, folder, TCMConstants.FULL_FOLDER, stamp, TCMConstants.FULL_TEXT, ffmpeg_end_fast,
 			TCMConstants.FAST_FOLDER, TCMConstants.FAST_TEXT)
 	else:
-		logger.error("Unrecognized video type {0} for {1} in {2}".format(video_type, stamp, folder))
+		logger.error(f"Unrecognized video type {video_type} for {stamp} in {folder}")
 	return command
 
 def add_to_bad_videos(folder, name):
-	simple_name = name.replace("{0}{1}/{2}/".format(TCMConstants.FOOTAGE_PATH, folder, TCMConstants.RAW_FOLDER), '')
+	simple_name = name.replace(f"{TCMConstants.FOOTAGE_PATH}{folder}/{TCMConstants.RAW_FOLDER}/", '')
 	add_string_to_sorted_file(
-		"{0}{1}/{2}/{3}".format(TCMConstants.FOOTAGE_PATH, folder, TCMConstants.RAW_FOLDER, TCMConstants.BAD_VIDEOS_FILENAME),
-		simple_name, "{0}\n".format(simple_name),
-		"Skipping over bad source file: {0}".format(name),
+		f"{TCMConstants.FOOTAGE_PATH}{folder}/{TCMConstants.RAW_FOLDER}/{TCMConstants.BAD_VIDEOS_FILENAME}",
+		simple_name, f"{simple_name}\n",
+		f"Skipping over bad source file: {name}",
 		logging.DEBUG)
 
 def add_to_bad_sizes(folder, stamp, front, left, right, back):
 	add_string_to_sorted_file(
-		"{0}{1}/{2}/{3}".format(TCMConstants.FOOTAGE_PATH, folder, TCMConstants.RAW_FOLDER, TCMConstants.BAD_SIZES_FILENAME),
+		f"{TCMConstants.FOOTAGE_PATH}{folder}/{TCMConstants.RAW_FOLDER}/{TCMConstants.BAD_SIZES_FILENAME}",
 		stamp,
-		"{0}: Front {1}, Left {2}, Right {3}, Back: {4}\n".format(
-			stamp, front, left, right, back),
-		"Size issue at {0}: Front {1}, Left {2}, Right {3}, Back: {4}".format(
-			stamp, front, left, right, back),
+		f"{stamp}: Front {front}, Left {left}, Right {right}, Back: {back}\n",
+		f"Size issue at {stamp}: Front {front}, Left {left}, Right {right}, Back: {back}",
 		logging.WARN)
 
 ### Other utility functions ###
@@ -190,7 +200,7 @@ def add_string_to_sorted_file(name, key, string, log_message, log_level):
 
 def format_timestamp(stamp):
 	timestamp = datetime.datetime.strptime(stamp, TCMConstants.FILENAME_TIMESTAMP_FORMAT)
-	logger.debug("Timestamp: {0}".format(timestamp))
+	logger.debug(f"Timestamp: {timestamp}")
 	return timestamp.strftime(TCMConstants.WATERMARK_TIMESTAMP_FORMAT)
 
 if __name__ == '__main__':

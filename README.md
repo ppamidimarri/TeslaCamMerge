@@ -28,6 +28,13 @@ Update on October 18: TeslaCamMerge now supports multiple Tesla cars. Each car s
 |My car|/samba/user1|/home/user/Footage/My_car|
 |Wife's car|/samba/user2|/home/user/Footage/Wifes_car|
 
+With this example setup, the variables in `TCMConstants.py` should be set to:
+|Variable|Value|
+|--------|-----|
+|MULTI_CAR|True|
+|CAR_LIST|['My_car', 'Wifes_car']|
+|SHARE_PATHS|['/samba/user1/', '/samba/user2/']|
+
 To-Do: Update example videos and screenshots with v10 results including rear view camera footage.
 
 ## How it works

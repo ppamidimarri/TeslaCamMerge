@@ -146,7 +146,7 @@ def run_ffmpeg_command(log_text, folder, stamp, video_type):
 					except:
 						logger.warn(f"Failed to remove bad file: {file}")
 				else:
-					add_to_bad_videos(file)
+					add_to_bad_videos(folder, file)
 	else:
 		logger.debug(f"FFMPEG stdout: {completed.stdout}, stderr: {completed.stderr}")
 	logger.info(f"{log_text} completed: {stamp}.")

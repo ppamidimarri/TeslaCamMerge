@@ -35,6 +35,14 @@ With this example setup, the variables in `TCMConstants.py` should be set to:
 |CAR_LIST|['My_car', 'Wifes_car']|
 |SHARE_PATHS|['/samba/user1/', '/samba/user2/']|
 
+If you want to use a single-Tesla setup, the variables should be set to:
+|Variable|Value|
+|--------|-----|
+|MULTI_CAR|False|
+|CAR_LIST|[]|
+|SHARE_PATHS|['/samba/user1/']|
+
+
 To-Do: Update example videos and screenshots with v10 results including rear view camera footage.
 
 ## How it works

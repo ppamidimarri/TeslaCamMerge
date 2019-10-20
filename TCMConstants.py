@@ -98,6 +98,7 @@ LSOF_PATH = '/usr/bin/lsof -t'							# Verify with: which lsof
 DF_PATH = '/bin/df'								# Verify with: which df
 CUTYCAPT_PATH = '/usr/bin/cutycapt --zoom-factor=1.5'				# Verify with: which cutycapt
 SYSTEMCTL_PATH = "/bin/systemctl"						# Verify with: which systemctl
+XVFB_RUN_PATH = '/usr/bin/xvfb-run'						# Verify with: which xvfb-run
 
 # Video watermark timestamp format (see Python strftime reference)
 WATERMARK_TIMESTAMP_FORMAT = '%b %-d\, %-I\:%M %p'
@@ -126,7 +127,7 @@ FILENAME_PATTERN = re.compile(FILENAME_REGEX)
 # Application management constants
 SLEEP_DURATION = 60		# Seconds between looping in main tasks
 SPECIAL_EXIT_CODE = 115		# Exit code used by the app, has to be non-zero for systemctl to auto-restart crashed services
-SIZE_RANGE = 0.4		# Maximum size difference in percentage between video files, timsestamps with bigger size differences are not merged
+SIZE_RANGE = 0.8		# Maximum size difference in percentage between video files, timsestamps with bigger size differences are not merged
 FFMPEG_TIMELIMIT = 9000		# CPU time limit in seconds for FFMPEG commands to run
 
 # Common functions

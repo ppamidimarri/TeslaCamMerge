@@ -97,7 +97,7 @@ If you don't like `vim` as the text editor, install `nano` with `sudo apt instal
 **B. Install required software on the Nano**
 1. `sudo apt update`
 2. `sudo apt upgrade`
-3. `sudo apt install ffmpeg samba lsof cutycapt`
+3. `sudo apt install ffmpeg samba lsof cutycapt xvfb`
 
 **C. Configure [samba](https://www.samba.org/) and set up the SMB share**
 1. `sudo cp /etc/samba/smb.conf{,.backup}`

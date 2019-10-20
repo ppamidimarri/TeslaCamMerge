@@ -40,7 +40,7 @@ def generate_stats_image():
 			logger.debug(f"HTML output:\n{output}")
 			with open(f"{TCMConstants.FOOTAGE_PATH}/{TCMConstants.STATS_FILENAME}", "w+") as file:
 				file.write(output)
-		command = f"export DISPLAY=:0 && {TCMConstants.CUTYCAPT_PATH} --url=file://{TCMConstants.FOOTAGE_PATH}/{TCMConstants.STATS_FILENAME} --out={TCMConstants.FOOTAGE_PATH}/{TCMConstants.STATS_IMAGE}"
+		command = f'{TCMConstants.XVFB_RUN_PATH} --server-args="-screen 0, 1280x1200x24" {TCMConstants.CUTYCAPT_PATH} --url=file://{TCMConstants.FOOTAGE_PATH}/{TCMConstants.STATS_FILENAME} --out={TCMConstants.FOOTAGE_PATH}/{TCMConstants.STATS_IMAGE}'
 		logger.debug(f"Command: {command}")
 		completed = subprocess.run(command, shell=True, stdin=subprocess.DEVNULL,
 			stdout=subprocess.PIPE, stderr=subprocess.PIPE)

@@ -39,7 +39,7 @@ def main():
 					if os.listdir(f"{share}{folder}/{directory}"):
 						logger.debug(f"Directory {share}{folder}/{directory} not empty, skipping")
 					else:
-						remove_empty_old_directory(f"{share}{folder}", directory)
+						remove_empty_old_directory(f"{share}{folder}/", directory)
 
 		for path in VIDEO_PATHS:
 			for file in os.listdir(path):

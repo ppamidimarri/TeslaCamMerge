@@ -73,7 +73,7 @@ DAYS_TO_KEEP = 30
 # 59 to the list.
 STATS_FILENAME = 'stats.html'
 STATS_IMAGE = 'stats.png'
-STATS_FREQUENCY = [0, 30, 40, 41, 42]
+STATS_FREQUENCY = [0, 30]
 STATS_TIMESTAMP_FORMAT = '%-I:%M %p on %a %b %-d, %Y'
 
 # Settings for application logs
@@ -127,7 +127,7 @@ FILENAME_PATTERN = re.compile(FILENAME_REGEX)
 # Application management constants
 SLEEP_DURATION = 60		# Seconds between looping in main tasks
 SPECIAL_EXIT_CODE = 115		# Exit code used by the app, has to be non-zero for systemctl to auto-restart crashed services
-SIZE_RANGE = 0.8		# Maximum size difference in percentage between video files, timsestamps with bigger size differences are not merged
+SIZE_RANGE = 0.4		# Maximum size difference in percentage between video files, timsestamps with bigger size differences are not merged
 FFMPEG_TIMELIMIT = 9000		# CPU time limit in seconds for FFMPEG commands to run
 
 # Common functions

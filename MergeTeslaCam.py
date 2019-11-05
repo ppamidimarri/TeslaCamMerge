@@ -178,7 +178,7 @@ def add_to_bad_sizes(folder, stamp, front, left, right, back):
 		f"{TCMConstants.FOOTAGE_PATH}{folder}/{TCMConstants.RAW_FOLDER}/{TCMConstants.BAD_SIZES_FILENAME}",
 		stamp,
 		f"{stamp}: Front {front}, Left {left}, Right {right}, Back: {back}\n",
-		f"Size issue at {stamp}: Front {front}, Left {left}, Right {right}, Back: {back}",
+		f"Size issue at {stamp} in {folder}: Front {front}, Left {left}, Right {right}, Back: {back}",
 		logging.WARN)
 
 ### Other utility functions ###

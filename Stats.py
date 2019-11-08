@@ -92,7 +92,7 @@ def get_subdirectory_table_rows(path, indent, font_class):
 	full_files, full_size = get_folder_details(path, TCMConstants.FULL_FOLDER)
 	output += f"<tr><td class='{font_class}'>{indent}{TCMConstants.FULL_FOLDER}</td><td class='{font_class}number'>{full_files:,d}</td><td class='{font_class}number'>{full_size}</td></tr>"
 	fast_files, fast_size = get_folder_details(path, TCMConstants.FAST_FOLDER)
-	output += f"<tr><td class='{font_class}'>{indent}{TCMConstants.FULL_FOLDER}</td><td class='{font_class}number'>{fast_files:,d}</td><td class='{font_class}number'>{fast_size}</td></tr>"
+	output += f"<tr><td class='{font_class}'>{indent}{TCMConstants.FAST_FOLDER}</td><td class='{font_class}number'>{fast_files:,d}</td><td class='{font_class}number'>{fast_size}</td></tr>"
 	return output
 
 def get_service_table_rows():

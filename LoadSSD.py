@@ -30,7 +30,7 @@ def main():
 							sub_path = folder
 							if TCMConstants.MULTI_CAR:
 								sub_path = f"{TCMConstants.CAR_LIST[index]}/{folder}"
-							move_file(os.path.join(root, name), sub_path)
+							move_file(os.path.join(root, name), sub_path, name)
 						else:
 							logger.warn(f"File '{name}' has invalid name, skipping")
 
@@ -52,16 +52,19 @@ def have_required_permissions():
 
 ### Loop functions ###
 
-def move_file(file, folder):
-	logger.info(f"Moving file {file} into {folder}")
-	if TCMConstants.check_file_for_read(file):
-		try:
-			shutil.move(file, f"{TCMConstants.FOOTAGE_PATH}{folder}/{TCMConstants.RAW_FOLDER}")
-			logger.debug(f"Moved file {file} into {folder}")
-		except:
-			logger.error(f"Failed to move {file} into {folder}")
+def move_file(file, folder, name):
+	if TCMConstants.check_file_for_read(f"{TCMConstants.FOOTAGE_PATH}{folder}/{TCMConstants.RAW_FOLDER}/{name}"):
+		logger.warn(f"Destination file already exists at: {TCMConstants.FOOTAGE_PATH}{folder}/{TCMConstants.RAW_FOLDER}/{name}")
 	else:
-		logger.debug(f"File {file} still being written, skipping for now")
+		logger.info(f"Moving file {file} into {folder}")
+		if TCMConstants.check_file_for_read(file):
+			try:
+				shutil.move(file, f"{TCMConstants.FOOTAGE_PATH}{folder}/{TCMConstants.RAW_FOLDER}")
+				logger.debug(f"Moved file {file} into {folder}")
+			except:
+				logger.error(f"Failed to move {file} into {folder}")
+		else:
+			logger.debug(f"File {file} still being written, skipping for now")
 
 def file_has_proper_name(file):
 	if TCMConstants.FILENAME_PATTERN.match(file):

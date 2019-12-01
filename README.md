@@ -53,17 +53,17 @@ To-Do: Update example videos and screenshots with v10 results including rear vie
 
 ## How it works
 
-The Pi Zero W is always connected to the car's USB port. In there, it acts presents itself as a USB storage device to the car. The car saves videos to the Pi Zero W's Micro-SD card when sentry events occur, or when the user presses the camera icon on the display. These clips are a minute long, and three clips are produced for each minute. 
+The Pi Zero W is always connected to the car's USB port. In there, it presents itself as a USB storage device to the car. The car saves videos to the Pi Zero W's Micro-SD card when sentry events occur, or when the user presses the camera icon on the display. These clips are up to a minute long, and four clips are produced for each minute.
 
-The Jetson Nano stays at home and is always on and connected to the network. It has an SMB share that maps to the Jetson Nano's Micro-SD card. There is a high-capacity USB SSD connected to the Jetson Nano. The Jetson Nano hosts a web site that displays the contents of the USB SSD. 
+The Jetson Nano is built with the roof filesystem on the USB SSD. The Jetson Nano stays at home and is always on and connected to the network. It serves an SMB share. The Jetson Nano hosts a web site that displays the footage saved and merged by this application.
 
-The Pi Zero W connects to the home WiFi network when in range, and tries to access the SMB share on the Jetson Nano. When the share is reachable, the Pi Zero W moves over all recorded files to that share.  
+The Pi Zero W connects to the home WiFi network when in range, and tries to access the SMB share on the Jetson Nano. When the share is reachable, the Pi Zero W moves over all recorded files to that share.
 
-When any new files are loaded on the SMB share, this application moves them from the Micro-SD card on the Jetson Nano over to the USB SSD. Once all three clips for any particular timestamp (i.e. front, left and right camera videos) are available on the USB SSD, this application then merges them into one mp4 file. It then creates a fast preview of the merged clip. 
+When any new files are loaded on the SMB share, this application moves them to a footage location for processing. Once all four clips for any particular timestamp (i.e. front, left, right and rear camera videos) are available at the footage location, this application then merges them into one mp4 file. It then creates a fast preview of the merged clip.
 
-You can easily access all the videos (raw clips from TeslaCam, merged full videos, or fast-preview versions) through a web browser. There is an "Upload" folder on the USB SSD. The web site allows you to easily copy / move files into that "Upload" folder. This application takes any files placed in that "Upload" folder and moves them to cloud storage. 
+You can easily access all the videos (raw clips from TeslaCam, merged full videos, or fast-preview versions) through a web browser. There is an "Upload" folder on the USB SSD. The web site allows you to easily copy / move files into that "Upload" folder. This application takes any files placed in that "Upload" folder and moves them to cloud storage.
 
-I have an nginx reverse proxy for my home that I set up for other projects. The Jetson Nano's web site for viewing video files is behind that reverse proxy, so I can access my available dashcam footage over the internet. The instructions on this project do not cover how to set up a reverse proxy. 
+I have an nginx reverse proxy for my home that I set up for other projects. The Jetson Nano's web site for viewing video files is behind that reverse proxy, so I can access my available dashcam footage over the internet. The instructions on this project do not cover how to set up a reverse proxy.
 
 ## Hardware needed
 
@@ -74,15 +74,15 @@ I have an nginx reverse proxy for my home that I set up for other projects. The 
 5. Micro-USB to USB cable to plug the Pi Zero W into the car's USB port
 6. Tesla car with dashcam functionality
 
-I use a 32GB Micro-SD card on the Jetson Nano, and a 128GB card on the Pi Zero W. The amount of storage you need on the Pi depends on how long you may be away from home. 
+I use a 32GB Micro-SD card on the Jetson Nano, and a 128GB card on the Pi Zero W. The amount of storage you need on the Pi depends on how long you may be away from home.
 
-I chose the Jetson Nano as it does the video merges with ffmpeg 4-5 times faster than a Raspberry Pi 3B+. I don't yet have a Raspberry Pi 4. The Pi 4 *may* achieve similar performance as the Jetson Nano at half the price. 
+I chose the Jetson Nano as it does the video merges with ffmpeg 4-5 times faster than a Raspberry Pi 3B+. I have not tested this on a Raspberry Pi 4. The Pi 4 *may* achieve similar performance as the Jetson Nano at half the price.
 
 ## Instructions
 
 **A. Setup the Jetson Nano**
 
-If you are new to the Jetson Nano, start with the [Getting Started guide from Nvidia](https://developer.nvidia.com/embedded/learn/get-started-jetson-nano-devkit#intro). It is simpler to set up your root filesystem on the USB SSD. To accomplish this, follow [the instructions in this Reddit thread](https://www.reddit.com/r/JetsonNano/comments/c79l36/nvidia_jetson_nano_how_to_install_rootfs_on/).
+If you are new to the Jetson Nano, start with the [Getting Started guide from Nvidia](https://developer.nvidia.com/embedded/learn/get-started-jetson-nano-devkit#intro). It is simpler to set up your root filesystem on the USB SSD. To accomplish this, follow [the instructions in this Reddit thread](https://www.reddit.com/r/JetsonNano/comments/c79l36/nvidia_jetson_nano_how_to_install_rootfs_on/). This will set up the root file system on the USB SSD.
 
 1. Flash a Micro-SD card with the [Jetson Nano bootloader image](https://1drv.ms/u/s!Akd48wbblep6hBcSdTPMoWcDPQP5)
 2. Insert the card in the Jetson Nano
@@ -158,7 +158,7 @@ This location is different from the SMB share for two reasons: (a) flatten the d
 
 **F. Install and configure [rclone](https://rclone.org/)**
 
-If you do not need the ability to upload your videos to the cloud, you can safely skip this section F. If you skip this section, you should also skip step 12 in section G below. You can also remove the "Upload" folder set up in step 7 of section D above with `rmdir /media/<userid>/<drivename>/Footage/Upload`.
+If you do not need the ability to upload your videos to the cloud, you can safely skip this section F. If you skip this section, you should also remove `tcm-uploadDrive` from step 9 in section G below. You can also remove the "Upload" folder set up in step 7 of section D above with `rmdir /media/<userid>/<drivename>/Footage/Upload`.
 
 1. `wget https://downloads.rclone.org/rclone-current-linux-arm.zip` 
 2. `unzip rclone-current-linux-arm.zip` 
@@ -228,9 +228,11 @@ If you decide to do all this, I highly recommend securing your reverse proxy ser
 
 ## Example Videos
 
-[Fast preview video](https://i.imgur.com/nqiPhZz.gifv)
+[Fast preview video](https://i.imgur.com/YQJt7lT.mp4)
 
-[Full merged video](https://i.imgur.com/Q2Y1ODc.gifv)
+![Fast preview](https://i.imgur.com/YQJt7lT.mp4)
+
+[Full merged video](https://i.imgur.com/Bp6W84j.mp4)
 
 ## [Screenshots](https://imgur.com/a/2Jl6kED)
 
@@ -249,7 +251,7 @@ List view:
 ![List view of videos](https://i.imgur.com/uaKslTA.png)
 
 Video view:
-![Video display](https://i.imgur.com/JBeHL8F.png)
+![Video display](https://i.imgur.com/NxrLnRx.png)
 
 Statistics view:
 ![Statistics](https://i.imgur.com/EibaOW2.png)
@@ -284,7 +286,7 @@ File information:
 ![File information](https://i.imgur.com/Z0UybCy.png) 
 
 Video view:
-![Video display on mobile](https://i.imgur.com/dNOVmah.jpg)
+![Video display on mobile](https://i.imgur.com/Rz8mRBJ.png)
 
 Statistics view:
 ![Statistics on mobile](https://i.imgur.com/dliGXJB.png)

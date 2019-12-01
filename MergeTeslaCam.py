@@ -96,8 +96,23 @@ def stamp_is_all_ready(stamp, folder):
 	left_file = f"{TCMConstants.FOOTAGE_PATH}{folder}/{TCMConstants.RAW_FOLDER}/{stamp}-{TCMConstants.LEFT_TEXT}"
 	right_file = f"{TCMConstants.FOOTAGE_PATH}{folder}/{TCMConstants.RAW_FOLDER}/{stamp}-{TCMConstants.RIGHT_TEXT}"
 	back_file = f"{TCMConstants.FOOTAGE_PATH}{folder}/{TCMConstants.RAW_FOLDER}/{stamp}-{TCMConstants.BACK_TEXT}"
+	if file_is_bad(stamp, folder):
+		return False
 	if TCMConstants.check_file_for_read(front_file) and TCMConstants.check_file_for_read(left_file) and TCMConstants.check_file_for_read(right_file) and TCMConstants.check_file_for_read(back_file) and file_sizes_in_same_range(folder, stamp, front_file, left_file, right_file, back_file):
 		return True
+	else:
+		return False
+
+def file_is_bad(stamp, folder):
+	if TCMConstants.check_file_for_read(f"{TCMConstants.FOOTAGE_PATH}{folder}/{TCMConstants.RAW_FOLDER}/{TCMConstants.BAD_VIDEOS_FILENAME}"):
+		with open(f"{TCMConstants.FOOTAGE_PATH}{folder}/{TCMConstants.RAW_FOLDER}/{TCMConstants.BAD_VIDEOS_FILENAME}", "r") as f:
+			bad_names = f.readlines()
+			check_list = [TCMConstants.FRONT_TEXT, TCMConstants.LEFT_TEXT, TCMConstants.RIGHT_TEXT, TCMConstants.BACK_TEXT]
+			for item in check_list:
+				if f"{stamp}-{item}\n" in bad_names:
+					logger.warn(f"Skipping {stamp} in {folder} due to data in {stamp}-{item}")
+					return True
+			return False
 	else:
 		return False
 

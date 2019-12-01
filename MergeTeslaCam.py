@@ -110,7 +110,7 @@ def file_is_bad(stamp, folder):
 			check_list = [TCMConstants.FRONT_TEXT, TCMConstants.LEFT_TEXT, TCMConstants.RIGHT_TEXT, TCMConstants.BACK_TEXT]
 			for item in check_list:
 				if f"{stamp}-{item}\n" in bad_names:
-					logger.warn(f"Skipping {stamp} in {folder} due to bad data in {stamp}-{item}")
+					logger.debug(f"Skipping {stamp} in {folder} due to bad data in {stamp}-{item}")
 					return True
 			return False
 	else:

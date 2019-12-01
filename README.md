@@ -52,7 +52,7 @@ If you want to use a single-Tesla setup, the variables should be set to:
 
 The Pi Zero W is always connected to the car's USB port. In there, it presents itself as a USB storage device to the car. The car saves videos to the Pi Zero W's Micro-SD card when sentry events occur, or when the user presses the camera icon on the display. These clips are up to a minute long, and four clips are produced for each minute.
 
-The Jetson Nano is built with the roof filesystem on the USB SSD. The Jetson Nano stays at home and is always on and connected to the network. It serves an SMB share. The Jetson Nano hosts a web site that displays the footage saved and merged by this application.
+The Jetson Nano is built with the root filesystem on the USB SSD. The Jetson Nano stays at home and is always on and connected to the network. It serves an SMB share. The Jetson Nano hosts a web site that displays the footage saved and merged by this application.
 
 The Pi Zero W connects to the home WiFi network when in range, and tries to access the SMB share on the Jetson Nano. When the share is reachable, the Pi Zero W moves over all recorded files to that share.
 

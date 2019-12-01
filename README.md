@@ -48,9 +48,6 @@ If you want to use a single-Tesla setup, the variables should be set to:
 |CAR_LIST|[]|
 |SHARE_PATHS|['/samba/user1/']|
 
-
-To-Do: Update example videos and screenshots with v10 results including rear view camera footage.
-
 ## How it works
 
 The Pi Zero W is always connected to the car's USB port. In there, it presents itself as a USB storage device to the car. The car saves videos to the Pi Zero W's Micro-SD card when sentry events occur, or when the user presses the camera icon on the display. These clips are up to a minute long, and four clips are produced for each minute.
@@ -229,8 +226,6 @@ If you decide to do all this, I highly recommend securing your reverse proxy ser
 ## Example Videos
 
 [Fast preview video](https://i.imgur.com/YQJt7lT.mp4)
-
-![Fast preview](https://i.imgur.com/YQJt7lT.mp4)
 
 [Full merged video](https://i.imgur.com/Bp6W84j.mp4)
 

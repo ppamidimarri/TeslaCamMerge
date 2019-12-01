@@ -54,7 +54,7 @@ def have_required_permissions():
 
 def move_file(file, folder, name):
 	if TCMConstants.check_file_for_read(f"{TCMConstants.FOOTAGE_PATH}{folder}/{TCMConstants.RAW_FOLDER}/{name}"):
-		logger.warn(f"Destination file already exists at: {TCMConstants.FOOTAGE_PATH}{folder}/{TCMConstants.RAW_FOLDER}/{name}")
+		logger.debug(f"Destination file already exists at: {TCMConstants.FOOTAGE_PATH}{folder}/{TCMConstants.RAW_FOLDER}/{name}")
 	else:
 		logger.info(f"Moving file {file} into {folder}")
 		if TCMConstants.check_file_for_read(file):

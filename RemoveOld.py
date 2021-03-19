@@ -18,6 +18,8 @@ VIDEO_PATHS = []
 
 ALL_VIDEO_REGEX = f"{TCMConstants.FILENAME_REGEX[:-5]}|fast|full).mp4"
 ALL_VIDEO_PATTERN = re.compile(ALL_VIDEO_REGEX)
+EVENTFILE_REGEX  = '(\d{4}(-\d\d){2}_(\d\d-){3})event.json'
+EVENTFILE_PATTERN = re.compile(EVENTFILE_REGEX)
 
 logger = TCMConstants.get_logger()
 
@@ -91,10 +93,14 @@ def remove_old_file(path, file):
 		logger.debug(f"File {path}/{file} is not ready for deletion, skipping")
 
 def extract_stamp(file):
-	match = ALL_VIDEO_PATTERN.match(file)
-	if match:
-		logger.debug("Returning stamp {0} for file {1}".format(match.group(1)[:-1], file))
-		return match.group(1)[:-1]
+	match_video = ALL_VIDEO_PATTERN.match(file)
+	match_event = EVENTFILE_PATTERN.match(file)
+	if match_video:
+		logger.debug("Returning stamp {0} for file {1}".format(match_video.group(1)[:-1], file))
+		return match_video.group(1)[:-1]
+	elif match_event:
+		logger.debug("Returning stamp {0} for file {1}".format(match_event.group(1)[:-1], file))
+		return match_event.group(1)[:-1]
 	else:
 		logger.debug(f"No valid stamp found for file: {file}")
 		return None

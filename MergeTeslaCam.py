@@ -18,7 +18,8 @@ import json
 # ffmpeg commands and filters
 ffmpeg_base = f'{TCMConstants.FFMPEG_PATH} -hide_banner -loglevel error -timelimit {TCMConstants.FFMPEG_TIMELIMIT}'
 ffmpeg_mid_full = f'-filter_complex "[1:v]scale=w={TCMConstants.FRONT_WIDTH}:h={TCMConstants.FRONT_HEIGHT}[top];[0:v]scale=w={TCMConstants.REST_WIDTH}:h={TCMConstants.REST_HEIGHT}[right];[3:v]scale=w={TCMConstants.REST_WIDTH}:h={TCMConstants.REST_HEIGHT}[back];[2:v]scale=w={TCMConstants.REST_WIDTH}:h={TCMConstants.REST_HEIGHT}[left];[left][back][right]hstack=inputs=3[bottom];[top][bottom]vstack=inputs=2[full];[full]drawtext=text=\''
-ffmpeg_end_full = '\':fontcolor=white:fontsize=24:box=1:boxcolor=black@0.5:boxborderw=5:x=(w-text_w)/2" -movflags +faststart -threads 0'
+ffmpeg_mid2_full = '\':fontcolor=white:fontsize=24:box=1:boxcolor=black@0.5:boxborderw=5:x=(w-text_w)/2[labeled];[labeled]drawtext=text=\''
+ffmpeg_end_full = '\':fontcolor=white:fontsize=24:box=1:boxcolor=black@0.5:boxborderw=5:x=(w-text_w)/2:y=h-text_h" -movflags +faststart -threads 0'
 ffmpeg_end_fast = '-vf "setpts=0.09*PTS" -c:v libx264 -crf 28 -profile:v main -tune fastdecode -movflags +faststart -threads 0'
 ffmpeg_error_regex = '(.*): Invalid data found when processing input'
 ffmpeg_error_pattern = re.compile(ffmpeg_error_regex)
@@ -169,22 +170,17 @@ def run_ffmpeg_command(log_text, folder, stamp, video_type):
 
 def get_ffmpeg_command(folder, stamp, video_type):
 	if video_type == 0:
-		event_string = get_event_string(folder, stamp)
-		if (len(event_string) > 0):
-			fts = format_timestamp(stamp).center(len(event_string))
-			event_string += "\n" + fts
-		else:
-			event_string = format_timestamp(stamp)
-		command = "{0} -i {1}{2}/{3}/{4}-{5} -i {1}{2}/{3}/{4}-{6} -i {1}{2}/{3}/{4}-{7} -i {1}{2}/{3}/{4}-{8} {9}{10}{11} {1}{2}/{12}/{4}-{13}".format(
+		command = "{0} -i {1}{2}/{3}/{4}-{5} -i {1}{2}/{3}/{4}-{6} -i {1}{2}/{3}/{4}-{7} -i {1}{2}/{3}/{4}-{8} {9}{10}{11}{12}{13} {1}{2}/{14}/{4}-{15}".format(
 			ffmpeg_base, TCMConstants.FOOTAGE_PATH, folder, TCMConstants.RAW_FOLDER, stamp, TCMConstants.RIGHT_TEXT,
 			TCMConstants.FRONT_TEXT, TCMConstants.LEFT_TEXT, TCMConstants.BACK_TEXT, ffmpeg_mid_full,
-			event_string, ffmpeg_end_full, TCMConstants.FULL_FOLDER, TCMConstants.FULL_TEXT)
+			format_timestamp(stamp), ffmpeg_mid2_full, get_event_string(folder, stamp), ffmpeg_end_full, TCMConstants.FULL_FOLDER, TCMConstants.FULL_TEXT)
 	elif video_type == 1:
 		command = "{0} -i {1}{2}/{3}/{4}-{5} {6} {1}{2}/{7}/{4}-{8}".format(
 			ffmpeg_base, TCMConstants.FOOTAGE_PATH, folder, TCMConstants.FULL_FOLDER, stamp, TCMConstants.FULL_TEXT, ffmpeg_end_fast,
 			TCMConstants.FAST_FOLDER, TCMConstants.FAST_TEXT)
 	else:
 		logger.error(f"Unrecognized video type {video_type} for {stamp} in {folder}")
+	logger.debug(command)
 	return command
 
 def get_event_string(folder, stamp):
@@ -194,9 +190,16 @@ def get_event_string(folder, stamp):
 			if event_matches_stamp(file, stamp):
 				with open(f"{TCMConstants.FOOTAGE_PATH}{folder}/{TCMConstants.RAW_FOLDER}/{file}", "r") as jsonfile:
 					event = json.load(jsonfile)
-					jsonstamp = format_timestamp(event['timestamp'].replace('T', '_').replace(':', '-'))
-					return f"{event['reason']} in {event['city']} at {jsonstamp} on camera {event['camera']}"
-	return ""
+					jsonstamp = format_timestamp(event['timestamp'].replace('T', '_').replace(':', '-'), True)
+					reason = TCMConstants.EVENT_REASON[event['reason']]
+					if not reason:
+						reason = event['reason']
+					camera = TCMConstants.EVENT_CAMERA[event['camera']]
+					if not camera:
+						camera = event['camera']
+					logger.debug(f"{reason} in {event['city']} at {jsonstamp} on camera {camera}")
+					return f"{reason} in {event['city']} at {jsonstamp} on camera {camera}"
+	return "No event information available"
 
 def event_matches_stamp(file, stamp):
 	file_time = datetime.datetime.fromisoformat(file.rsplit('-',1)[0].split('_')[0] + 'T' + file.rsplit('-',1)[0].split('_')[1].replace('-',':'))
@@ -240,10 +243,13 @@ def add_string_to_sorted_file(name, key, string, log_message, log_level):
 		for line in outlist:
 			writer.write(line)
 
-def format_timestamp(stamp):
+def format_timestamp(stamp, seconds=False):
 	timestamp = datetime.datetime.strptime(stamp, TCMConstants.FILENAME_TIMESTAMP_FORMAT)
 	logger.debug(f"Timestamp: {timestamp}")
-	return timestamp.strftime(TCMConstants.WATERMARK_TIMESTAMP_FORMAT)
+	if seconds:
+		return timestamp.strftime(TCMConstants.EVENT_TIMESTAMP_FORMAT)
+	else:
+		return timestamp.strftime(TCMConstants.WATERMARK_TIMESTAMP_FORMAT)
 
 if __name__ == '__main__':
 	main()

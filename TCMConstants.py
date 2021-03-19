@@ -101,7 +101,8 @@ SYSTEMCTL_PATH = "/bin/systemctl"						# Verify with: which systemctl
 XVFB_RUN_PATH = '/usr/bin/xvfb-run'						# Verify with: which xvfb-run
 
 # Video watermark timestamp format (see Python strftime reference)
-WATERMARK_TIMESTAMP_FORMAT = '%b %-d\, %-I\:%M %p'
+WATERMARK_TIMESTAMP_FORMAT = '%b %-d\, %-I\:%M %p'		# For file timestamp, without seconds
+EVENT_TIMESTAMP_FORMAT = '%b %-d\, %-I\:%M\:%S %p'		# For event timestamp with seconds
 
 # Names of text files to be placed in RAW_PATH that will list bad input files
 # created by TeslaCam. BAD_VIDEOS_FILENAME will contain the names of files that
@@ -124,7 +125,17 @@ FILENAME_TIMESTAMP_FORMAT = '%Y-%m-%d_%H-%M-%S'
 FILENAME_REGEX  = '(\d{4}(-\d\d){2}_(\d\d-){3})(right_repeater|front|left_repeater|back).mp4'
 FILENAME_PATTERN = re.compile(FILENAME_REGEX)
 EVENT_JSON = 'event.json'
+
+### Characteristics of event.json files output by TeslaCam
 EVENT_DURATION = 600		# Maximum duration in seconds between the timestamp in event.json and the timestamp in the filename
+EVENT_REASON = {'sentry_aware_object_detection' : 'Sentry triggered',
+	'user_interaction_honk' : 'Honked',
+	'user_interaction_dashcam_panel_save' : 'Saved',
+	'user_interaction_dashcam_icon_tapped' : 'Saved from viewer'}
+EVENT_CAMERA = {'0' : 'front',
+	'1': '1',
+	'2': '2',
+	'3': '3'}
 
 # Application management constants
 SLEEP_DURATION = 60		# Seconds between looping in main tasks

@@ -123,11 +123,13 @@ FAST_TEXT = 'fast.mp4'
 FILENAME_TIMESTAMP_FORMAT = '%Y-%m-%d_%H-%M-%S'
 FILENAME_REGEX  = '(\d{4}(-\d\d){2}_(\d\d-){3})(right_repeater|front|left_repeater|back).mp4'
 FILENAME_PATTERN = re.compile(FILENAME_REGEX)
+EVENT_JSON = 'event.json'
+EVENT_DURATION = 600		# Maximum duration in seconds between the timestamp in event.json and the timestamp in the filename
 
 # Application management constants
 SLEEP_DURATION = 60		# Seconds between looping in main tasks
 SPECIAL_EXIT_CODE = 115		# Exit code used by the app, has to be non-zero for systemctl to auto-restart crashed services
-SIZE_RANGE = 0.4		# Maximum size difference in percentage between video files, timsestamps with bigger size differences are not merged
+SIZE_RANGE = 0.8		# Maximum size difference in percentage between video files, timsestamps with bigger size differences are not merged
 FFMPEG_TIMELIMIT = 9000		# CPU time limit in seconds for FFMPEG commands to run
 
 # Common functions

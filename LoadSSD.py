@@ -9,7 +9,9 @@ import os
 import time
 import shutil
 import re
+import json
 import TCMConstants
+import datetime
 
 logger = TCMConstants.get_logger()
 
@@ -58,8 +60,13 @@ def move_file(file, folder, name):
 	else:
 		logger.info(f"Moving file {file} into {folder}")
 		if TCMConstants.check_file_for_read(file):
+			destination = f"{TCMConstants.FOOTAGE_PATH}{folder}/{TCMConstants.RAW_FOLDER}"
+			if (name == TCMConstants.EVENT_JSON):
+				with open(file, 'r') as jsonfile:
+					event = json.load(jsonfile)
+					destination += "/" + event["timestamp"].replace('T', '_').replace(':', '-') + '-' + name
 			try:
-				shutil.move(file, f"{TCMConstants.FOOTAGE_PATH}{folder}/{TCMConstants.RAW_FOLDER}")
+				shutil.move(file, destination)
 				logger.debug(f"Moved file {file} into {folder}")
 			except:
 				logger.error(f"Failed to move {file} into {folder}")
@@ -67,7 +74,7 @@ def move_file(file, folder, name):
 			logger.debug(f"File {file} still being written, skipping for now")
 
 def file_has_proper_name(file):
-	if TCMConstants.FILENAME_PATTERN.match(file):
+	if (file == TCMConstants.EVENT_JSON) or TCMConstants.FILENAME_PATTERN.match(file):
 		return True
 	else:
 		return False

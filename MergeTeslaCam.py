@@ -13,6 +13,7 @@ import datetime
 import TCMConstants
 import re
 import logging
+import json
 
 # ffmpeg commands and filters
 ffmpeg_base = f'{TCMConstants.FFMPEG_PATH} -hide_banner -loglevel error -timelimit {TCMConstants.FFMPEG_TIMELIMIT}'
@@ -68,7 +69,7 @@ def loop_car(car_path):
 			try:
 				stamp, camera = file.rsplit("-", 1)
 			except ValueError:
-				if file != TCMConstants.BAD_VIDEOS_FILENAME and file != TCMConstants.BAD_SIZES_FILENAME:
+				if TCMConstants.EVENT_JSON not in file and file != TCMConstants.BAD_VIDEOS_FILENAME and file != TCMConstants.BAD_SIZES_FILENAME:
 					logger.warn(f"Unrecognized filename: {file}")
 				continue
 			process_stamp(stamp, f"{car_path}{folder}")
@@ -168,10 +169,16 @@ def run_ffmpeg_command(log_text, folder, stamp, video_type):
 
 def get_ffmpeg_command(folder, stamp, video_type):
 	if video_type == 0:
+		event_string = get_event_string(folder, stamp)
+		if (len(event_string) > 0):
+			fts = format_timestamp(stamp).center(len(event_string))
+			event_string += "\n" + fts
+		else:
+			event_string = format_timestamp(stamp)
 		command = "{0} -i {1}{2}/{3}/{4}-{5} -i {1}{2}/{3}/{4}-{6} -i {1}{2}/{3}/{4}-{7} -i {1}{2}/{3}/{4}-{8} {9}{10}{11} {1}{2}/{12}/{4}-{13}".format(
 			ffmpeg_base, TCMConstants.FOOTAGE_PATH, folder, TCMConstants.RAW_FOLDER, stamp, TCMConstants.RIGHT_TEXT,
 			TCMConstants.FRONT_TEXT, TCMConstants.LEFT_TEXT, TCMConstants.BACK_TEXT, ffmpeg_mid_full,
-			format_timestamp(stamp), ffmpeg_end_full, TCMConstants.FULL_FOLDER, TCMConstants.FULL_TEXT)
+			event_string, ffmpeg_end_full, TCMConstants.FULL_FOLDER, TCMConstants.FULL_TEXT)
 	elif video_type == 1:
 		command = "{0} -i {1}{2}/{3}/{4}-{5} {6} {1}{2}/{7}/{4}-{8}".format(
 			ffmpeg_base, TCMConstants.FOOTAGE_PATH, folder, TCMConstants.FULL_FOLDER, stamp, TCMConstants.FULL_TEXT, ffmpeg_end_fast,
@@ -179,6 +186,26 @@ def get_ffmpeg_command(folder, stamp, video_type):
 	else:
 		logger.error(f"Unrecognized video type {video_type} for {stamp} in {folder}")
 	return command
+
+def get_event_string(folder, stamp):
+	list = os.listdir(f"{TCMConstants.FOOTAGE_PATH}{folder}/{TCMConstants.RAW_FOLDER}/")
+	for file in list:
+		if TCMConstants.EVENT_JSON in file:
+			if event_matches_stamp(file, stamp):
+				with open(f"{TCMConstants.FOOTAGE_PATH}{folder}/{TCMConstants.RAW_FOLDER}/{file}", "r") as jsonfile:
+					event = json.load(jsonfile)
+					jsonstamp = format_timestamp(event['timestamp'].replace('T', '_').replace(':', '-'))
+					return f"{event['reason']} in {event['city']} at {jsonstamp} on camera {event['camera']}"
+	return ""
+
+def event_matches_stamp(file, stamp):
+	file_time = datetime.datetime.fromisoformat(file.rsplit('-',1)[0].split('_')[0] + 'T' + file.rsplit('-',1)[0].split('_')[1].replace('-',':'))
+	stamp_time = datetime.datetime.fromisoformat(stamp.split('_')[0] + 'T' + stamp.split('_')[1].replace('-',':'))
+	max_delta = datetime.timedelta(days=0, seconds=TCMConstants.EVENT_DURATION)
+	if (abs(file_time - stamp_time) <= max_delta):
+		return True
+	else:
+		return False
 
 def add_to_bad_videos(folder, name):
 	simple_name = name.replace(f"{TCMConstants.FOOTAGE_PATH}{folder}/{TCMConstants.RAW_FOLDER}/", '')

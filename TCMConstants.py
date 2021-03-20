@@ -132,10 +132,10 @@ EVENT_REASON = {'sentry_aware_object_detection' : 'Sentry triggered',
 	'user_interaction_honk' : 'Honked',
 	'user_interaction_dashcam_panel_save' : 'Saved',
 	'user_interaction_dashcam_icon_tapped' : 'Saved from viewer'}
-EVENT_CAMERA = {'0' : 'front',
+EVENT_CAMERA = {'0' : 'front camera',
 	'1': '1',
 	'2': '2',
-	'3': '3'}
+	'3': 'left camera'}
 
 # Application management constants
 SLEEP_DURATION = 60		# Seconds between looping in main tasks

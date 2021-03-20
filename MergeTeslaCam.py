@@ -196,9 +196,9 @@ def get_event_string(folder, stamp):
 						reason = event['reason']
 					camera = TCMConstants.EVENT_CAMERA[event['camera']]
 					if not camera:
-						camera = event['camera']
+						camera = 'camera ' + event['camera']
 					logger.debug(f"{reason} in {event['city']} at {jsonstamp} on camera {camera}")
-					return f"{reason} in {event['city']} at {jsonstamp} on camera {camera}"
+					return f"{reason} in {event['city']} at {jsonstamp} on {camera}"
 	return "No event information available"
 
 def event_matches_stamp(file, stamp):

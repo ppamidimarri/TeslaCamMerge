@@ -133,14 +133,13 @@ EVENT_REASON = {'sentry_aware_object_detection' : 'Sentry triggered',
 	'user_interaction_dashcam_panel_save' : 'Saved',
 	'user_interaction_dashcam_icon_tapped' : 'Saved from viewer'}
 EVENT_CAMERA = {'0' : 'front camera',
-	'1': '1',
-	'2': '2',
-	'3': 'left camera'}
+	'3' : 'left camera',
+	'4' : 'right camera'}
 
 # Application management constants
 SLEEP_DURATION = 60		# Seconds between looping in main tasks
 SPECIAL_EXIT_CODE = 115		# Exit code used by the app, has to be non-zero for systemctl to auto-restart crashed services
-SIZE_RANGE = 0.8		# Maximum size difference in percentage between video files, timsestamps with bigger size differences are not merged
+SIZE_RANGE = 0.99		# Maximum size difference in percentage between video files, timsestamps with bigger size differences are not merged
 FFMPEG_TIMELIMIT = 9000		# CPU time limit in seconds for FFMPEG commands to run
 
 # Common functions

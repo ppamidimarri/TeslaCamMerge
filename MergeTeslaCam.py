@@ -169,6 +169,7 @@ def run_ffmpeg_command(log_text, folder, stamp, video_type):
 	logger.info(f"{log_text} completed: {stamp}.")
 
 def get_ffmpeg_command(folder, stamp, video_type):
+	logger.debug(f"Get command: folder {folder}, stamp {stamp}, type {video_type}")
 	if video_type == 0:
 		command = "{0} -i {1}{2}/{3}/{4}-{5} -i {1}{2}/{3}/{4}-{6} -i {1}{2}/{3}/{4}-{7} -i {1}{2}/{3}/{4}-{8} {9}{10}{11}{12}{13} {1}{2}/{14}/{4}-{15}".format(
 			ffmpeg_base, TCMConstants.FOOTAGE_PATH, folder, TCMConstants.RAW_FOLDER, stamp, TCMConstants.RIGHT_TEXT,
@@ -184,6 +185,7 @@ def get_ffmpeg_command(folder, stamp, video_type):
 	return command
 
 def get_event_string(folder, stamp):
+	logger.debug(f"Getting event string: folder {folder}, stamp {stamp}")
 	list = os.listdir(f"{TCMConstants.FOOTAGE_PATH}{folder}/{TCMConstants.RAW_FOLDER}/")
 	for file in list:
 		if TCMConstants.EVENT_JSON in file:
@@ -191,11 +193,13 @@ def get_event_string(folder, stamp):
 				with open(f"{TCMConstants.FOOTAGE_PATH}{folder}/{TCMConstants.RAW_FOLDER}/{file}", "r") as jsonfile:
 					event = json.load(jsonfile)
 					jsonstamp = format_timestamp(event['timestamp'].replace('T', '_').replace(':', '-'), True)
-					reason = TCMConstants.EVENT_REASON[event['reason']]
-					if not reason:
+					try:
+						reason = TCMConstants.EVENT_REASON[event['reason']]
+					except:
 						reason = event['reason']
-					camera = TCMConstants.EVENT_CAMERA[event['camera']]
-					if not camera:
+					try:
+						camera = TCMConstants.EVENT_CAMERA[event['camera']]
+					except:
 						camera = 'camera ' + event['camera']
 					logger.debug(f"{reason} in {event['city']} at {jsonstamp} on camera {camera}")
 					return f"{reason} in {event['city']} at {jsonstamp} on {camera}"

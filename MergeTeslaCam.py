@@ -71,7 +71,7 @@ def loop_car(car_path):
 				stamp, camera = file.rsplit("-", 1)
 			except ValueError:
 				if TCMConstants.EVENT_JSON not in file and file != TCMConstants.BAD_VIDEOS_FILENAME and file != TCMConstants.BAD_SIZES_FILENAME:
-					logger.warn(f"Unrecognized filename: {file}")
+					logger.warning(f"Unrecognized filename: {file}")
 				continue
 			process_stamp(stamp, f"{car_path}{folder}")
 
@@ -89,7 +89,7 @@ def process_stamp(stamp, folder):
 			else:
 				logger.debug(f"Fast file exists for stamp {stamp} at {folder}")
 		else:
-			logger.warn(f"Full file {TCMConstants.FOOTAGE_PATH}{folder}/{TCMConstants.FULL_FOLDER}/{stamp}-{TCMConstants.FULL_TEXT} not ready for read, postponing fast preview")
+			logger.warning(f"Full file {TCMConstants.FOOTAGE_PATH}{folder}/{TCMConstants.FULL_FOLDER}/{stamp}-{TCMConstants.FULL_TEXT} not ready for read, postponing fast preview")
 	else:
 		logger.debug(f"Stamp {stamp} not yet ready in {folder}")
 
@@ -161,7 +161,7 @@ def run_ffmpeg_command(log_text, folder, stamp, video_type):
 					try:
 						os.remove(file)
 					except:
-						logger.warn(f"Failed to remove bad file: {file}")
+						logger.warning(f"Failed to remove bad file: {file}")
 				else:
 					add_to_bad_videos(folder, file)
 	else:

@@ -144,7 +144,7 @@ This location is different from the SMB share for two reasons: (a) flatten the d
 **E. Install and set up [filebrowser](https://filebrowser.org/)**
 1. `cd ~`
 2. `mkdir log` (or any other location you want your log files in)
-3. `curl -fsSL https://filebrowser.org/get.sh | bash`
+3. `curl -fsSL https://raw.githubusercontent.com/filebrowser/get/master/get.sh | bash`
 4. `ifconfig` and note the LAN IP address of your Jetson Nano. In your home router, given your Jetson Nano a fixed LAN IP.
 5. `filebrowser config init -a <LAN-IP> -b / -r /home/<userid>/Footage/ -l /home/<userid>/log/filebrowser.log --branding.files /home/<userid>/TeslaCamMerge --branding.disableExternal --branding.name "TM3 Footage"`
 6. `filebrowser users add admin admin --perm.admin`

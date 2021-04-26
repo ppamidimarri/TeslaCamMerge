@@ -130,8 +130,8 @@ EVENT_JSON = 'event.json'
 EVENT_DURATION = 600		# Maximum duration in seconds between the timestamp in event.json and the timestamp in the filename
 EVENT_REASON = {'sentry_aware_object_detection' : 'Sentry triggered',
 	'user_interaction_honk' : 'Honked',
-	'user_interaction_dashcam_panel_save' : 'Saved',
-	'user_interaction_dashcam_icon_tapped' : 'Saved from viewer'}
+	'user_interaction_dashcam_panel_save' : 'Saved from panel',
+	'user_interaction_dashcam_icon_tapped' : 'Saved from icon'}
 EVENT_CAMERA = {'0' : 'front camera',
 	'3' : 'left camera',
 	'4' : 'right camera',

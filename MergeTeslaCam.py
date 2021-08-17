@@ -2,9 +2,9 @@
 
 # This script users ffmpeg to generate combined videos of TeslaCam footage.
 # It looks for files at "RAW_PATH" and waits for all (front, left-repeater,
-# right-repeater) are available for a single timestamp. Once all three files
-# are available, it merges them into one "full" file. It then creates a
-# sped-up view of the "full" file as the "fast" file.
+# right-repeater, and back) are available for a single timestamp. Once all 
+# four files are available, it merges them into one "full" file. It then
+# creates a sped-up view of the "full" file as the "fast" file.
 
 import os
 import time
@@ -188,7 +188,7 @@ def get_event_string(folder, stamp):
 	logger.debug(f"Getting event string: folder {folder}, stamp {stamp}")
 	list = os.listdir(f"{TCMConstants.FOOTAGE_PATH}{folder}/{TCMConstants.RAW_FOLDER}/")
 	for file in list:
-		if TCMConstants.EVENT_JSON in file:
+		if TCMConstants.EVENT_JSON in file and file != "-event.json":
 			if event_matches_stamp(file, stamp):
 				with open(f"{TCMConstants.FOOTAGE_PATH}{folder}/{TCMConstants.RAW_FOLDER}/{file}", "r") as jsonfile:
 					event = json.load(jsonfile)

@@ -206,12 +206,15 @@ def get_event_string(folder, stamp):
 	return "No event information available"
 
 def event_matches_stamp(file, stamp):
-	file_time = datetime.datetime.fromisoformat(file.rsplit('-',1)[0].split('_')[0] + 'T' + file.rsplit('-',1)[0].split('_')[1].replace('-',':'))
-	stamp_time = datetime.datetime.fromisoformat(stamp.split('_')[0] + 'T' + stamp.split('_')[1].replace('-',':'))
-	max_delta = datetime.timedelta(days=0, seconds=TCMConstants.EVENT_DURATION)
-	if (abs(file_time - stamp_time) <= max_delta):
-		return True
-	else:
+	try:
+		file_time = datetime.datetime.fromisoformat(file.rsplit('-',1)[0].split('_')[0] + 'T' + file.rsplit('-',1)[0].split('_')[1].replace('-',':'))
+		stamp_time = datetime.datetime.fromisoformat(stamp.split('_')[0] + 'T' + stamp.split('_')[1].replace('-',':'))
+		max_delta = datetime.timedelta(days=0, seconds=TCMConstants.EVENT_DURATION)
+		if (abs(file_time - stamp_time) <= max_delta):
+			return True
+		else:
+			return False
+	except:
 		return False
 
 def add_to_bad_videos(folder, name):

@@ -33,7 +33,7 @@ def main():
 							if TCMConstants.MULTI_CAR:
 								sub_path = f"{TCMConstants.CAR_LIST[index]}/{folder}"
 							move_file(os.path.join(root, name), sub_path, name)
-						else:
+						elif name != "thumb.png":
 							logger.warn(f"File '{name}' has invalid name, skipping")
 
 		time.sleep(TCMConstants.SLEEP_DURATION)
